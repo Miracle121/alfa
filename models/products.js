@@ -188,8 +188,7 @@ const productsSchema = new Schema({
         ref: 'Typeofclaimsettlement',
         required: true
     },
-    typeofrefund:
-        {
+    typeofrefund:{
         type: Schema.Types.ObjectId,
         ref: 'Typeofrefund',
         required: true
@@ -214,33 +213,38 @@ const productsSchema = new Schema({
     },
   //==== page 4==========
 //==========tarif==========
-    agentlist:[{ 
-        type: Schema.Types.ObjectId,
-        ref: 'Agents',
-        required: true
-    }],
-    Isagreement:{
-        type:Boolean,
-        required: true
-    },
-    limitofagreement:{
-        type:Number,
-        required: true
-    },
-    tariffperclasses:[{
-    classes:{ // ulash kerak
-        type: Schema.Types.ObjectId,
-        ref: 'Classesofproduct',
-        required: true
-    },
-   max: {
-        type:Number,
-        required: true
-    },
-    min:{   type:Number,
-        required: true
-    }}
-],
+    tariff:[{
+        agentlist:{ 
+            type: Schema.Types.ObjectId,
+            ref: 'Agents',
+            required: true
+        },
+        Isagreement:{
+            type:Boolean,
+            required: true
+        },
+        limitofagreement:{
+            type:Number,
+            required: true
+        },
+        tariffperclasses:[{
+            classes:{ 
+                type: Schema.Types.ObjectId,
+                ref: 'Classesofproduct',
+                required: true
+            },
+           max: {
+                type:Number,
+                required: true
+            },
+            min:{   type:Number,
+                required: true
+            }}
+        ],       
+
+    }],   
+
+
 //======================Франшиза======================
     franchise:[{
     risk:{

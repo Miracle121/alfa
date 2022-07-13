@@ -1,6 +1,7 @@
 const Products = require('../models/products')
+const Agents = require('../models/agents')
 const {validationResult} = require('express-validator')
-
+let xx=[]
 exports.getProducts= async(req,res,next)=>{
     const page = req.query.page ||1   
     const counts = 20 //req.query.count ||20
@@ -26,11 +27,31 @@ exports.getProducts= async(req,res,next)=>{
         .populate('typeofrefund','name')
         .populate('typeofpayment','name')
         .populate('typeofpolice','name')
-        .populate('agentlist','name')
-        .populate('tariffperclasses.classes','name')
+        // .populate('tariff.agentlist','name')
+        // .populate('tariffperclasses.classes','name')
         .populate('franchise.risk','name')
         .populate('franchise.typeoffranchise','name')
         .populate('franchise.baseoffranchise','name')    
+        .populate({
+            path: 'tariff',
+            populate:[                
+                {               
+                    path: 'agentlist',
+                    select: 'inn'
+                },
+                {
+                    path: 'tariffperclasses',
+                    populate:[
+                        {
+                            path: 'classes',
+                            select: 'name'
+                        },
+                    ]
+                }
+           
+
+            ]           
+         })
 
         .skip((page-1)*counts).limit(counts)
          res.status(200).json({
@@ -71,11 +92,32 @@ exports.getProductsId =async(req,res,next)=>{
         .populate('typeofrefund','name')
         .populate('typeofpayment','name')
         .populate('typeofpolice','name')
-        .populate('agentlist','fullName')
-        .populate('tariffperclasses.classes','name')
+        // .populate('agentlist','fullName')
+        // .populate('tariffperclasses.classes','name')
         .populate('franchise.risk','name')
         .populate('franchise.typeoffranchise','name')
         .populate('franchise.baseoffranchise','name')
+        .populate({
+            path: 'tariff',
+            populate:[                
+                {               
+                    path: 'agentlist',
+                    select: 'inn'
+                },
+                {
+                    path: 'tariffperclasses',
+                    populate:[
+                        {
+                            path: 'classes',
+                            select: 'name'
+                        },
+                    ]
+                }
+           
+
+            ]           
+         })
+
         if(!data){
             err.statusCode =404
         }
@@ -144,10 +186,16 @@ exports.createProducts= async (req,res,next)=>{
     const typeofpolice= req.body.typeofpolice
     const minimumterminsurance= req.body.minimumterminsurance
     const maxterminsurance= req.body.maxterminsurance
-    const agentlist= req.body.agentlist
-    const Isagreement= req.body.Isagreement
-    const limitofagreement= req.body.limitofagreement
-    const tariffperclasses= req.body.tariffperclasses
+
+    const tariff = req.body.tariff
+  
+
+    // const agentlist= req.body.agentlist
+    // const Isagreement= req.body.Isagreement
+    // const limitofagreement= req.body.limitofagreement
+    // const tariffperclasses= req.body.tariffperclasses
+
+
     const franchise= req.body.franchise  
     const group =new Products({
         productname: productname,
@@ -194,14 +242,19 @@ exports.createProducts= async (req,res,next)=>{
         typeofpolice:typeofpolice,
         minimumterminsurance:minimumterminsurance,
         maxterminsurance:maxterminsurance,
-        agentlist:agentlist,
-        Isagreement:Isagreement,
-        limitofagreement:limitofagreement,
-        tariffperclasses:tariffperclasses,
+        tariff:tariff,
+
+        // agentlist:agentlist,
+        // Isagreement:Isagreement,
+        // limitofagreement:limitofagreement,
+        // tariffperclasses:tariffperclasses,
+
         franchise:franchise,
         creatorId: req.userId
     })
+    // console.log(group._id);
     const groups = await group.save()
+
     res.status(201).json({
         message:`Products added`,
         data: groups,
@@ -256,10 +309,13 @@ exports.updateProducts =async(req,res,next)=>{
     const typeofpolice= req.body.typeofpolice
     const minimumterminsurance= req.body.minimumterminsurance
     const maxterminsurance= req.body.maxterminsurance
-    const agentlist= req.body.agentlist
-    const Isagreement= req.body.Isagreement
-    const limitofagreement= req.body.limitofagreement
-    const tariffperclasses= req.body.tariffperclasses
+
+    const tariff = req.body.tariff
+
+    // const agentlist= req.body.agentlist
+    // const Isagreement= req.body.Isagreement
+    // const limitofagreement= req.body.limitofagreement
+    // const tariffperclasses= req.body.tariffperclasses
     const franchise= req.body.franchise     
     try {
     const products = await Products.findById(productId)
@@ -314,10 +370,12 @@ exports.updateProducts =async(req,res,next)=>{
     products.typeofpolice=typeofpolice
     products.minimumterminsurance=minimumterminsurance
     products.maxterminsurance=maxterminsurance
-    products.agentlist=agentlist
-    products.Isagreement=Isagreement
-    products.limitofagreement=limitofagreement
-    products.tariffperclasses=tariffperclasses
+
+    products.tariff=tariff
+    // products.agentlist=agentlist
+    // products.Isagreement=Isagreement
+    // products.limitofagreement=limitofagreement
+    // products.tariffperclasses=tariffperclasses
     products.franchise=franchise
     const data = await products.save()
     res.status(200).json({
@@ -361,4 +419,18 @@ exports.deleteProducts = async(req,res,next)=>{
         next(err)
     }
 }
+
+exports.getTariff = async(req,res,next)=>{
+    const agentlist = req.body.agentlist
+    const limitofagreement = req.body.limitofagreement
+    const Isagreement = req.body.Isagreement
+    const tariffperclasses = req.body.tariffperclasses
+
+
+    console.log("XXXX");
+    console.log(tariff);
+
+
+}
+
 
