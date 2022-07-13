@@ -31,7 +31,7 @@ const agentsSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Typeofagent'
      }, 
-    forindividualsdata:[{
+    forindividualsdata:{
         fullname:{
             type:String
         },
@@ -53,8 +53,8 @@ const agentsSchema = new Schema({
         numberofcard:{
             type:String
         }       
-    }],
-    corporateentitiesdata:[
+    },
+    corporateentitiesdata:
         {
             fullname:{
             type:String  
@@ -74,7 +74,7 @@ const agentsSchema = new Schema({
         scheduledaccount:{
             type:String
         }
-     }],
+     },
     address:{
         type:String
      },

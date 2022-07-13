@@ -70,6 +70,7 @@ exports.createAgents = async(req,res,next)=>{
     const telephonenumber = req.body.telephonenumber
     const isUsedourpanel = req.body.isUsedourpanel
     const isUserRestAPI = req.body.isUserRestAPI
+    console.log(corporateentitiesdata);
     //=============================
     const email = req.body.email
     const password = req.body.password
