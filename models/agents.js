@@ -54,9 +54,8 @@ const agentsSchema = new Schema({
             type:String
         }       
     },
-    corporateentitiesdata:
-        {
-            fullname:{
+    corporateentitiesdata: {
+        fullname:{
             type:String  
         },    
         nameoforganization:{
@@ -101,7 +100,7 @@ const agentsSchema = new Schema({
         ref: 'Accountstatus',
         required: true
      },
-     accountrole:{
+    accountrole:{
         type: Schema.Types.ObjectId,
         ref: 'Accountroles',
         required: true

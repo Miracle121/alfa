@@ -101,8 +101,8 @@ const productsSchema = new Schema({
     }, 
     fixedpolicyholder:  { 
             type: Schema.Types.ObjectId,
-            ref: 'Agents',   //'fixedpolicyholde', 
-            required: true
+            ref: 'Agents'   //'fixedpolicyholde', 
+            // required: true
         },
     Isbeneficiary:{
             type: Boolean,            
@@ -225,7 +225,7 @@ const productsSchema = new Schema({
         },
         limitofagreement:{
             type:Number,
-            required: true
+            // required: true
         },
         tariffperclasses:[{
             classes:{ 
@@ -235,10 +235,10 @@ const productsSchema = new Schema({
             },
            max: {
                 type:Number,
-                required: true
+                // required: true
             },
             min:{   type:Number,
-                required: true
+                // required: true
             }}
         ],       
 
@@ -267,16 +267,16 @@ const productsSchema = new Schema({
     typeoffranchise:{
         type: Schema.Types.ObjectId,
         ref: 'Typeoffranchise',
-        required: true
+        // required: true
     },
     baseoffranchise:{        
         type: Schema.Types.ObjectId,
         ref: 'Baseoffranchise',
-        required: true
+        // required: true
     },
     franchise:{
-         type: String,
-         required: true
+         type: String
+        //  required: true
     }
 
 

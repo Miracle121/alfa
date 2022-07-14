@@ -1,6 +1,7 @@
 const Products = require('../models/products')
 const Agents = require('../models/agents')
 const {validationResult} = require('express-validator')
+
 let xx=[]
 exports.getProducts= async(req,res,next)=>{
     const page = req.query.page ||1   
@@ -186,7 +187,6 @@ exports.createProducts= async (req,res,next)=>{
     const typeofpolice= req.body.typeofpolice
     const minimumterminsurance= req.body.minimumterminsurance
     const maxterminsurance= req.body.maxterminsurance
-
     const tariff = req.body.tariff
   
 
@@ -252,8 +252,29 @@ exports.createProducts= async (req,res,next)=>{
         franchise:franchise,
         creatorId: req.userId
     })
-    // console.log(group._id);
     const groups = await group.save()
+
+    //============================qayta korish uchun agentni update qilish joyi fixedpolicyholder  fixedbeneficiary================
+    // console.log(group._id);
+
+   
+    const fixedpolicyholderdata = await Agents.findById(fixedpolicyholder)
+   if(fixedpolicyholderdata){
+    fixedpolicyholderdata.isfixedpolicyholde =fixedpolicyholder
+    const data = await fixedpolicyholderdata.save()
+   
+   } 
+    const fixedbeneficiarydata = await Agents.findById(fixedbeneficiary)
+    if(fixedbeneficiarydata){
+        fixedbeneficiarydata.isbeneficiary =fixedbeneficiary
+        const data1 = await fixedbeneficiarydata.save()
+    }
+    
+   
+
+//============================================================
+    
+    
 
     res.status(201).json({
         message:`Products added`,
