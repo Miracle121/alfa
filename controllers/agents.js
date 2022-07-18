@@ -70,7 +70,7 @@ exports.createAgents = async(req,res,next)=>{
     const telephonenumber = req.body.telephonenumber
     const isUsedourpanel = req.body.isUsedourpanel
     const isUserRestAPI = req.body.isUserRestAPI
-    console.log(corporateentitiesdata);
+    
     //=============================
     const email = req.body.email
     const password = req.body.password
@@ -100,7 +100,9 @@ exports.createAgents = async(req,res,next)=>{
             accountrole:accountrole,
             creatorId: req.userId
         })
-        const results = await result.save()   
+
+        const results = await result.save()  
+
         const resultUsers=  new User({
                 fullname: results.corporateentitiesdata[0].fullname,
                 email:email,
@@ -110,11 +112,11 @@ exports.createAgents = async(req,res,next)=>{
                 agentId:results._id,
                 creatorId: req.userId
             })
-        const userdata = resultUsers.save()   
+        const userdata = await resultUsers.save()   
         res.status(200).json({
             message:`Agents List`,
             data: results,
-            // userdata:userdata,
+            
             creatorId: req.userId,
         })
        }else{
@@ -126,7 +128,7 @@ exports.createAgents = async(req,res,next)=>{
        }     
     } catch (err) {
         if(!err.statusCode){
-            const err = new Error('Intenall error11111')
+            const err = new Error('Agentni qoshishda xatolik')
             err.statusCode = 500
             throw err
         }
