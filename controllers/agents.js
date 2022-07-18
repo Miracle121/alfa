@@ -78,9 +78,11 @@ exports.createAgents = async(req,res,next)=>{
     const accountrole = req.body.accountrole
     const hashpass = await  bcrypt.hash(password,12) 
     try {
+        
        const inn1= await Agents.find({"inn":inn})
        const email1= await User.find({"email":email})       
        if(inn1.length===0 && email1.length===0){
+       
         const result = new Agents({       
             inn:inn,
             typeofpersons:typeofpersons,
@@ -101,10 +103,12 @@ exports.createAgents = async(req,res,next)=>{
             creatorId: req.userId
         })
 
-        const results = await result.save()  
+        const results = await result.save() 
+         
+       
 
         const resultUsers=  new User({
-                fullname: results.corporateentitiesdata[0].fullname,
+                fullname: "XXX",
                 email:email,
                 password:hashpass,
                 accountstatus:accountstatus,
@@ -113,10 +117,10 @@ exports.createAgents = async(req,res,next)=>{
                 creatorId: req.userId
             })
         const userdata = await resultUsers.save()   
+        console.log(userdata);
         res.status(200).json({
             message:`Agents List`,
-            data: results,
-            
+            data: results,            
             creatorId: req.userId,
         })
        }else{
