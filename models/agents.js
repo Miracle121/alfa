@@ -7,16 +7,28 @@ const agentsSchema = new Schema({
         unique:true,
         required:true
     },
+    branch:{
+        type: Schema.Types.ObjectId,
+        ref: 'Breanches',
+        required:true
+    },
+    agreementnumber:{
+        type:String,
+        required:true
+    },
+    agreementdate:{
+        type:Date,
+        required:true
+    },
     typeofpersons:{
         type: Schema.Types.ObjectId,
         ref: 'Typeofpersones',
         required:true
-    },
-    regionId:{
+    },   
+    typeofagent:{
         type: Schema.Types.ObjectId,
-        ref: 'Region'            
-     },    
-    
+        ref: 'Typeofagent'
+     }, 
     //======Isbeneficiary======= 
     isbeneficiary:{
         type: Schema.Types.ObjectId,
@@ -27,37 +39,93 @@ const agentsSchema = new Schema({
         ref: 'Products'
      },
     //==========end======= 
-    typeofagent:{
-        type: Schema.Types.ObjectId,
-        ref: 'Typeofagent'
-     }, 
+   
     forindividualsdata:{
-        fullname:{
-            type:String
+        name:{
+            type:String,
+            required:true
+        },
+        secondname:{
+            type:String,
+            required:true
+        },
+        middlename:{
+            type:String,
+            required:true
+        },
+        gender:{
+            type: Schema.Types.ObjectId,
+            ref: 'Gender',
+            required:true
+        },
+        dateofbirth :{
+            type:Date,
+            required:true
+        },
+        citizenship:{
+            type: Schema.Types.ObjectId,
+            ref: 'Citizenship',
+            required:true
+        },
+        typeofdocument:{
+            type: Schema.Types.ObjectId,
+            ref: 'Typeofdocument',
+            required:true
         },
         passportSeries:  {
+            type:String
+         },
+        passportNumber:  {
             type:String
          },
         pin:{
             type:String           
         },
         passportissuancedate:{
-            type:String
+            type:Date
         },
         passportissuedby:{
             type:String
         },
-        dateofbirth:{
-            type:Date
+        regions:{
+        type: Schema.Types.ObjectId,
+        ref: 'Regions',
+        required:true
         },
+        districts:{
+        type: Schema.Types.ObjectId,
+        ref: 'Districts',
+        required:true
+        },
+        address:{
+          type:String
+        },
+        postcode:{
+            type:String
+        },
+        telephonenumber:{
+            type:String
+         },
+        emailforcontact:{
+            type:String
+         },
+        personalaccount:{
+            type:String
+         },
+        transitaccount:{
+           type:String
+         },
+        mfo:{
+        type:String
+        },
+        nameofbank:{
+        type:String
+        }, 
         numberofcard:{
             type:String
         }       
     },
-    corporateentitiesdata: {
-        fullname:{
-            type:String  
-        },    
+    corporateentitiesdata: {     
         nameoforganization:{
             type:String            
         },
@@ -67,19 +135,69 @@ const agentsSchema = new Schema({
         mfo:{
             type:String
         },
-        bank:{
+        nameofbank:{
+            type:String
+        },
+        innofbank:{
             type:String
         },
         scheduledaccount:{
             type:String
-        }
-     },
-    address:{
-        type:String
-     },
-    telephonenumber:{
-        type:String
-     },   
+        },
+        regionId:{
+            type: Schema.Types.ObjectId,
+            ref: 'Region'            
+         },
+        districts:{
+            type: Schema.Types.ObjectId,
+            ref: 'Districts',
+            required:true
+         }, 
+        address:{
+            type:String
+        },
+        postcode:{
+            type:String
+        },
+        checkingaccount:{
+            type:String,
+            required:true
+        },
+        employees:[{
+            fullname:{
+                type:String,
+                required:true
+            },
+            positions:{
+                type: Schema.Types.ObjectId,
+                ref: 'Positions',
+                required:true
+            },
+            typeofdocumentsformanager:{
+                type: Schema.Types.ObjectId,
+                ref: 'Typeofdocuments',
+                required:true
+            },
+            documentnumber:{
+                type:String               
+            },
+            dateofmanagerdocument:{
+                type:Date                
+            },
+            expirationdate:{
+                type:Date 
+            },
+            telephonenumber:{
+                type:String
+            },
+            emailforcontacts:{
+                type:String
+            }
+        }]
+
+     }, 
+
+     
     isUsedourpanel:{
         type:Boolean
     },
@@ -105,7 +223,6 @@ const agentsSchema = new Schema({
         ref: 'Accountroles',
         required: true
      },   
-
     creatorId:{
         type: Schema.Types.ObjectId,
         ref: 'Users',

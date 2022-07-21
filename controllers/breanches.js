@@ -1,23 +1,32 @@
-const Agents = require('../models/agents')
+const Breanches = require('../models/breanches')
 const User = require('../models/users')
 const {validationResult} = require('express-validator')
 const bcrypt = require('bcryptjs')
 
-exports.getAgents= async(req,res,next)=>{
+exports.getBreanches= async(req,res,next)=>{
     const page = req.query.page ||1
     const counts = 20 //req.query.count ||20
     let totalItems
     try {
-     totalItems = await Agents.find().countDocuments()
-     const data = await Agents.find()
-     .populate('typeofpersons','name')
+     totalItems = await Breanches.find().countDocuments()
+     const data = await Breanches.find()    
      .populate('regionId','name')
-     .populate('typeofagent','name')
-     .populate('accountstatus','name')
-     .populate('accountrole','name')     
+     
+     .populate('breanchstatus','name')
+     .populate({
+        path: 'employees',
+        populate:[
+            {
+                path: 'positions',
+                select: 'name'
+            }
+        ]
+     })
+   
+      
      .skip((page-1)*counts).limit(counts)
      res.status(200).json({
-         message:`Agents List`,
+         message:`Breanches List`,
          data:data,
          totalItems:totalItems
      })
@@ -30,22 +39,28 @@ exports.getAgents= async(req,res,next)=>{
     } 
 }
 
-exports.getAgentsById = async(req,res,next)=>{
+exports.getBreanchesById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const result= await Agents.findById(AgesId)
-        .populate('typeofpersons','name')
-        .populate('regionId','name')
-        .populate('typeofagent','name')
-        .populate('accountstatus','name')
-        .populate('accountrole','name')  
+        const result= await Breanches.findById(AgesId)
+        .populate('regionId','name')     
+        .populate('breanchstatus','name')
+        .populate({
+           path: 'employees',
+           populate:[
+               {
+                   path: 'positions',
+                   select: 'name'
+               }
+           ]
+        }) 
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404
             throw error
         }
         res.status(200).json({
-            message:`Agents List`,
+            message:`Breanches List`,
             data:result
         })
     } catch (err) {
@@ -57,88 +72,68 @@ exports.getAgentsById = async(req,res,next)=>{
     }
 }
 
-exports.createAgents = async(req,res,next)=>{     
+exports.createBreanches = async(req,res,next)=>{     
+    const levelofbreanches = req.body.levelofbreanches
+    const codeofbreanches = req.body.codeofbreanches
     const inn = req.body.inn
-    const branch = req.body.branch
-    const agreementnumber = req.body.agreementnumber
+    const regionId = req.body.regionId
+    const branchname= req.body.branchname    
+    const shorttitleofbranch= req.body.shorttitleofbranch
+    const address = req.body.address 
+    const telephone = req.body.telephone   
+    let email =req.body.email
+    let agreementnumber =req.body.agreementnumber
     const agreementdate = req.body.agreementdate
-    
-    const typeofpersons= req.body.typeofpersons    
-    const isbeneficiary= req.body.isbeneficiary||null
-    const isfixedpolicyholde = req.body.isfixedpolicyholde || null
-    const typeofagent = req.body.typeofagent   
-    
-    let forindividualsdata =req.body.forindividualsdata
-    let corporateentitiesdata =req.body.corporateentitiesdata
-   
-    const isUsedourpanel = req.body.isUsedourpanel
-    const isUserRestAPI = req.body.isUserRestAPI
-    
-    //=============================
-    const email = req.body.email
-    const password = req.body.password
-    const accountstatus = req.body.accountstatus
-    const accountrole = req.body.accountrole
-
-
-    const hashpass = await  bcrypt.hash(password,12) 
+    const expirationdate = req.body.expirationdate
+    const employees = req.body.employees
+    const checkingaccount = req.body.checkingaccount
+    const mfo = req.body.mfo
+    const nameofbank = req.body.nameofbank
+    const breanchstatus = req.body.breanchstatus   
     try {
-        
-       const inn1= await Agents.find({"inn":inn})
-       const email1= await User.find({"email":email})       
-       if(inn1.length===0 && email1.length===0){
-      
-       
-        const result = new Agents({       
-            inn:inn,
-            branch:branch,
-            agreementnumber:agreementnumber,
-            agreementdate:agreementdate,
-            typeofpersons:typeofpersons,
-                       
-            isbeneficiary:isbeneficiary,
-            isfixedpolicyholde:isfixedpolicyholde,
-            typeofagent:typeofagent,
-            forindividualsdata:forindividualsdata,
-            corporateentitiesdata:corporateentitiesdata,
-          
-           
-            isUsedourpanel:isUsedourpanel,
-            isUserRestAPI:isUserRestAPI,
-            email:email,
-            password:hashpass,
-            accountstatus:accountstatus,
-            accountrole:accountrole,
-            creatorId: req.userId
-        })
 
-        const results = await result.save() 
-         
-       
+        const inndata = await Breanches.find({"inn":inn})
 
-        const resultUsers=  new User({
-                // fullname: "XXX",
+        if(inndata){
+            res.status(200).json({
+                message:`Breanches List`,
+                data: inndata,            
+                creatorId: req.userId,
+            })
+        }else{
+
+            const result = new Breanches({       
+                levelofbreanches:levelofbreanches,
+                codeofbreanches:codeofbreanches,
+                inn:inn,
+                regionId:regionId,
+                branchname:branchname,
+                shorttitleofbranch:shorttitleofbranch,
+                address:address,
+                telephone:telephone,
                 email:email,
-                password:hashpass,
-                accountstatus:accountstatus,
-                accountrole:accountrole,
-                agentId:results._id,
+                agreementnumber:agreementnumber,
+                agreementdate:agreementdate,
+                expirationdate:expirationdate,
+                employees:employees,
+                checkingaccount:checkingaccount,
+                mfo:mfo,
+                nameofbank:nameofbank,
+                breanchstatus:breanchstatus,          
                 creatorId: req.userId
             })
-        const userdata = await resultUsers.save()   
-        console.log(userdata);
-        res.status(200).json({
-            message:`Agents List`,
-            data: results,            
-            creatorId: req.userId,
-        })
-       }else{
-        res.status(200).json({
-            message:`Agents List`,
-            data: inn1,
-            creatorId: req.userId,
-        })
-       }     
+            // console.log(result);
+            const results = await result.save()      
+            res.status(200).json({
+                message:`Breanches List`,
+                data: results,            
+                creatorId: req.userId,
+            })
+        }
+        
+        
+
+      
     } catch (err) {
         if(!err.statusCode){
             const err = new Error('Agentni qoshishda xatolik')
@@ -149,7 +144,7 @@ exports.createAgents = async(req,res,next)=>{
     }    
 }
 
-exports.updateAgents = async(req,res,next)=>{ 
+exports.updateBreanches= async(req,res,next)=>{ 
     const AgesId = req.params.id
     const inn = req.body.inn
     const typeofpersons= req.body.typeofpersons
@@ -170,7 +165,7 @@ exports.updateAgents = async(req,res,next)=>{
     const accountrole = req.body.accountrole
     const hashpass = await  bcrypt.hash(password,12)   
     try {
-    const result = await Agents.findById(AgesId)
+    const result = await Breanches.findById(AgesId)
     if(!result){
         const error = new Error('Object  not found')
         error.statusCode = 404
@@ -210,10 +205,10 @@ exports.updateAgents = async(req,res,next)=>{
     }
 }
 
-exports.deleteAgents = async(req,res,next)=>{
+exports.deleteBreanches = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const deleteddata = await Agents.findById(AgesId)
+        const deleteddata = await Breanches.findById(AgesId)
         const userdata = await User.find({"agentId":AgesId})        
     if(!deleteddata){
         const error = new Error('Object  not found')
@@ -224,7 +219,7 @@ exports.deleteAgents = async(req,res,next)=>{
         error.statusCode =403
         throw error
         }
-    const data=await Agents.findByIdAndRemove(AgesId)
+    const data=await Breanches.findByIdAndRemove(AgesId)
     const usersdata=await User.findByIdAndRemove(userdata) 
     res.status(200).json({
         message:'Region is deletes',

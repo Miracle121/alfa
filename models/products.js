@@ -160,7 +160,7 @@ const productsSchema = new Schema({
     },
     fixedpreventivemeasures:{
         type:Number,
-        required:true
+        // required:true
     },
     Ispolicywithoutpayment:{
         type:Boolean,

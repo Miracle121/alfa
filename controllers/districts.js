@@ -49,10 +49,9 @@ exports.getDistrictsById = async(req,res,next)=>{
 }
 
 exports.getDistrictsByRegId = async(req,res,next)=>{
-    const regId= req.params.id
-   
+    const regId= req.params.id   
         try {
-            const dist= await Districts.find({regiId:regId}).populate('regiId','name').populate('mfy','name')
+            const dist= await Districts.find({regiId:regId}).populate('regiId','name')
             if(!dist){
                 const error = new Error('Object  not found')
                 error.statusCode = 404
@@ -68,28 +67,15 @@ exports.getDistrictsByRegId = async(req,res,next)=>{
                 err.statusCode =500
             }
             next(err)
-        }
-
-    
-  
-  
-
+        } 
 }
 
 exports.createDistricts = async(req,res,next)=>{
-    const name = req.body.name
-    const viewBox = req.body.viewBox
-    const pathd = req.body.pathd
-    const regiId = req.body.regiId
-    const transform = req.body.transform
-    const  circle = req.body.circle
+    const name = req.body.name   
+    const regiId = req.body.regiId   
     const dist = new Districts({
         name:name,
         regiId:regiId,
-        viewBox:viewBox,
-        pathd:pathd,
-        transform:transform,
-        circle:circle,
         creatorId: req.userId
     })
     const districts = await dist.save()
@@ -110,10 +96,7 @@ exports.updateDistricts = async(req,res,next)=>{
     const distId = req.params.id
     const name = req.body.name
     const regId =req.body.regiId
-    const viewBox = req.body.viewBox
-    const pathd = req.body.pathd
-    const transform = req.body.transform
-    const  circle = req.body.circle
+   
     try {
     const district = await Districts.findById(distId)
     if(!district){
@@ -123,13 +106,7 @@ exports.updateDistricts = async(req,res,next)=>{
     }
     district.name= name
     district.regiId = regId
-    district.viewBox = viewBox
-    district.pathd = pathd
-    district.transform =transform
-    district.circle =circle
-
     const data =await district.save()
-  
     res.status(200).json({
         message:`ma'lumotlar o'zgartirildi`,
         data: data
@@ -159,20 +136,11 @@ exports.deleteDistricts = async(req,res,next)=>{
         throw error
     }
 
-
-
     const data=await Districts.findByIdAndRemove(destId)
     const regId = data.regiId.toString()
     const reg = await Region.findById(regId)
     reg.districts.pull(destId)
     const regsavedata = await reg.save()
-
-    const mfylist = await Mfy.find({districtId: destId})
-    console.log(mfylist);
-    const mfydeleted = await Mfy.remove({_id: mfylist})  
-
-
-
 
     res.status(200).json({
         message:'Region is deletes',

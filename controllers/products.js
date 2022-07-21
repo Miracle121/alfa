@@ -190,10 +190,7 @@ exports.createProducts= async (req,res,next)=>{
     const tariff = req.body.tariff
   
 
-    // const agentlist= req.body.agentlist
-    // const Isagreement= req.body.Isagreement
-    // const limitofagreement= req.body.limitofagreement
-    // const tariffperclasses= req.body.tariffperclasses
+    
 
 
     const franchise= req.body.franchise  

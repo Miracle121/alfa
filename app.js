@@ -41,7 +41,14 @@ const typeofagent = require('./routes/typeofagent')
 const accountstatus = require('./routes/accountstatus')
 
 const accountroles = require('./routes/accountroles')
-// const genders =require('./routes/genders')
+const genders =require('./routes/gender')
+const district = require('./routes/districts')
+const citizenship = require('./routes/citizenship')
+const position = require('./routes/position')
+const typeofdocuments = require('./routes/typeofdocuments')
+const levelofbranch = require('./routes/levelofbranch')
+const breanches = require('./routes/breanches')
+const breanchstatus = require('./routes/breanchstatus')
 const app = express();
 // const URL =  'mongodb://localhost:27017/Alfa' 
 const URL ='mongodb://alfa:admin123a@87.237.235.44:27017/Alfa?authSource=admin'
@@ -98,6 +105,15 @@ app.use('/typeofposition',typeofposition)
 app.use('/typeofagent',typeofagent)
 app.use('/accountstatus',accountstatus)
 app.use('/accountroles',accountroles)
+app.use('/genders',genders)
+
+app.use('/district',district)
+app.use('/citizenship',citizenship)
+app.use('/position',position)
+app.use('/typeofdocuments',typeofdocuments)
+app.use('/levelofbranch',levelofbranch)
+app.use('/breanches',breanches)
+app.use('/breanchstatus',breanchstatus)
 
 
 
