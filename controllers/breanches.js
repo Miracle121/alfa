@@ -2,6 +2,7 @@ const Breanches = require('../models/breanches')
 const User = require('../models/users')
 const {validationResult} = require('express-validator')
 const bcrypt = require('bcryptjs')
+const  moment = require('moment')
 
 exports.getBreanches= async(req,res,next)=>{
     const page = req.query.page ||1
@@ -72,7 +73,8 @@ exports.getBreanchesById = async(req,res,next)=>{
     }
 }
 
-exports.createBreanches = async(req,res,next)=>{     
+exports.createBreanches = async(req,res,next)=>{    
+    
     const levelofbreanches = req.body.levelofbreanches
     const codeofbreanches = req.body.codeofbreanches
     const inn = req.body.inn
@@ -83,25 +85,17 @@ exports.createBreanches = async(req,res,next)=>{
     const telephone = req.body.telephone   
     let email =req.body.email
     let agreementnumber =req.body.agreementnumber
-    const agreementdate = req.body.agreementdate
-    const expirationdate = req.body.expirationdate
+    const agreementdate = moment(req.body.agreementdate,"DD/MM/YYYY")
+    const expirationdate = moment(req.body.expirationdate,"DD/MM/YYYY")
     const employees = req.body.employees
     const checkingaccount = req.body.checkingaccount
     const mfo = req.body.mfo
     const nameofbank = req.body.nameofbank
     const breanchstatus = req.body.breanchstatus   
+    
     try {
-
         const inndata = await Breanches.find({"inn":inn})
-
-        if(inndata){
-            res.status(200).json({
-                message:`Breanches List`,
-                data: inndata,            
-                creatorId: req.userId,
-            })
-        }else{
-
+        if(inndata){         
             const result = new Breanches({       
                 levelofbreanches:levelofbreanches,
                 codeofbreanches:codeofbreanches,
@@ -114,7 +108,7 @@ exports.createBreanches = async(req,res,next)=>{
                 email:email,
                 agreementnumber:agreementnumber,
                 agreementdate:agreementdate,
-                expirationdate:expirationdate,
+                expirationdate:(expirationdate),
                 employees:employees,
                 checkingaccount:checkingaccount,
                 mfo:mfo,
@@ -122,24 +116,41 @@ exports.createBreanches = async(req,res,next)=>{
                 breanchstatus:breanchstatus,          
                 creatorId: req.userId
             })
-            // console.log(result);
+         
+            
             const results = await result.save()      
             res.status(200).json({
                 message:`Breanches List`,
                 data: results,            
                 creatorId: req.userId,
             })
+
+
+
+
+           
+        }else{
+            console.log("keldi elseda"); 
+            console.log(inndata);
+            res.status(200).json({
+                message:`Breanches List`,
+                data: inndata,            
+                creatorId: req.userId,
+            })
+            
         }
         
         
 
       
     } catch (err) {
-        if(!err.statusCode){
-            const err = new Error('Agentni qoshishda xatolik')
-            err.statusCode = 500
-            throw err
-        }
+        console.log(err);
+        // if(!err.statusCode){
+          
+        //     const err = new Error('Agentni qoshishda xatolik')
+        //     err.statusCode = 500
+        //     throw err
+        // }
         next(err)
     }    
 }

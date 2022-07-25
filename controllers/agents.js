@@ -2,7 +2,7 @@ const Agents = require('../models/agents')
 const User = require('../models/users')
 const {validationResult} = require('express-validator')
 const bcrypt = require('bcryptjs')
-
+const  moment = require('moment')
 exports.getAgents= async(req,res,next)=>{
     const page = req.query.page ||1
     const counts = 20 //req.query.count ||20
@@ -61,7 +61,7 @@ exports.createAgents = async(req,res,next)=>{
     const inn = req.body.inn
     const branch = req.body.branch
     const agreementnumber = req.body.agreementnumber
-    const agreementdate = req.body.agreementdate
+    const agreementdate = moment(req.body.agreementdate,"DD/MM/YYYY")   
     
     const typeofpersons= req.body.typeofpersons    
     const isbeneficiary= req.body.isbeneficiary||null
