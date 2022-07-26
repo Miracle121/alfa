@@ -2,8 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path')
-
 const cors = require('cors')
+
 // const session = require('express-session');
 const region = require('./routes/regions');
 const districts = require('./routes/districts')
