@@ -93,8 +93,8 @@ exports.createBreanches = async(req,res,next)=>{
     const nameofbank = req.body.nameofbank
     const breanchstatus = req.body.breanchstatus  
     try {
-        const inndata = await Breanches.find({"inn":inn})
-        if(inndata){         
+        // const inndata = await Breanches.find({"inn":inn})
+        // if(inndata){         
             const result = new Breanches({       
                 levelofbreanches:levelofbreanches,
                 codeofbreanches:codeofbreanches,
@@ -128,16 +128,16 @@ exports.createBreanches = async(req,res,next)=>{
 
 
            
-        }else{
+        // }else{
           
       
-            res.status(200).json({
-                message:`Breanches List`,
-                data: inndata,            
-                creatorId: req.userId,
-            })
+        //     res.status(200).json({
+        //         message:`Breanches List`,
+        //         data: inndata,            
+        //         creatorId: req.userId,
+        //     })
             
-        }
+        // }
         
         
 
