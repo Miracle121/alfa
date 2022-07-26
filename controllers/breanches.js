@@ -129,8 +129,8 @@ exports.createBreanches = async(req,res,next)=>{
 
            
         }else{
-            console.log("keldi elseda"); 
-            console.log(inndata);
+          
+      
             res.status(200).json({
                 message:`Breanches List`,
                 data: inndata,            
@@ -143,7 +143,7 @@ exports.createBreanches = async(req,res,next)=>{
 
       
     } catch (err) {
-        console.log(err);
+        // console.log(err);
         // if(!err.statusCode){
           
         //     const err = new Error('Agentni qoshishda xatolik')

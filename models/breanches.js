@@ -2,7 +2,6 @@ const {Schema,model} = require('mongoose')
 
 
 const breanchesSchema = new Schema({  
-
     levelofbreanches:{
         type: Schema.Types.ObjectId,
         ref: 'Levelofbranch',

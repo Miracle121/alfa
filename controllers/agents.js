@@ -11,7 +11,7 @@ exports.getAgents= async(req,res,next)=>{
      totalItems = await Agents.find().countDocuments()
      const data = await Agents.find()
      .populate('typeofpersons','name')
-     .populate('regionId','name')
+    //  .populate('regionId','name')
      .populate('typeofagent','name')
      .populate('accountstatus','name')
      .populate('accountrole','name')     
@@ -60,14 +60,14 @@ exports.getAgentsById = async(req,res,next)=>{
 exports.createAgents = async(req,res,next)=>{     
     const inn = req.body.inn
     const branch = req.body.branch
-    const agreementnumber = req.body.agreementnumber
-    const agreementdate = moment(req.body.agreementdate,"DD/MM/YYYY")       
+    const agreementnumber = req.body.agreementnumber || null
+    const agreementdate = req.body.agreementdate || null //moment(req.body.agreementdate,"DD/MM/YYYY")       
     const typeofpersons= req.body.typeofpersons    
     const isbeneficiary= req.body.isbeneficiary||null
     const isfixedpolicyholde = req.body.isfixedpolicyholde || null
     const typeofagent = req.body.typeofagent       
-    let forindividualsdata =req.body.forindividualsdata
-    let corporateentitiesdata =req.body.corporateentitiesdata
+    let forindividualsdata =req.body.forindividualsdata || null
+    let corporateentitiesdata =req.body.corporateentitiesdata || null
     const isUsedourpanel = req.body.isUsedourpanel
     const isUserRestAPI = req.body.isUserRestAPI
     const email = req.body.email
@@ -75,6 +75,7 @@ exports.createAgents = async(req,res,next)=>{
     const accountstatus = req.body.accountstatus
     const accountrole = req.body.accountrole
     const hashpass = await  bcrypt.hash(password,12) 
+   
     try {
        const inn1= await Agents.find({"inn":inn})
        const email1= await User.find({"email":email})       
@@ -122,11 +123,13 @@ exports.createAgents = async(req,res,next)=>{
         })
        }     
     } catch (err) {
-        if(!err.statusCode){
-            const err = new Error('Agentni qoshishda xatolik')
-            err.statusCode = 500
-            throw err
-        }
+
+        // console.log(err);
+        // if(!err.statusCode){
+        //     const err = new Error(err)
+        //     err.statusCode = 500
+        //     throw err
+        // }
         next(err)
     }    
 }

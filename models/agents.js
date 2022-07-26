@@ -10,7 +10,7 @@ const agentsSchema = new Schema({
     branch:{
         type: Schema.Types.ObjectId,
         ref: 'Breanches',
-        required:true
+        required:true     
     },
     agreementnumber:{
         type:String,
@@ -29,7 +29,6 @@ const agentsSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Typeofagent'
      }, 
-    //======Isbeneficiary======= 
     isbeneficiary:{
         type: Schema.Types.ObjectId,
         ref: 'Products'
@@ -38,39 +37,39 @@ const agentsSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Products'
      },
-    //==========end======= 
    
     forindividualsdata:{
         name:{
-            type:String,
-            required:true
+            type:String         
         },
         secondname:{
-            type:String,
-            required:true
+            type:String
         },
         middlename:{
-            type:String,
-            required:true
+            type:String           
         },
         gender:{
             type: Schema.Types.ObjectId,
             ref: 'Gender',
-            required:true
+            // required:true,
+            // default:null
         },
         dateofbirth :{
             type:Date,
-            required:true
+            // required:true,
+            // default:null
         },
         citizenship:{
             type: Schema.Types.ObjectId,
             ref: 'Citizenship',
-            required:true
+            // required:true,
+            // default:null
         },
         typeofdocument:{
             type: Schema.Types.ObjectId,
             ref: 'Typeofdocument',
-            required:true
+            // required:true,
+            // default:null
         },
         passportSeries:  {
             type:String
@@ -90,12 +89,12 @@ const agentsSchema = new Schema({
         regions:{
         type: Schema.Types.ObjectId,
         ref: 'Regions',
-        required:true
+        // required:true
         },
         districts:{
         type: Schema.Types.ObjectId,
         ref: 'Districts',
-        required:true
+        // required:true
         },
         address:{
           type:String
@@ -151,7 +150,7 @@ const agentsSchema = new Schema({
         districts:{
             type: Schema.Types.ObjectId,
             ref: 'Districts',
-            required:true
+            // required:true
          }, 
         address:{
             type:String
@@ -161,22 +160,22 @@ const agentsSchema = new Schema({
         },
         checkingaccount:{
             type:String,
-            required:true
+            // required:true
         },
         employees:[{
             fullname:{
                 type:String,
-                required:true
+                // required:true
             },
             positions:{
                 type: Schema.Types.ObjectId,
                 ref: 'Positions',
-                required:true
+                // required:true
             },
             typeofdocumentsformanager:{
                 type: Schema.Types.ObjectId,
                 ref: 'Typeofdocuments',
-                required:true
+                // required:true
             },
             documentnumber:{
                 type:String               
@@ -196,8 +195,6 @@ const agentsSchema = new Schema({
         }]
 
      }, 
-
-     
     isUsedourpanel:{
         type:Boolean
     },
