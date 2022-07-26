@@ -13,7 +13,7 @@ const breanchesSchema = new Schema({
     },
     inn:{
         type:String,
-        unique:true,
+      
         required:true
     },
     regionId:{
