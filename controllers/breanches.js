@@ -91,8 +91,7 @@ exports.createBreanches = async(req,res,next)=>{
     const checkingaccount = req.body.checkingaccount
     const mfo = req.body.mfo
     const nameofbank = req.body.nameofbank
-    const breanchstatus = req.body.breanchstatus   
-    
+    const breanchstatus = req.body.breanchstatus  
     try {
         const inndata = await Breanches.find({"inn":inn})
         if(inndata){         

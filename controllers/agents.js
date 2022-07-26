@@ -61,48 +61,35 @@ exports.createAgents = async(req,res,next)=>{
     const inn = req.body.inn
     const branch = req.body.branch
     const agreementnumber = req.body.agreementnumber
-    const agreementdate = moment(req.body.agreementdate,"DD/MM/YYYY")   
-    
+    const agreementdate = moment(req.body.agreementdate,"DD/MM/YYYY")       
     const typeofpersons= req.body.typeofpersons    
     const isbeneficiary= req.body.isbeneficiary||null
     const isfixedpolicyholde = req.body.isfixedpolicyholde || null
-    const typeofagent = req.body.typeofagent   
-    
+    const typeofagent = req.body.typeofagent       
     let forindividualsdata =req.body.forindividualsdata
     let corporateentitiesdata =req.body.corporateentitiesdata
-   
     const isUsedourpanel = req.body.isUsedourpanel
     const isUserRestAPI = req.body.isUserRestAPI
-    
-    //=============================
     const email = req.body.email
     const password = req.body.password
     const accountstatus = req.body.accountstatus
     const accountrole = req.body.accountrole
-
-
     const hashpass = await  bcrypt.hash(password,12) 
     try {
-        
        const inn1= await Agents.find({"inn":inn})
        const email1= await User.find({"email":email})       
-       if(inn1.length===0 && email1.length===0){
-      
-       
+       if(inn1.length===0 && email1.length===0){     
         const result = new Agents({       
             inn:inn,
             branch:branch,
             agreementnumber:agreementnumber,
             agreementdate:agreementdate,
-            typeofpersons:typeofpersons,
-                       
+            typeofpersons:typeofpersons,                       
             isbeneficiary:isbeneficiary,
             isfixedpolicyholde:isfixedpolicyholde,
             typeofagent:typeofagent,
             forindividualsdata:forindividualsdata,
-            corporateentitiesdata:corporateentitiesdata,
-          
-           
+            corporateentitiesdata:corporateentitiesdata,         
             isUsedourpanel:isUsedourpanel,
             isUserRestAPI:isUserRestAPI,
             email:email,
@@ -111,13 +98,8 @@ exports.createAgents = async(req,res,next)=>{
             accountrole:accountrole,
             creatorId: req.userId
         })
-
-        const results = await result.save() 
-         
-       
-
+        const results = await result.save()       
         const resultUsers=  new User({
-                // fullname: "XXX",
                 email:email,
                 password:hashpass,
                 accountstatus:accountstatus,
