@@ -137,23 +137,22 @@ exports.createAgents = async(req,res,next)=>{
 exports.updateAgents = async(req,res,next)=>{ 
     const AgesId = req.params.id
     const inn = req.body.inn
-    const typeofpersons= req.body.typeofpersons
-    const regionId= req.body.regionId
-    const isbeneficiary= req.body.isbeneficiary
-    const isfixedpolicyholde = req.body.isfixedpolicyholde 
-    const typeofagent = req.body.typeofagent   
-    const address = req.body.address
-    let forindividualsdata =req.body.forindividualsdata
-    let corporateentitiesdata =req.body.corporateentitiesdata
-    const telephonenumber = req.body.telephonenumber
+    const branch = req.body.branch
+    const agreementnumber = req.body.agreementnumber || null
+    const agreementdate = req.body.agreementdate || null //moment(req.body.agreementdate,"DD/MM/YYYY")       
+    const typeofpersons= req.body.typeofpersons    
+    const isbeneficiary= req.body.isbeneficiary||null
+    const isfixedpolicyholde = req.body.isfixedpolicyholde || null
+    const typeofagent = req.body.typeofagent       
+    let forindividualsdata =req.body.forindividualsdata || null
+    let corporateentitiesdata =req.body.corporateentitiesdata || null
     const isUsedourpanel = req.body.isUsedourpanel
     const isUserRestAPI = req.body.isUserRestAPI
-    //=============================
     const email = req.body.email
     const password = req.body.password
     const accountstatus = req.body.accountstatus
     const accountrole = req.body.accountrole
-    const hashpass = await  bcrypt.hash(password,12)   
+    const hashpass = await  bcrypt.hash(password,12) 
     try {
     const result = await Agents.findById(AgesId)
     if(!result){
@@ -162,23 +161,29 @@ exports.updateAgents = async(req,res,next)=>{
         throw error
     }   
     result.inn=inn
+    result.branch=branch
+    result.agreementnumber=agreementnumber
+    result.agreementdate=agreementdate
     result.typeofpersons=typeofpersons
-    result.regionId=regionId
     result.isbeneficiary=isbeneficiary
     result.isfixedpolicyholde=isfixedpolicyholde
     result.typeofagent=typeofagent
     result.forindividualsdata=forindividualsdata
     result.corporateentitiesdata=corporateentitiesdata
-    result.address=address
-    result.forindividualsdata=forindividualsdata
-    result.corporateentitiesdata=corporateentitiesdata
-    result.telephonenumber=telephonenumber
     result.isUsedourpanel=isUsedourpanel
     result.isUserRestAPI=isUserRestAPI
     result.email=email
-    result.password=hashpass
+    result.password=password
     result.accountstatus=accountstatus
     result.accountrole=accountrole
+    result.hashpass=hashpass
+
+
+
+
+   
+
+
     const data =await result.save()  
     res.status(200).json({
         message:`Agents List`,

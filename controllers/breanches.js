@@ -156,24 +156,23 @@ exports.createBreanches = async(req,res,next)=>{
 
 exports.updateBreanches= async(req,res,next)=>{ 
     const AgesId = req.params.id
+    const levelofbreanches = req.body.levelofbreanches
+    const codeofbreanches = req.body.codeofbreanches
     const inn = req.body.inn
-    const typeofpersons= req.body.typeofpersons
-    const regionId= req.body.regionId
-    const isbeneficiary= req.body.isbeneficiary
-    const isfixedpolicyholde = req.body.isfixedpolicyholde 
-    const typeofagent = req.body.typeofagent   
-    const address = req.body.address
-    let forindividualsdata =req.body.forindividualsdata
-    let corporateentitiesdata =req.body.corporateentitiesdata
-    const telephonenumber = req.body.telephonenumber
-    const isUsedourpanel = req.body.isUsedourpanel
-    const isUserRestAPI = req.body.isUserRestAPI
-    //=============================
-    const email = req.body.email
-    const password = req.body.password
-    const accountstatus = req.body.accountstatus
-    const accountrole = req.body.accountrole
-    const hashpass = await  bcrypt.hash(password,12)   
+    const regionId = req.body.regionId
+    const branchname= req.body.branchname    
+    const shorttitleofbranch= req.body.shorttitleofbranch
+    const address = req.body.address 
+    const telephone = req.body.telephone   
+    let email =req.body.email
+    let agreementnumber =req.body.agreementnumber
+    const agreementdate = moment(req.body.agreementdate,"DD/MM/YYYY")
+    const expirationdate = moment(req.body.expirationdate,"DD/MM/YYYY")
+    const employees = req.body.employees
+    const checkingaccount = req.body.checkingaccount
+    const mfo = req.body.mfo
+    const nameofbank = req.body.nameofbank
+    const breanchstatus = req.body.breanchstatus  
     try {
     const result = await Breanches.findById(AgesId)
     if(!result){
@@ -181,24 +180,22 @@ exports.updateBreanches= async(req,res,next)=>{
         error.statusCode = 404
         throw error
     }   
+    result.levelofbreanches=levelofbreanches
+    result.codeofbreanches=codeofbreanches
     result.inn=inn
-    result.typeofpersons=typeofpersons
     result.regionId=regionId
-    result.isbeneficiary=isbeneficiary
-    result.isfixedpolicyholde=isfixedpolicyholde
-    result.typeofagent=typeofagent
-    result.forindividualsdata=forindividualsdata
-    result.corporateentitiesdata=corporateentitiesdata
+    result.branchname=branchname
+    result.shorttitleofbranch=shorttitleofbranch
     result.address=address
-    result.forindividualsdata=forindividualsdata
-    result.corporateentitiesdata=corporateentitiesdata
-    result.telephonenumber=telephonenumber
-    result.isUsedourpanel=isUsedourpanel
-    result.isUserRestAPI=isUserRestAPI
+    result.telephone=telephone
     result.email=email
-    result.password=hashpass
-    result.accountstatus=accountstatus
-    result.accountrole=accountrole
+    result.agreementnumber=agreementnumber
+    result.expirationdate=expirationdate
+    result.employees=employees
+    result.checkingaccount=checkingaccount
+    result.mfo=mfo
+    result.nameofbank=nameofbank
+    result.breanchstatus=breanchstatus
     const data =await result.save()  
     res.status(200).json({
         message:`Agents List`,
@@ -206,11 +203,11 @@ exports.updateBreanches= async(req,res,next)=>{
     })
     } 
     catch (err) {
-        if(!err.statusCode){
-            const error = new Error('Intenall error11111')
-            error.statusCode = 500
-            throw error
-        }
+        // if(!err.statusCode){
+        //     const error = new Error('Intenall error11111')
+        //     error.statusCode = 500
+        //     throw error
+        // }
         next(err)
     }
 }
