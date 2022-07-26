@@ -88,7 +88,7 @@ const agentsSchema = new Schema({
         },
         regions:{
         type: Schema.Types.ObjectId,
-        ref: 'Regions',
+        ref: 'Region',
         // required:true
         },
         districts:{

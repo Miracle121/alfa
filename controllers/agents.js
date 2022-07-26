@@ -11,7 +11,7 @@ exports.getAgents= async(req,res,next)=>{
      totalItems = await Agents.find().countDocuments()
      const data = await Agents.find()
      .populate('typeofpersons','name')
-    //  .populate('regionId','name')
+    //  .populate('regions','name')
      .populate('typeofagent','name')
      .populate('accountstatus','name')
      .populate('accountrole','name')     
@@ -35,7 +35,7 @@ exports.getAgentsById = async(req,res,next)=>{
     try {
         const result= await Agents.findById(AgesId)
         .populate('typeofpersons','name')
-        .populate('regionId','name')
+        // .populate('regionId','name')
         .populate('typeofagent','name')
         .populate('accountstatus','name')
         .populate('accountrole','name')  
