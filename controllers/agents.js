@@ -10,11 +10,64 @@ exports.getAgents= async(req,res,next)=>{
     try {
      totalItems = await Agents.find().countDocuments()
      const data = await Agents.find()
-     .populate('typeofpersons','name')
-    //  .populate('regions','name')
-     .populate('typeofagent','name')
-     .populate('accountstatus','name')
-     .populate('accountrole','name')     
+     .populate('branch','branchname')        
+        .populate('typeofpersons','name')     
+        .populate('typeofagent','name')
+        .populate('accountstatus','name')
+        .populate('accountrole','name')  
+        .populate({
+            path: 'forindividualsdata',
+            populate:[
+                {               
+                    path: 'gender',
+                    select: 'name'
+                },
+                {               
+                    path: 'citizenship',
+                    select: 'name'
+                },
+                {               
+                    path: 'typeofdocument',
+                    select: 'name'
+                },
+                {               
+                    path: 'regions',
+                    select: 'name'
+                },
+                {               
+                    path: 'districts',
+                    select: 'name'
+                },
+
+                
+            ]
+        })
+        .populate({
+            path: 'corporateentitiesdata',
+            populate:[
+                {               
+                    path: 'regionId',
+                    select: 'name'
+                },
+                {               
+                    path: 'districts',
+                    select: 'name'
+                },
+                {
+                    path: 'employees',
+                    populate:[
+                        {
+                            path: 'positions',
+                            select: 'name'
+                        },
+                        {
+                            path: 'typeofdocumentsformanager',
+                            select: 'name'
+                        },
+                    ]
+                }
+            ]
+        })  
      .skip((page-1)*counts).limit(counts)
      res.status(200).json({
          message:`Agents List`,
@@ -22,10 +75,10 @@ exports.getAgents= async(req,res,next)=>{
          totalItems:totalItems
      })
     } catch (err) {
-        if(!err.statusCode)
-        {
-            err.statusCode =500
-        }
+        // if(!err.statusCode)
+        // {
+        //     err.statusCode =500
+        // }
         next(err)
     } 
 }
@@ -34,11 +87,46 @@ exports.getAgentsById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
         const result= await Agents.findById(AgesId)
-        .populate('typeofpersons','name')
-        // .populate('regionId','name')
+        .populate('branch','branchname')        
+        .populate('typeofpersons','name')     
         .populate('typeofagent','name')
         .populate('accountstatus','name')
         .populate('accountrole','name')  
+        .populate({
+            path: 'forindividualsdata',
+            populate:[
+                {               
+                    path: 'gender',
+                    select: 'name'
+                },
+            ]
+        })
+        .populate({
+            path: 'corporateentitiesdata',
+            populate:[
+                {               
+                    path: 'regionId',
+                    select: 'name'
+                },
+                {               
+                    path: 'districts',
+                    select: 'name'
+                },
+                {
+                    path: 'employees',
+                    populate:[
+                        {
+                            path: 'positions',
+                            select: 'name'
+                        },
+                        {
+                            path: 'typeofdocumentsformanager',
+                            select: 'name'
+                        },
+                    ]
+                }
+            ]
+        })
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404
@@ -48,11 +136,12 @@ exports.getAgentsById = async(req,res,next)=>{
             message:`Agents List`,
             data:result
         })
-    } catch (err) {
-        if(!err.statusCode)
-        {
-            err.statusCode =500
-        }
+    } 
+    catch (err) {
+        // if(!err.statusCode)
+        // {
+        //     err.statusCode =500
+        // }
         next(err)
     }
 }

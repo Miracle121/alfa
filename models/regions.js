@@ -5,15 +5,6 @@ const regionSchema = new Schema({
         type:String,
         required:true
     },
-    // viewBox:{
-    //     type:String
-    // },
-    // pathd:{
-    //     type:String
-    // },
-    // transform:{
-    //     type:String
-    // },
     creatorId:{
         type: Schema.Types.ObjectId,
         ref: 'Users',

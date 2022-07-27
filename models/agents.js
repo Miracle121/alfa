@@ -67,7 +67,7 @@ const agentsSchema = new Schema({
         },
         typeofdocument:{
             type: Schema.Types.ObjectId,
-            ref: 'Typeofdocument',
+            ref: 'Typeofdocuments',
             // required:true,
             // default:null
         },
@@ -169,7 +169,7 @@ const agentsSchema = new Schema({
             },
             positions:{
                 type: Schema.Types.ObjectId,
-                ref: 'Positions',
+                ref: 'position',
                 // required:true
             },
             typeofdocumentsformanager:{
