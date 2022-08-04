@@ -7,7 +7,7 @@ exports.getSubgroupOfProducts= async(req,res,next)=>{
     let totalItems
     try {
     totalItems = await Subgroupofproducts.find().countDocuments()
-     const subgroups = await Subgroupofproducts.find().skip((page-1)*counts).limit(counts)
+     const subgroups = await Subgroupofproducts.find().populate('groupId','name').skip((page-1)*counts).limit(counts)
      res.status(200).json({
          message:`SubGroups of products`,
          data:subgroups,

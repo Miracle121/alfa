@@ -25,7 +25,7 @@ exports.getProducts= async(req,res,next)=>{
         .populate('policyformatId','name')
         .populate('typeofclaimsettlement','name')
         .populate('typeofrefund','name')
-        .populate('typeofrefund','name')
+        // .populate('typeofrefund','name')
         .populate('typeofpayment','name')
         .populate('typeofpolice','name')
         // .populate('tariff.agentlist','name')

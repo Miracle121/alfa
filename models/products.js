@@ -124,7 +124,7 @@ const productsSchema = new Schema({
     },
     fixedpremium:{
         type:Number,
-        required:true
+        // required:true
     },
     Isbettingrange:{
         type:Boolean,
@@ -136,15 +136,15 @@ const productsSchema = new Schema({
     },
     fixedrate:{
         type:String,
-        required:true
+        // required:true
     },
     Isfixedsuminsured:{
         type:Boolean,
-        required:true
+        // required:true
     },
     fixedsuminsured:{
         type:Number,
-        required:true
+        // required:true
     },
     Isfixedfee:{
         type:Boolean,
@@ -152,7 +152,7 @@ const productsSchema = new Schema({
     },
     fixedfee:{
         type:Number,
-        required:true
+        // required:true
     },
     Isfixedpreventivemeasures:{
         type:Boolean,

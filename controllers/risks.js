@@ -7,7 +7,10 @@ exports.getRisks= async(req,res,next)=>{
     let totalItems
     try {
         totalItems = await Risks.find().countDocuments()
-        const risks = await Risks.find().populate('typeofrisksId','name').populate('classesId','name').skip((page-1)*counts).limit(counts)
+        const risks = await Risks.find()
+        .populate('typeofrisksId','name')
+        .populate('classesId','name')
+        .skip((page-1)*counts).limit(counts)
          res.status(200).json({
          message:`Risks list`,
          data:risks,
@@ -54,12 +57,12 @@ exports.createRisks= async (req,res,next)=>{
     const name = req.body.name     
     const typeofrisksId = req.body.typeofrisksId 
     const classesId = req.body.classesId
-    const num = req.body.num
+    const categorynumber = req.body.categorynumber
     const group =new Risks({
         name: name,
         typeofrisksId:typeofrisksId,
         classesId:classesId,
-        categorynumber:num,
+        categorynumber:categorynumber,
         creatorId: req.userId
     })
     const groups = await group.save()
@@ -75,7 +78,7 @@ exports.updateRisks =async(req,res,next)=>{
     const name = req.body.name   
     const typeofrisksId = req.body.typeofrisksId    
     const classesId = req.body.classesId
-    const num = req.body.num 
+    const categorynumber = req.body.categorynumber 
     try {
     const groups = await Risks.findById(typeofriskId)
     if(!groups){
@@ -86,7 +89,7 @@ exports.updateRisks =async(req,res,next)=>{
     groups.name= name  
     groups.typeofrisksId=typeofrisksId
     groups.classesId=classesId
-    groups.num=num
+    groups.categorynumber=categorynumber
     const typeofrisk = await groups.save()
     res.status(200).json({
         message:`Risks is changed`,
