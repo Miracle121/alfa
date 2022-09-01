@@ -49,10 +49,12 @@ const typeofdocuments = require('./routes/typeofdocuments')
 const levelofbranch = require('./routes/levelofbranch')
 const breanches = require('./routes/breanches')
 const breanchstatus = require('./routes/breanchstatus')
+//============agreements=================
+const agreements = require('./routes/agreements')
 const app = express();
 
-const URL = 'mongodb://alfa:admin123a@localhost:27017/Alfa?authSource=admin'
-// const URL ='mongodb://alfa:admin123a@91.190.159.70:27017/Alfa?authSource=admin'
+// const URL = 'mongodb://alfa:admin123a@localhost:27017/Alfa?authSource=admin'
+const URL ='mongodb://alfa:admin123a@91.190.159.70:27017/Alfa?authSource=admin'
 
 
 global.__basedir = __dirname;
@@ -114,6 +116,8 @@ app.use('/typeofdocuments',typeofdocuments)
 app.use('/levelofbranch',levelofbranch)
 app.use('/breanches',breanches)
 app.use('/breanchstatus',breanchstatus)
+//================agreements=====
+app.use('/agreements',agreements)
 
 
 
