@@ -87,17 +87,17 @@ const agentsSchema = new Schema({
             type:String
         },
         regions:{
-        type: Schema.Types.ObjectId,
-        ref: 'Region',
-        // required:true
+            type: Schema.Types.ObjectId,
+            ref: 'Region',
+            // required:true
         },
         districts:{
-        type: Schema.Types.ObjectId,
-        ref: 'Districts',
+            type: Schema.Types.ObjectId,
+            ref: 'Districts',
         // required:true
         },
         address:{
-          type:String
+            type:String
         },
         postcode:{
             type:String

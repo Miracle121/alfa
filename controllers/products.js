@@ -2,7 +2,7 @@ const Products = require('../models/products')
 const Agents = require('../models/agents')
 const {validationResult} = require('express-validator')
 
-let xx=[]
+
 exports.getProducts= async(req,res,next)=>{
     const page = req.query.page ||1   
     const counts = 20 //req.query.count ||20
@@ -439,16 +439,21 @@ exports.deleteProducts = async(req,res,next)=>{
 }
 
 exports.getTariff = async(req,res,next)=>{
-    const agentlist = req.body.agentlist
-    const limitofagreement = req.body.limitofagreement
-    const Isagreement = req.body.Isagreement
-    const tariffperclasses = req.body.tariffperclasses
-
-
-    console.log("XXXX");
-    console.log(tariff);
-
-
+    const subgroupofproductsId =req.get('subgroupofproductsId')
+    que = {}
+    if (subgroupofproductsId)
+        que.subgroupofproductsId = subgroupofproductsId        
+        try {
+            const  totalItems = await Products.find(que).countDocuments()
+            const  products = await Products.find(que)
+            res.status(200).json({
+                message: `Products list`,
+                oreders: products,
+                totalItems: totalItems
+            })
+        } catch (error) {
+            next(error)            
+        }     
 }
 
 

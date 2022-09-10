@@ -12,5 +12,7 @@ router.post('/',IsAuth,agreements.createAgreements)
 router.put('/:id',IsAuth,agreements.updateAgreements)
 router.delete('/:id',IsAuth,agreements.deleteAgreements)
 
+router.post('/agentsfilter',IsAuth,agreements.findebyquery)
+
 
 module.exports = router

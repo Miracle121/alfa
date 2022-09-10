@@ -1,4 +1,5 @@
 const Agreements = require('../models/agreements')
+const Agents = require('../models/agents')
 const User = require('../models/users')
 const {validationResult} = require('express-validator')
 const bcrypt = require('bcryptjs')
@@ -75,6 +76,9 @@ exports.createAgreements = async(req,res,next)=>{
     const products = req.body.products    
     const startofinsurance = req.body.startofinsurance    
     const endofinsurance = req.body.endofinsurance    
+    const clinets= req.body.clinets
+    const beneficiary= req.body.beneficiary
+    const pledgers = req.body.pledgers
     const riskId = req.body.riskId    
     const totalsuminsured = req.body.totalsuminsured    
     const totalinsurancepremium = req.body.totalinsurancepremium    
@@ -97,7 +101,7 @@ exports.createAgreements = async(req,res,next)=>{
     const agreementdate = req.body.agreementdate
     const copyofagreement =req.body.copyofagreement
     const documents =req.body.documents
-    const policy =req.body.policy
+    const policy =req.body.policy   
     try {
             const result = new Agreements({    
                 groupofproductsId:groupofproductsId,
@@ -105,6 +109,10 @@ exports.createAgreements = async(req,res,next)=>{
                 products:products,
                 startofinsurance:startofinsurance,
                 endofinsurance:endofinsurance,
+                clinets:clinets,
+                beneficiary:beneficiary,
+                pledgers:pledgers,
+
                 riskId:riskId,
                 totalsuminsured:totalsuminsured,
                 totalinsurancepremium:totalinsurancepremium,
@@ -254,5 +262,108 @@ exports.deleteAgreements = async(req,res,next)=>{
             err.statusCode =500
         }
         next(err)
+    }
+}
+
+exports.findebyquery =async(req,res,next)=>{
+    
+    let agentsdata
+    let agentscount
+    const inn = req.get('inn')
+    const nameoforganization = req.get('nameoforganization')
+    const name = req.get('name')
+    const secondname = req.get('secondname')
+    const middlename = req.get('middlename')
+    const passportSeries = req.get('passportSeries')
+    const passportNumber = req.get('passportNumber')
+    const pin= req.get('pin')
+    que = {}
+    if (inn)
+        que.inn = inn
+    if (nameoforganization)
+        que.nameoforganization = nameoforganization
+    if (name)
+        que.name = name
+    if (secondname)
+        que.secondname = secondname
+    if (middlename)
+        que.middlename = middlename
+    if (passportSeries)
+        que.passportSeries = passportSeries
+    if (passportNumber)
+        que.passportNumber = passportNumber
+    if (pin)
+        que.pin = pin   
+        // console.log(que);
+    try {
+
+        agentscount = await Agents.find(que).countDocuments()
+         agentsdata = await Agents.find(que).populate('branch','branchname')        
+         .populate('typeofpersons','name')     
+         .populate('typeofagent','name')
+         .populate('accountstatus','name')
+         .populate('accountrole','name')  
+         .populate({
+             path: 'forindividualsdata',
+             populate:[
+                 {               
+                     path: 'gender',
+                     select: 'name'
+                 },
+                 {               
+                     path: 'citizenship',
+                     select: 'name'
+                 },
+                 {               
+                     path: 'typeofdocument',
+                     select: 'name'
+                 },
+                 {               
+                     path: 'regions',
+                     select: 'name'
+                 },
+                 {               
+                     path: 'districts',
+                     select: 'name'
+                 },
+ 
+                 
+             ]
+         })
+         .populate({
+             path: 'corporateentitiesdata',
+             populate:[
+                 {               
+                     path: 'regionId',
+                     select: 'name'
+                 },
+                 {               
+                     path: 'districts',
+                     select: 'name'
+                 },
+                 {
+                     path: 'employees',
+                     populate:[
+                         {
+                             path: 'positions',
+                             select: 'name'
+                         },
+                         {
+                             path: 'typeofdocumentsformanager',
+                             select: 'name'
+                         },
+                     ]
+                 }
+             ]
+         })      
+        
+         res.status(200).json({
+            message: `Agents list`,
+            data: agentsdata,
+            agentscount: agentscount
+        })
+
+    } catch (error) {
+        next(error)        
     }
 }

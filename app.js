@@ -51,10 +51,20 @@ const breanches = require('./routes/breanches')
 const breanchstatus = require('./routes/breanchstatus')
 //============agreements=================
 const agreements = require('./routes/agreements')
+const reasons = require('./routes/reasons')
+
+const policy = require('./routes/policy')
+const typeofendorsements = require('./routes/typeofendorsements')
+const statusofendorsements = require('./routes/statusofendorsements')
+const fieldofendorsements = require('./routes/fieldofendorsements')
+
+
+
+
 const app = express();
 
-const URL = 'mongodb://alfa:admin123a@localhost:27017/Alfa?authSource=admin'
-// const URL ='mongodb://alfa:admin123a@91.190.159.70:27017/Alfa?authSource=admin'
+// const URL = 'mongodb://alfa:admin123a@localhost:27017/Alfa?authSource=admin'
+const URL ='mongodb://alfa:admin123a@91.190.159.70:27017/Alfa?authSource=admin'
 
 
 global.__basedir = __dirname;
@@ -118,6 +128,12 @@ app.use('/breanches',breanches)
 app.use('/breanchstatus',breanchstatus)
 //================agreements=====
 app.use('/agreements',agreements)
+app.use('/reasons',reasons)
+app.use('/policy',policy)
+
+app.use('/typeofendorsements',typeofendorsements)
+app.use('/statusofendorsements',statusofendorsements)
+app.use('/fieldofendorsements',fieldofendorsements)
 
 
 

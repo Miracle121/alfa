@@ -21,7 +21,20 @@ const agreementsSchema = new Schema({
     endofinsurance:{
         type:Date 
     },
-    //======================Обязательства========================
+    clinets:{
+            type: Schema.Types.ObjectId,
+            ref: 'Agents',        
+    },
+    beneficiary:{
+        type: Schema.Types.ObjectId,
+        ref: 'Agents'
+    },
+    pledgers:[{
+        type: Schema.Types.ObjectId,
+        ref: 'Agents', 
+        required: true
+    }],
+ 
     riskId:[{
         riskgroup:{
           type: Schema.Types.ObjectId,
@@ -109,7 +122,6 @@ const agreementsSchema = new Schema({
         }
         
     }],
-    //======shu yergacha qilindi======
     franchise:[{
         risk:{
             type: Schema.Types.ObjectId,
@@ -230,21 +242,18 @@ const agreementsSchema = new Schema({
 
     //=============Полис======
     policy:[{
-        policynumber:{
-            type:String
+        policyId:{
+            type: Schema.Types.ObjectId,
+            ref: 'Policy'
         },
-        formno:{
-            type:String
-        },
-        dateofissue:{
-            type:Date
-        },
-        copiesofdocuments:{
-            type:String
-        }
-
     }],
-
+    //==================Индоссаменты========
+    endorsements:[{
+        endorsementsId:{
+        type: Schema.Types.ObjectId,
+        ref: 'Endorsements'
+    }}],
+    
     creatorId:{
         type: Schema.Types.ObjectId,
         ref: 'Users',
