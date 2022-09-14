@@ -439,7 +439,9 @@ exports.deleteProducts = async(req,res,next)=>{
 }
 
 exports.getTariff = async(req,res,next)=>{
+    
     const subgroupofproductsId =req.get('subgroupofproductsId')
+ 
     que = {}
     if (subgroupofproductsId)
         que.subgroupofproductsId = subgroupofproductsId        
