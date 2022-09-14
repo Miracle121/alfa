@@ -266,6 +266,7 @@ exports.deleteAgreements = async(req,res,next)=>{
 }
 
 exports.findebyquery =async(req,res,next)=>{
+   
     
     let agentsdata
     let agentscount
