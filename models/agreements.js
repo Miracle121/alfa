@@ -34,6 +34,34 @@ const agreementsSchema = new Schema({
         ref: 'Agents', 
         required: true
     }],
+    //===================
+    objectofinsurance:[{
+        typeofobjects:{
+            type: Schema.Types.ObjectId,
+            ref: 'Typeofobjects',
+            required:true
+        },
+        objects:{
+            type: Schema.Types.ObjectId,
+            ref: 'Objects',
+            required:true
+        },
+        quantity:{
+            type: Number,
+            required: true
+        },
+        regionId:{
+            type: Schema.Types.ObjectId,
+            ref: 'Region',
+            required:true
+        },
+        districtsId:{
+            type: Schema.Types.ObjectId,
+            ref: 'Districts',
+            required:true
+        }
+    }],
+    //====================
  
     riskId:[{
         riskgroup:{

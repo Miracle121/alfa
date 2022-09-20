@@ -80,6 +80,7 @@ exports.createAgreements = async(req,res,next)=>{
     const beneficiary= req.body.beneficiary
     const pledgers = req.body.pledgers
     const riskId = req.body.riskId    
+    const objectofinsurance= req.body.objectofinsurance
     const totalsuminsured = req.body.totalsuminsured    
     const totalinsurancepremium = req.body.totalinsurancepremium    
     const accruedinsurancepremium = req.body.accruedinsurancepremium    
@@ -112,7 +113,7 @@ exports.createAgreements = async(req,res,next)=>{
                 clinets:clinets,
                 beneficiary:beneficiary,
                 pledgers:pledgers,
-
+                objectofinsurance:objectofinsurance,
                 riskId:riskId,
                 totalsuminsured:totalsuminsured,
                 totalinsurancepremium:totalinsurancepremium,
@@ -278,28 +279,31 @@ exports.findebyquery =async(req,res,next)=>{
     const passportSeries = req.get('passportSeries')
     const passportNumber = req.get('passportNumber')
     const pin= req.get('pin')
+
     que = {}
+    
     if (inn)
         que.inn = inn
     if (nameoforganization)
-        que.nameoforganization = nameoforganization
+        que['corporateentitiesdata.nameoforganization'] = nameoforganization
     if (name)
-        que.name = name
+        que['forindividualsdata.name'] = name
     if (secondname)
-        que.secondname = secondname
+        que['forindividualsdata.secondname'] = secondname
     if (middlename)
-        que.middlename = middlename
+        que['forindividualsdata.middlename'] = middlename
     if (passportSeries)
-        que.passportSeries = passportSeries
+        que['forindividualsdata.passportSeries'] = passportSeries
     if (passportNumber)
-        que.passportNumber = passportNumber
+        que['forindividualsdata.passportNumber'] = passportNumber
     if (pin)
-        que.pin = pin   
+        que['forindividualsdata.pin'] = pin   
         // console.log(que);
     try {
 
         agentscount = await Agents.find(que).countDocuments()
-         agentsdata = await Agents.find(que).populate('branch','branchname')        
+         agentsdata = await Agents.find(que)
+         .populate('branch','branchname')        
          .populate('typeofpersons','name')     
          .populate('typeofagent','name')
          .populate('accountstatus','name')
