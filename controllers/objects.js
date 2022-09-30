@@ -121,3 +121,22 @@ exports.deleteObject = async(req,res,next)=>{
     }
 }
 
+exports.getByTypeofObjectId =async(req,res,next)=>{    
+    const typeId= req.params.id
+    try {
+        const objects= await Objects.find({typobjectsId:typeId}) //.populate('typobjectsId','name')
+        if(!objects){
+            err.statusCode =404
+        }
+        res.status(200).json({
+            message:`Objects list`,
+            data: objects
+        })
+    } catch (err) {
+        if(!err.statusCode)
+        {
+            err.statusCode =500
+        }
+        next(err)
+    }
+}
