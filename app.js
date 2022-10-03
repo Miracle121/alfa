@@ -57,6 +57,7 @@ const policy = require('./routes/policy')
 const typeofendorsements = require('./routes/typeofendorsements')
 const statusofendorsements = require('./routes/statusofendorsements')
 const fieldofendorsements = require('./routes/fieldofendorsements')
+const paymentcurrency = require('./routes/paymentcurrency')
 
 
 
@@ -134,6 +135,8 @@ app.use('/policy',policy)
 app.use('/typeofendorsements',typeofendorsements)
 app.use('/statusofendorsements',statusofendorsements)
 app.use('/fieldofendorsements',fieldofendorsements)
+
+app.use('/paymentcurrency',paymentcurrency)
 
 
 

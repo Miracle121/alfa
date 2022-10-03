@@ -110,10 +110,10 @@ const agreementsSchema = new Schema({
     },
     paymentcurrency:{
         type: Schema.Types.ObjectId,
-        ref: 'Typeofpayments',
+        ref: 'Paymentcurrency',
         required: true  
     },
-    duplicatefee:[{
+    duplicatefee:{
         Isduplicatefee:{
             type:Boolean
         },
@@ -125,8 +125,8 @@ const agreementsSchema = new Schema({
         countoffee:{
             type:Number
         }
-    }],
-    demonstrablecosts:[{
+    },
+    demonstrablecosts:{
         Isdemonstrablecosts:{
             type:Boolean
         },
@@ -140,7 +140,7 @@ const agreementsSchema = new Schema({
         countoffee:{
             type:Number
         }
-    }],
+    },
     premiumpaymentschedule:[{
         scheduledate:{
             type:Date
