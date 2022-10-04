@@ -1,4 +1,5 @@
 const {Schema,model} = require('mongoose')
+const  moment = require('moment')
 const agreementsSchema = new Schema({
     //==========================Продукт================
     groupofproductsId:{
@@ -93,8 +94,7 @@ const agreementsSchema = new Schema({
         },
         suminsured:{
             type:Number
-        }
-        
+        }        
       } ],
     totalsuminsured:{
         type:Number
@@ -197,7 +197,7 @@ const agreementsSchema = new Schema({
          //== endi qilinadi
         reason:{
             type: Schema.Types.ObjectId,
-            ref: 'Reason',
+            ref: 'Reasons',
             required: true
         },
 
@@ -290,5 +290,25 @@ const agreementsSchema = new Schema({
 },
 
 { timestamps:true })
+
+// agreementsSchema.pre('validate', function(next){ 
+//     const data = this;
+//     console.log(data.riskId);
+//     // data.riskId = asdasd;
+//     // data.riskId.map(
+//     //     (data)=>{
+//     //         console.log(data.startdate);
+//     //         console.log(data.enddate);
+//     //         //data.startdate= moment(data.startdate ,"DD/MM/YYYY") 
+//     //         // return moment(data.startdate ,"DD/MM/YYYY") 
+
+//     //     }
+//     // )
+//     // console.log(data.riskId);    
+//         console.log('triggered...');
+//         next();
+//     });
+
+
 
 module.exports = model('Agreements',agreementsSchema)

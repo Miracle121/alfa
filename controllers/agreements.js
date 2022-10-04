@@ -12,8 +12,40 @@ exports.getAgreements= async(req,res,next)=>{
     try {
      totalItems = await Agreements.find().countDocuments()
      const data = await Agreements.find()
-    //  .populate('regionId','name')     
-    //  .populate('breanchstatus','name')
+     .populate('groupofproductsId','name')     
+     .populate('subgroupofproductsId','name')
+     .populate('products','productname')
+     .populate('clinets','inn')
+     .populate('beneficiary','inn')
+     .populate('pledgers','inn')
+     .populate('objectofinsurance.typeofobjects','name')
+     .populate('objectofinsurance.objects','name')
+     .populate('objectofinsurance.regionId','name')
+     .populate('objectofinsurance.districtsId','name')
+     .populate('riskId.riskgroup','name')
+     .populate('riskId.risk','name')
+     .populate('riskId.classeId','name')
+     .populate('paymentcurrency','name')
+
+     .populate('franchise.risk','name')
+     .populate('franchise.typeoffranchise','name')
+     .populate('franchise.baseoffranchise','name')
+
+     .populate('termination.reason','name')
+     .populate('commission.agents','inn')
+
+     .populate('policy.policyId','policynumber')
+     
+
+
+     
+     
+
+    //  .populate('pledgers','inn')
+
+     
+
+
     //  .populate({
     //     path: 'employees',
     //     populate:[
@@ -42,16 +74,27 @@ exports.getAgreementsById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
         const result= await Agreements.findById(AgesId)
-        // .populate('regionId','name')     
-        // .populate('breanchstatus','name')
-        // .populate({
-        //    path: 'employees',
-        //    populate:[
-        //        {
-        //            path: 'positions',
-        //            select: 'name'
-        //        }
-        //    ]}) 
+        .populate('groupofproductsId','name')     
+        .populate('subgroupofproductsId','name')
+        .populate('products','productname')
+        .populate('clinets','inn')
+        .populate('beneficiary','inn')
+        .populate('pledgers','inn')
+        .populate('objectofinsurance.typeofobjects','name')
+        .populate('objectofinsurance.objects','name')
+        .populate('objectofinsurance.regionId','name')
+        .populate('objectofinsurance.districtsId','name')
+        .populate('riskId.riskgroup','name')
+        .populate('riskId.risk','name')
+        .populate('riskId.classeId','name')
+        .populate('paymentcurrency','name')   
+        .populate('franchise.risk','name')
+        .populate('franchise.typeoffranchise','name')
+        .populate('franchise.baseoffranchise','name')   
+        .populate('termination.reason','name')
+        .populate('commission.agents','inn')   
+        .populate('policy.policyId','policynumber')
+        
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404
@@ -75,7 +118,8 @@ exports.createAgreements = async(req,res,next)=>{
     const subgroupofproductsId = req.body.subgroupofproductsId    
     const products = req.body.products    
     const startofinsurance = req.body.startofinsurance    
-    const endofinsurance = req.body.endofinsurance    
+    const endofinsurance =   moment(req.body.endofinsurance ,"DD/MM/YYYY")
+      
     const clinets= req.body.clinets
     const beneficiary= req.body.beneficiary
     const pledgers = req.body.pledgers
@@ -94,12 +138,12 @@ exports.createAgreements = async(req,res,next)=>{
     const commission = req.body.commission
     const rpm = req.body.rpm
     const appregistrationnumber = req.body.appregistrationnumber
-    const applicationdate = req.body.applicationdate 
+    const applicationdate =      moment(req.body.applicationdate ,"DD/MM/YYYY")                     
     const whoaccepted = req.body.whoaccepted   
     const copyofdocuments = req.body.copyofdocuments
     const generalagreement = req.body.generalagreement
     const numberofcontract = req.body.numberofcontract
-    const agreementdate = req.body.agreementdate
+    const agreementdate =   moment( req.body.agreementdate,"DD/MM/YYYY")         
     const copyofagreement =req.body.copyofagreement
     const documents =req.body.documents
     const policy =req.body.policy   
