@@ -2,6 +2,9 @@ const {Schema,model} = require('mongoose')
 const  moment = require('moment')
 const agreementsSchema = new Schema({
     //==========================Продукт================
+    agreementsnumber:{
+        type:String
+    },
     groupofproductsId:{
         type: Schema.Types.ObjectId,
         ref: 'Groupsofproducts',

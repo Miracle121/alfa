@@ -26,35 +26,12 @@ exports.getAgreements= async(req,res,next)=>{
      .populate('riskId.risk','name')
      .populate('riskId.classeId','name')
      .populate('paymentcurrency','name')
-
      .populate('franchise.risk','name')
      .populate('franchise.typeoffranchise','name')
      .populate('franchise.baseoffranchise','name')
-
      .populate('termination.reason','name')
      .populate('commission.agents','inn')
-
      .populate('policy.policyId','policynumber')
-     
-
-
-     
-     
-
-    //  .populate('pledgers','inn')
-
-     
-
-
-    //  .populate({
-    //     path: 'employees',
-    //     populate:[
-    //         {
-    //             path: 'positions',
-    //             select: 'name'
-    //         }
-    //     ]
-    //  })  
      .skip((page-1)*counts).limit(counts)
      res.status(200).json({
          message:`Agreements List`,
@@ -191,13 +168,7 @@ exports.createAgreements = async(req,res,next)=>{
                 creatorId: req.userId,
             })
     } catch (err) {
-        // console.log(err);
-        // if(!err.statusCode){
-          
-        //     const err = new Error('Agentni qoshishda xatolik')
-        //     err.statusCode = 500
-        //     throw err
-        // }
+       
         next(err)
     }    
 }

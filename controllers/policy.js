@@ -10,7 +10,22 @@ exports.getPolicy= async(req,res,next)=>{
     let totalItems
     try {
      totalItems = await Policy.find().countDocuments()
-     const data = await Policy.find()    
+     const data = await Policy.find()
+     .populate('agreementsId','agreementsnumber')
+     
+     .populate('typeofpoliceId','name')
+     .populate('statusofpolicy','name')
+     .populate('statusofpayment','name')
+
+     .populate('objectofinsurance.typeofobjects','name')
+     .populate('objectofinsurance.objects','name')
+     .populate('objectofinsurance.regionId','name')
+     .populate('objectofinsurance.districtsId','name')
+
+     .populate('riskId.riskgroup','name')
+     .populate('riskId.risk','name')
+     .populate('riskId.classeId','name')
+
      res.status(200).json({
          message:`Policy List`,
          data:data,
@@ -49,19 +64,38 @@ exports.createPolicy = async(req,res,next)=>{
     const agreementsId = req.body.agreementsId
     const policynumber = req.body.policynumber
     const formnumber = req.body.formnumber
+    const typeofpoliceId = req.body.typeofpoliceId    
     const dateofissue = moment(req.body.dateofissue,"DD/MM/YYYY")
+    const dateofend = moment(req.body.dateofend,"DD/MM/YYYY") 
+   
+    const unixdateofissue = new Date(dateofissue)
+    const dateofissueunix = Math.floor(unixdateofissue.getTime()/1000);
+    const unixdateofendunix = new Date(dateofend)
+    const dateofendunix = Math.floor(unixdateofendunix.getTime()/1000)     
+    
     const copyofdocuments = req.body.copyofdocuments   
-    try {
-              
+    const riskId = req.body.riskId
+    const objectofinsurance = req.body.objectofinsurance
+    const statusofpolicy = req.body.statusofpolicy
+    const statusofpayment = req.body.statusofpayment
+
+    try {              
             const result = new Policy({    
                 agreementsId:agreementsId,
                 policynumber:policynumber,
                 formnumber:formnumber,
+                typeofpoliceId:typeofpoliceId,                
                 dateofissue:dateofissue,
-                copyofdocuments:copyofdocuments,                      
+                dateofend:dateofend,
+                dateofissueunix:dateofissueunix,
+                dateofendunix:dateofendunix,
+                copyofdocuments:copyofdocuments,   
+                riskId:riskId,
+                objectofinsurance:objectofinsurance,
+                statusofpolicy:statusofpolicy,
+                statusofpayment:statusofpayment,
                 creatorId: req.userId
             })
-
             const results = await result.save()      
             res.status(200).json({
                 message:`Policy List`,
@@ -80,8 +114,16 @@ exports.updatePolicy= async(req,res,next)=>{
     const agreementsId = req.body.agreementsId
     const policynumber = req.body.policynumber
     const formnumber = req.body.formnumber
+    const typeofpoliceId = req.body.typeofpoliceId    
     const dateofissue = moment(req.body.dateofissue,"DD/MM/YYYY")
-    const copyofdocuments = req.body.copyofdocuments 
+    const dateofend = moment(req.body.dateofend,"DD/MM/YYYY") 
+    const dateofissueunix = Math.floor((dateofissue).getTime()/1000);
+    const dateofendunix = Math.floor((dateofend).getTime()/1000)
+    const copyofdocuments = req.body.copyofdocuments   
+    const riskId = req.body.riskId
+    const objectofinsurance = req.body.objectofinsurance
+    const statusofpolicy = req.body.statusofpolicy
+    const statusofpayment = req.body.statusofpayment
     try {
     const result = await Policy.findById(policyId)
     if(!result){
@@ -92,12 +134,20 @@ exports.updatePolicy= async(req,res,next)=>{
     result.agreementsId=agreementsId
     result.policynumber=policynumber
     result.formnumber=formnumber
-    result.dateofissue=dateofissue
+    result.typeofpoliceId=typeofpoliceId
+    result.dateofissue=dateofissue    
+    result.dateofend=dateofend
+    result.dateofissueunix=dateofissueunix
+    result.dateofendunix=dateofendunix
     result.copyofdocuments=copyofdocuments
+    result.riskId=riskId
+    result.objectofinsurance=objectofinsurance
+    result.statusofpolicy=statusofpolicy
+    result.statusofpayment=statusofpayment 
     
     const data =await result.save()  
     res.status(200).json({
-        message:`Agents List`,
+        message:`Policy List`,
         data: data
     })
     } 

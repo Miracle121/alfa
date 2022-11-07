@@ -59,13 +59,17 @@ const statusofendorsements = require('./routes/statusofendorsements')
 const fieldofendorsements = require('./routes/fieldofendorsements')
 const paymentcurrency = require('./routes/paymentcurrency')
 
+//==============Policy Status======
+const statusofpayment = require('./routes/statusofpayment')
+const statusofpolicy = require('./routes/statusofpolicy')
+
 
 
 
 const app = express();
 
-const URL = 'mongodb://alfa:admin123a@localhost:27017/Alfa?authSource=admin'
-// const URL ='mongodb://alfa:admin123a@91.190.159.70:27017/Alfa?authSource=admin'
+// const URL = 'mongodb://alfa:admin123a@localhost:27017/Alfa?authSource=admin'
+const URL ='mongodb://alfa:admin123a@91.190.159.70:27017/Alfa?authSource=admin'
 
 
 global.__basedir = __dirname;
@@ -137,6 +141,10 @@ app.use('/statusofendorsements',statusofendorsements)
 app.use('/fieldofendorsements',fieldofendorsements)
 
 app.use('/paymentcurrency',paymentcurrency)
+
+//===================Policy sections====
+app.use('/statusofpayment',statusofpayment)
+app.use('/statusofpolicy',statusofpolicy)
 
 
 
