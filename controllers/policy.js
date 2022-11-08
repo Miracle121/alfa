@@ -11,20 +11,19 @@ exports.getPolicy= async(req,res,next)=>{
     try {
      totalItems = await Policy.find().countDocuments()
      const data = await Policy.find()
-     .populate('agreementsId','agreementsnumber')
-     
+     .populate('agreementsId','agreementsnumber')     
      .populate('typeofpoliceId','name')
      .populate('statusofpolicy','name')
      .populate('statusofpayment','name')
-
      .populate('objectofinsurance.typeofobjects','name')
      .populate('objectofinsurance.objects','name')
      .populate('objectofinsurance.regionId','name')
      .populate('objectofinsurance.districtsId','name')
-
      .populate('riskId.riskgroup','name')
      .populate('riskId.risk','name')
      .populate('riskId.classeId','name')
+     .populate('statusofpolicy','name')
+     .populate('statusofpayment','name')
 
      res.status(200).json({
          message:`Policy List`,
@@ -43,7 +42,21 @@ exports.getPolicy= async(req,res,next)=>{
 exports.getPolicyById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const result= await Policy.findById(AgesId)       
+        const result= await Policy.findById(AgesId)
+        .populate('agreementsId','agreementsnumber')     
+        .populate('typeofpoliceId','name')
+        .populate('statusofpolicy','name')
+        .populate('statusofpayment','name')
+        .populate('objectofinsurance.typeofobjects','name')
+        .populate('objectofinsurance.objects','name')
+        .populate('objectofinsurance.regionId','name')
+        .populate('objectofinsurance.districtsId','name')   
+        .populate('riskId.riskgroup','name')
+        .populate('riskId.risk','name')
+        .populate('riskId.classeId','name')
+        .populate('statusofpolicy','name')
+        .populate('statusofpayment','name')      
+
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404

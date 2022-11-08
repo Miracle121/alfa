@@ -54,8 +54,7 @@ const agreements = require('./routes/agreements')
 const reasons = require('./routes/reasons')
 
 const policy = require('./routes/policy')
-const typeofendorsements = require('./routes/typeofendorsements')
-const statusofendorsements = require('./routes/statusofendorsements')
+
 const fieldofendorsements = require('./routes/fieldofendorsements')
 const paymentcurrency = require('./routes/paymentcurrency')
 
@@ -63,7 +62,9 @@ const paymentcurrency = require('./routes/paymentcurrency')
 const statusofpayment = require('./routes/statusofpayment')
 const statusofpolicy = require('./routes/statusofpolicy')
 
-
+//===============Endorsements========================
+const typeofendorsements = require('./routes/typeofendorsements')
+const statusofendorsements = require('./routes/statusofendorsements')
 
 
 const app = express();
@@ -136,9 +137,7 @@ app.use('/agreements',agreements)
 app.use('/reasons',reasons)
 app.use('/policy',policy)
 
-app.use('/typeofendorsements',typeofendorsements)
-app.use('/statusofendorsements',statusofendorsements)
-app.use('/fieldofendorsements',fieldofendorsements)
+
 
 app.use('/paymentcurrency',paymentcurrency)
 
@@ -146,6 +145,10 @@ app.use('/paymentcurrency',paymentcurrency)
 app.use('/statusofpayment',statusofpayment)
 app.use('/statusofpolicy',statusofpolicy)
 
+//====================Endorsements======
+app.use('/typeofendorsements',typeofendorsements)
+app.use('/statusofendorsements',statusofendorsements)
+app.use('/fieldofendorsements',fieldofendorsements)
 
 
 app.use('/user',users)

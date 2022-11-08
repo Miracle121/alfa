@@ -1,6 +1,5 @@
 const {Schema,model} = require('mongoose')
 const endorsementsSchema = new Schema({
-
     // ummumiy qisim
     agreementsId:{
         type: Schema.Types.ObjectId,
@@ -12,40 +11,18 @@ const endorsementsSchema = new Schema({
         ref: 'Agreements',
         required:true
     },
-
-      //== endi qilinadi==
-      resultofendorsements:{
+    //== endi qilinadi==
+    resultofendorsements:{
         type: Schema.Types.ObjectId,
         ref: 'Resultofendorsements',
         required:true
-
     },    
-
-
 //Запрос на заключение
     reqforconclusion:{
         type:String,
         required:true
-
     },  
-
-
-
-
-    //Запрос на изменение вординга
-
-
-  
-
-
-
-
-
-
-
-
-   
-
+   //Запрос на изменение вординга
     creatorId:{
         type: Schema.Types.ObjectId,
         ref: 'Users',

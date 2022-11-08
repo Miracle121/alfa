@@ -39,7 +39,7 @@ const policySchema = new Schema({
     },
     copyofdocuments: {
         type: String,
-        required: true
+        // required: true
     },
     riskId: [{
         riskgroup: {
