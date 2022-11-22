@@ -65,12 +65,13 @@ const statusofpolicy = require('./routes/statusofpolicy')
 //===============Endorsements========================
 const typeofendorsements = require('./routes/typeofendorsements')
 const statusofendorsements = require('./routes/statusofendorsements')
+const endorsements = require('./routes/endorsements')
 
 
 const app = express();
 
  const URL = 'mongodb://mongoadmin:alfa_123_alfa_222@localhost:27017/Alfa?authSource=admin'       
-//'mongodb://alfa:admin123a@localhost:27017/Alfa?authSource=admin'
+
 // const URL = 'mongodb://mongoadmin:alfa_123_alfa_222@91.190.159.70:27017/Alfa?authSource=admin'
 
 
@@ -137,6 +138,7 @@ app.use('/breanchstatus',breanchstatus)
 app.use('/agreements',agreements)
 app.use('/reasons',reasons)
 app.use('/policy',policy)
+app.use('/endorsements',endorsements)
 
 
 

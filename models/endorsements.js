@@ -6,27 +6,25 @@ const endorsementsSchema = new Schema({
         ref: 'Agreements',
         required:true
     },
+
     typeofendorsements:{
         type: Schema.Types.ObjectId,
-        ref: 'Agreements',
+        ref: 'Typeofendorsements',
+        required:true
+    }, 
+    reqforconclusion:{
+        type:String    
+    },  
+    endorsementsinfo:[{  
+        type: Schema.Types.Mixed 
+    }],
+    statusofendorsements:{
+        type: Schema.Types.ObjectId,
+        ref: 'Statusofendorsements',
         required:true
     },
-    //== endi qilinadi==
-    resultofendorsements:{
-        type: Schema.Types.ObjectId,
-        ref: 'Resultofendorsements',
-        required:true
-    },    
-//Запрос на заключение
-    reqforconclusion:{
-        type:String,
-        required:true
-    },  
-   //Запрос на изменение вординга
+  
 
-
-
-   
     creatorId:{
         type: Schema.Types.ObjectId,
         ref: 'Users',

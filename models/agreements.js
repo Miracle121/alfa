@@ -293,25 +293,4 @@ const agreementsSchema = new Schema({
 },
 
 { timestamps:true })
-
-// agreementsSchema.pre('validate', function(next){ 
-//     const data = this;
-//     console.log(data.riskId);
-//     // data.riskId = asdasd;
-//     // data.riskId.map(
-//     //     (data)=>{
-//     //         console.log(data.startdate);
-//     //         console.log(data.enddate);
-//     //         //data.startdate= moment(data.startdate ,"DD/MM/YYYY") 
-//     //         // return moment(data.startdate ,"DD/MM/YYYY") 
-
-//     //     }
-//     // )
-//     // console.log(data.riskId);    
-//         console.log('triggered...');
-//         next();
-//     });
-
-
-
 module.exports = model('Agreements',agreementsSchema)
