@@ -139,3 +139,28 @@ exports.deleteEndorsements = async(req,res,next)=>{
         next(err)
     }
 }
+
+exports.getEndorsementsByAgreementId = async(req,res,next)=>{
+    const AgesId= req.params.id
+    try {
+        const result= await Endorsements.find({'agreementsId':AgesId})
+        .populate('agreementsId','agreementsnumber')
+        .populate('typeofendorsements','name')
+        .populate('statusofendorsements','name')
+        if(!result){
+            const error = new Error('Object  not found')
+            error.statusCode = 404
+            throw error
+        }
+        res.status(200).json({
+            message:`Endorsements list`,
+            data:result
+        })
+    } catch (err) {
+        if(!err.statusCode)
+        {
+            err.statusCode =500
+        }
+        next(err)
+    }
+}

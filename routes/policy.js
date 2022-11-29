@@ -11,6 +11,7 @@ router.get('/:id',IsAuth,policy.getPolicyById)
 router.post('/',IsAuth,policy.createPolicy)
 router.put('/:id',IsAuth,policy.updatePolicy)
 router.delete('/:id',IsAuth,policy.deletePolicy)
+router.get('/f/:id',IsAuth,policy.getPolicyByAgeementId)
 
 
 module.exports = router

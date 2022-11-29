@@ -11,6 +11,7 @@ router.get('/:id',IsAuth,endorsements.getEndorsementsById)
 router.post('/',IsAuth,endorsements.createEndorsements)
 router.put('/:id',IsAuth,endorsements.updateEndorsements)
 router.delete('/:id',IsAuth,endorsements.deleteEndorsements)
+router.get('/f/:id',IsAuth,endorsements.getEndorsementsByAgreementId)
 
 
 module.exports = router

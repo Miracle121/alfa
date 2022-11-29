@@ -202,3 +202,39 @@ exports.deletePolicy = async(req,res,next)=>{
         next(err)
     }
 }
+
+
+
+exports.getPolicyByAgeementId = async(req,res,next)=>{
+    
+    const AgesId= req.params.id
+    try {
+        const result= await Policy.find({'agreementsId':AgesId})
+        .populate('agreementsId','agreementsnumber')     
+        .populate('typeofpoliceId','name')
+        .populate('statusofpolicy','name')
+        .populate('statusofpayment','name')
+        .populate('objectofinsurance.typeofobjects','name')
+        .populate('objectofinsurance.objects','name')
+        .populate('objectofinsurance.regionId','name')
+        .populate('objectofinsurance.districtsId','name')   
+        .populate('riskId.riskgroup','name')
+        .populate('riskId.risk','name')
+        .populate('riskId.classeId','name')
+        .populate('statusofpolicy','name')
+        .populate('statusofpayment','name')      
+
+        if(!result){
+            const error = new Error('Object  not found')
+            error.statusCode = 404
+            throw error
+        }
+        res.status(200).json({
+            message:`Policy List`,
+            data:result
+        })
+    } catch (err) {
+       
+        next(err)
+    }
+}

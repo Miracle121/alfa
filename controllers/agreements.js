@@ -31,7 +31,11 @@ exports.getAgreements= async(req,res,next)=>{
      .populate('franchise.baseoffranchise','name')
      .populate('termination.reason','name')
      .populate('commission.agents','inn')
+
      .populate('policy.policyId','policynumber')
+
+
+
      .skip((page-1)*counts).limit(counts)
      res.status(200).json({
          message:`Agreements List`,
