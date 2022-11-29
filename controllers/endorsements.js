@@ -1,4 +1,5 @@
 const Endorsements = require('../models/endorsements')
+const Agreements = require('../models/agreements')
 const User = require('../models/users')
 const {validationResult} = require('express-validator')
 
@@ -51,11 +52,14 @@ exports.getEndorsementsById = async(req,res,next)=>{
 }
 
 exports.createEndorsements = async(req,res,next)=>{
+    
     const agreementsId = req.body.agreementsId  
     const typeofendorsements= req.body.typeofendorsements
     const reqforconclusion = req.body.reqforconclusion
     const endorsementsinfo = req.body.endorsementsinfo
     const statusofendorsements = req.body.statusofendorsements
+
+    const resultagreements = await Agreements.findById(agreementsId)
 
     const result = new Endorsements({
         agreementsId:agreementsId,
@@ -66,6 +70,9 @@ exports.createEndorsements = async(req,res,next)=>{
         creatorId: req.userId
     })
     const results = await result.save()
+    resultagreements.policy= results._id
+    const data =await resultagreements.save()  
+
     res.status(200).json({
         message:`Endorsements added`,
         data: results,

@@ -67,6 +67,9 @@ const typeofendorsements = require('./routes/typeofendorsements')
 const statusofendorsements = require('./routes/statusofendorsements')
 const endorsements = require('./routes/endorsements')
 
+//===============Billing============================
+const transactions = require('./routes/billing/transaction')
+
 
 const app = express();
 
@@ -152,6 +155,11 @@ app.use('/statusofpolicy',statusofpolicy)
 app.use('/typeofendorsements',typeofendorsements)
 app.use('/statusofendorsements',statusofendorsements)
 app.use('/fieldofendorsements',fieldofendorsements)
+
+//===================Transactions==========
+
+app.use('/transactions',transactions)
+
 
 
 app.use('/user',users)

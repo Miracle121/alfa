@@ -1,5 +1,6 @@
 const Policy = require('../models/policy')
 const User = require('../models/users')
+const Agreements = require('../models/agreements')
 const {validationResult} = require('express-validator')
 const bcrypt = require('bcryptjs')
 const  moment = require('moment')
@@ -91,7 +92,7 @@ exports.createPolicy = async(req,res,next)=>{
     const objectofinsurance = req.body.objectofinsurance
     const statusofpolicy = req.body.statusofpolicy
     const statusofpayment = req.body.statusofpayment
-
+    const resultagreements = await Agreements.findById(agreementsId)
     try {              
             const result = new Policy({    
                 agreementsId:agreementsId,
@@ -109,7 +110,9 @@ exports.createPolicy = async(req,res,next)=>{
                 statusofpayment:statusofpayment,
                 creatorId: req.userId
             })
-            const results = await result.save()      
+            const results = await result.save()   
+            resultagreements.policy= results._id
+            const data =await resultagreements.save()          
             res.status(200).json({
                 message:`Policy List`,
                 data: results,            

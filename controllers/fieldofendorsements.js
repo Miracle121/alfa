@@ -51,9 +51,11 @@ exports.createFieldofendorsements= async (req,res,next)=>{
         throw error
         }
     const typeofendorsements = req.body.typeofendorsements
+    const nameoffield= req.body.nameoffield
     const filds = req.body.filds   
     const group =new Fieldofendorsements({
         typeofendorsements: typeofendorsements,
+        nameoffield:nameoffield,
         filds: filds,        
         creatorId: req.userId
     })
@@ -69,6 +71,7 @@ exports.updateFieldofendorsements =async(req,res,next)=>{
     const groupsId= req.params.id
     const typeofendorsements = req.body.typeofendorsements 
     const titleoffield = req.body.titleoffield
+    const nameoffield = req.body.nameoffield
     const typeoffield = req.body.typeoffield       
     try {
         const groups = await Fieldofendorsements.findById(groupsId)
@@ -78,7 +81,8 @@ exports.updateFieldofendorsements =async(req,res,next)=>{
             throw error
             }
     groups.typeofendorsements= typeofendorsements   
-    groups.titleoffield= titleoffield   
+    groups.titleoffield= titleoffield  
+    groups.nameoffield= nameoffield
     groups.typeoffield= typeoffield   
     const groupsofpr = await groups.save()
     res.status(200).json({
