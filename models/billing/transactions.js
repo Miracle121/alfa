@@ -3,12 +3,12 @@ const transactionSchema = new Schema({
 
     //ID расчетного счета
     account_ID: {
-        type: String,
-        required: true
+        type: String
+        // required: true
     },
     //номер платежного поручения
     payment_order_number: {
-        type: Number,
+        type: String,
         required: true
     },
     //дата платежного поручения
@@ -72,6 +72,11 @@ const transactionSchema = new Schema({
     recipient_bank_taxpayer_number: {
         type: String,
         required: true
+    },
+    statusofAttachment:{
+        type:String,
+        enum : ['Новый','В процессе','Готов'],
+        default: 'Новый'
     },
     creatorId: {
         type: Schema.Types.ObjectId,
