@@ -62,7 +62,7 @@ const paymentcurrency = require('./routes/paymentcurrency')
 const statusofpayment = require('./routes/statusofpayment')
 const statusofpolicy = require('./routes/statusofpolicy')
 
-//===============Endorsements========================
+//===============Endorsements============================
 const typeofendorsements = require('./routes/typeofendorsements')
 const statusofendorsements = require('./routes/statusofendorsements')
 const endorsements = require('./routes/endorsements')
@@ -72,12 +72,17 @@ const transactions = require('./routes/billing/transaction')
 const transactionlog = require('./routes/billing/transactionlog')
 const typeofdistribute = require('./routes/billing/typeofdistribute')
 
+//=================BCO=================================
+
+const languagepolicy= require('./routes/bco/languagepolicy')
+const typeofbco = require('./routes/bco/typeofbco')
+
 
 const app = express();
 
- const URL = 'mongodb://mongoadmin:alfa_123_alfa_222@localhost:27017/Alfa?authSource=admin'       
+//  const URL = 'mongodb://mongoadmin:alfa_123_alfa_222@localhost:27017/Alfa?authSource=admin'       
 
-// const URL = 'mongodb://mongoadmin:alfa_123_alfa_222@91.190.159.70:27017/Alfa?authSource=admin'
+const URL = 'mongodb://mongoadmin:alfa_123_alfa_222@91.190.159.70:27017/Alfa?authSource=admin'
 
 
 global.__basedir = __dirname;
@@ -167,7 +172,9 @@ app.use('/transactions',transactions)
 app.use('/transactionlog',transactionlog)
 app.use('/typeofdistribute',typeofdistribute)
 
-
+//=====================BCO======================
+app.use('/languagepolicy',languagepolicy)
+app.use('/typeofbco',typeofbco)
 
 app.use('/user',users)
 app.use((error,req,res,next)=>{   

@@ -1,11 +1,11 @@
 const { Schema, model } = require('mongoose')
 const transactionlogSchema = new Schema({
 
-    typeofdistribute:{
+    typeofdistribute:[{
         type: Schema.Types.ObjectId,
         ref: 'Typeofdistribute',
         required: true
-    },
+    }],
     //ID расчетного счета
     payment_order_number: {
         type: String,

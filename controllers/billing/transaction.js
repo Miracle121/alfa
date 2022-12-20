@@ -47,7 +47,7 @@ exports.getTransactionById = async (req, res, next) => {
 
 exports.createTransaction = async (req, res, next) => {
     try {
-        console.log(req.file);
+        // console.log(req.file);
         const file = reader.readFile(req.file.path)      //"C:/Users/Mrxone/Desktop/123.xlsx"
         let data = []
         const sheets = file.SheetNames
