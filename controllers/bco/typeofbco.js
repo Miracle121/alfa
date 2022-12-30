@@ -9,8 +9,8 @@ exports.getTypeofbco= async(req,res,next)=>{
      totalItems = await Typeofbco.find()   
      .countDocuments()
      const data = await Typeofbco.find()
-     .populate('policy_type_name','name')
-     .populate('policy_size_id','name')
+    
+    //  .populate('policy_type_id','name')
      .populate('language','name')
      .populate('statusofpolicy','name')
      .skip((page-1)*counts).limit(counts)
@@ -32,7 +32,7 @@ exports.getTypeofbcoById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
         const result= await Typeofbco.findById(AgesId)
-        .populate('policy_type_name','name')
+   
         .populate('policy_size_id','name')
         .populate('language','name')
         .populate('statusofpolicy','name')

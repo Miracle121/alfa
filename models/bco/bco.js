@@ -6,10 +6,12 @@ const bcoSchema = new Schema({
         ref: 'Typeofbco',
         required: true
     },
-    policy_series: {
-        type: String,
-        // required: true
-    },
+    
+    // policy_series: {
+    //     type: String,
+    //     // required: true
+    // },
+    //номер бланка полиса
     policy_number:{
         type: Number,
         required: true
@@ -29,7 +31,7 @@ const bcoSchema = new Schema({
     },    
     statusofbcopolicy:[{
         type: Schema.Types.ObjectId,
-        ref: 'Statusofpolicy',
+        ref: 'Statusbcopolicy',
         required: true
     }],
     creatorId: {

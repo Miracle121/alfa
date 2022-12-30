@@ -76,7 +76,11 @@ const typeofdistribute = require('./routes/billing/typeofdistribute')
 
 const languagepolicy= require('./routes/bco/languagepolicy')
 const typeofbco = require('./routes/bco/typeofbco')
+const bco= require('./routes/bco/bco')
 
+const statusbcopolicy = require('./routes/bco/statusbcopolicy')
+const actstatus = require('./routes/bco/actstatus')
+const acts = require('./routes/bco/acts')
 
 const app = express();
 
@@ -175,6 +179,12 @@ app.use('/typeofdistribute',typeofdistribute)
 //=====================BCO======================
 app.use('/languagepolicy',languagepolicy)
 app.use('/typeofbco',typeofbco)
+app.use('/bco',bco)
+app.use('/statusbcopolicy',statusbcopolicy)
+app.use('/actstatus',actstatus)
+app.use('/acts',acts)
+
+
 
 app.use('/user',users)
 app.use((error,req,res,next)=>{   

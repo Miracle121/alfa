@@ -1,12 +1,21 @@
 const {Schema,model} = require('mongoose')
 const typeofdistributeSchema = new Schema({
-    name:{
+    nameofoperations:{
         type:String,
         required:true
     },
-    id_operations:{
+    // accountname:{
+    //     type:String
+    //     // required:true
+    // },
+    debt_account_ID:{
         type:Number,
-        required:true
+        // required:true
+
+    },
+    cred_account_ID:{
+        type:Number,
+        // required:true
 
     },
     creatorId:{

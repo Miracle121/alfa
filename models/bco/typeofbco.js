@@ -1,8 +1,7 @@
 const { Schema, model } = require('mongoose')
 const typeofbcoSchema = new Schema({
     policy_type_name: {
-        type: Schema.Types.ObjectId,
-        ref: 'Typeofpolice',
+        type: String,
         required: true
     },
     policy_size_id: {

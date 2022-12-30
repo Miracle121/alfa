@@ -1,15 +1,15 @@
-const Typeofdistribute = require('../../models/billing/typeofdistribute')
-const {validationResult} = require('express-validator')
+const Actstatus = require('../../models/bco/actstatus')
 
-exports.getTypeofdistributes= async(req,res,next)=>{
+
+exports.getActstatus= async(req,res,next)=>{
     const page = req.query.page ||1
     const counts = 20 //req.query.count ||20
     let totalItems
     try {
-     totalItems = await Typeofdistribute.find().countDocuments()
-     const data = await Typeofdistribute.find().skip((page-1)*counts).limit(counts)
+     totalItems = await Actstatus.find().countDocuments()
+     const data = await Actstatus.find().skip((page-1)*counts).limit(counts)
      res.status(200).json({
-         message:`Type of distributes list`,
+         message:`Act status`,
          data:data,
          totalItems:totalItems
      })
@@ -22,17 +22,17 @@ exports.getTypeofdistributes= async(req,res,next)=>{
     } 
 }
 
-exports.getTypeofdistributesById = async(req,res,next)=>{
+exports.getActstatusById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const result= await Typeofdistribute.findById(AgesId)
+        const result= await Actstatus.findById(AgesId)
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404
             throw error
         }
         res.status(200).json({
-            message:`Type of distributes list`,
+            message:`Act status`,
             data:result
         })
     } catch (err) {
@@ -44,43 +44,36 @@ exports.getTypeofdistributesById = async(req,res,next)=>{
     }
 }
 
-exports.createTypeofdistributes = async(req,res,next)=>{
-    const nameofoperations = req.body.nameofoperations
-    const debt_account_ID= req.body.debt_account_ID    
-    const cred_account_ID= req.body.cred_account_ID   
-    const result = new Typeofdistribute({
-        nameofoperations:nameofoperations,
-        debt_account_ID:debt_account_ID,
-        cred_account_ID:cred_account_ID,
+exports.createActstatus = async(req,res,next)=>{
+    const name = req.body.name    
+    const result = new Actstatus({
+        name:name,
         creatorId: req.userId
     })
     const results = await result.save()
     res.status(200).json({
-        message:`Type of distributes list`,
+        message:`Act status`,
         data: results,
         creatorId: req.userId,
     })
 }
 
-exports.updateTypeofdistributes= async(req,res,next)=>{ 
+exports.updateActstatus= async(req,res,next)=>{ 
     const AgesId = req.params.id
-    const nameofoperations = req.body.nameofoperations
-    const debt_account_ID= req.body.debt_account_ID  
-    const cred_account_ID= req.body.cred_account_ID  
+    const name = req.body.name
+    
     try {
-    const result = await Typeofdistribute.findById(AgesId)
+    const result = await Actstatus.findById(AgesId)
     if(!result){
         const error = new Error('Object  not found')
         error.statusCode = 404
         throw error
     }
-    result.nameofoperations= nameofoperations
-    result.debt_account_ID=debt_account_ID
-    result.cred_account_ID=cred_account_ID
+    result.name= name
  
     const data =await result.save()  
     res.status(200).json({
-        message:`Type of distributes list`,
+        message:`Act status`,
         data: data
     })
     } catch (err) {
@@ -93,10 +86,10 @@ exports.updateTypeofdistributes= async(req,res,next)=>{
     }
 }
 
-exports.deleteTypeofdistributes = async(req,res,next)=>{
+exports.deleteActstatus = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const deleteddata = await Typeofdistribute.findById(AgesId)
+        const deleteddata = await Actstatus.findById(AgesId)
     if(!deleteddata){
         const error = new Error('Object  not found')
         error.statusCode = 404
@@ -107,9 +100,9 @@ exports.deleteTypeofdistributes = async(req,res,next)=>{
         error.statusCode =403
         throw error
     }
-    const data=await Typeofdistribute.findByIdAndRemove(AgesId)
+    const data=await Actstatus.findByIdAndRemove(AgesId)
     res.status(200).json({
-        message:'Accountroles is deleted',
+        message:'Status bco policy',
         data:data   
     })
     } catch (err) {
