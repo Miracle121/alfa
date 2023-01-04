@@ -1,6 +1,7 @@
 const Typeofbco = require('../../models/bco/typeofbco')
 
 
+
 exports.getTypeofbco= async(req,res,next)=>{
     const page = req.query.page ||1
     const counts = 20 //req.query.count ||20
@@ -59,14 +60,18 @@ exports.createTypeofbco = async(req,res,next)=>{
     const policy_size_id = req.body.policy_size_id
     const language = req.body.language
     const policy_series= req.body.policy_series
-    const policy_number_of_digits= req.body.policy_number_of_digits
+    const policy_number_of_digits_start= req.body.policy_number_of_digits_start
+    const policy_number_of_digits_end= req.body.policy_number_of_digits_end
+    const policy_count=Math.abs(policy_number_of_digits_start-policy_number_of_digits_end) 
     const statusofpolicy = req.body.statusofpolicy
     const result = new Typeofbco({
         policy_type_name:policy_type_name,
         policy_size_id:policy_size_id,
         language:language,
         policy_series:policy_series,
-        policy_number_of_digits:policy_number_of_digits,
+        policy_number_of_digits_start:policy_number_of_digits_start,
+        policy_number_of_digits_end:policy_number_of_digits_end,
+        policy_count:policy_count,
         statusofpolicy:statusofpolicy,
         creatorId: req.userId
     })
@@ -80,7 +85,14 @@ exports.createTypeofbco = async(req,res,next)=>{
 
 exports.updateTypeofbco= async(req,res,next)=>{ 
     const AgesId = req.params.id
-    const name = req.body.name
+    const policy_type_name = req.body.policy_type_name   
+    const policy_size_id = req.body.policy_size_id
+    const language = req.body.language
+    const policy_series= req.body.policy_series
+    const policy_number_of_digits_start= req.body.policy_number_of_digits_start
+    const policy_number_of_digits_end= req.body.policy_number_of_digits_end
+    const policy_count=Math.abs(policy_number_of_digits_start-policy_number_of_digits_end) 
+    const statusofpolicy = req.body.statusofpolicy
     
     try {
     const result = await Typeofbco.findById(AgesId)
@@ -89,7 +101,15 @@ exports.updateTypeofbco= async(req,res,next)=>{
         error.statusCode = 404
         throw error
     }
-    result.name= name
+    result.policy_type_name= policy_type_name
+    result.policy_size_id= policy_size_id
+    result.language =language
+    result.policy_series =policy_series
+    result.policy_number_of_digits_start =policy_number_of_digits_start
+    result.policy_number_of_digits_end =policy_number_of_digits_end
+    result.policy_count =policy_count
+    result.statusofpolicy=statusofpolicy
+
  
     const data =await result.save()  
     res.status(200).json({

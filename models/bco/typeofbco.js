@@ -19,9 +19,16 @@ const typeofbcoSchema = new Schema({
         type: String,
         required: true
     },
-    policy_number_of_digits: {
+    policy_number_of_digits_start: {
         type: Number,
         required: true
+    },
+    policy_number_of_digits_end: {
+        type: Number,
+        required: true
+    },
+    policy_count:{
+        type: Number
     },
     statusofpolicy:{
         type: Schema.Types.ObjectId,
