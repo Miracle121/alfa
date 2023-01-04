@@ -11,7 +11,9 @@ exports.getTransactionlog = async (req, res, next) => {
     let totalItems
     try {
         totalItems = await Transactionlog.find().countDocuments()
-        const data = await Transactionlog.find().skip((page - 1) * counts).limit(counts)
+        const data = await Transactionlog.find()
+        .populate('typeofdistribute','nameofoperations')      
+        .skip((page - 1) * counts).limit(counts)
         res.status(200).json({
             message: `Transaction list`,
             data: data,

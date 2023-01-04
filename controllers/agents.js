@@ -266,13 +266,6 @@ exports.updateAgents = async(req,res,next)=>{
     result.accountstatus=accountstatus
     result.accountrole=accountrole
     result.hashpass=hashpass
-
-
-
-
-   
-
-
     const data =await result.save()  
     res.status(200).json({
         message:`Agents List`,
