@@ -11,7 +11,7 @@ exports.getTypeofbco= async(req,res,next)=>{
      .countDocuments()
      const data = await Typeofbco.find()
     
-    //  .populate('policy_type_id','name')
+     .populate('policy_size_id','name')
      .populate('language','name')
      .populate('statusofpolicy','name')
      .skip((page-1)*counts).limit(counts)
@@ -60,18 +60,14 @@ exports.createTypeofbco = async(req,res,next)=>{
     const policy_size_id = req.body.policy_size_id
     const language = req.body.language
     const policy_series= req.body.policy_series
-    const policy_number_of_digits_start= req.body.policy_number_of_digits_start
-    const policy_number_of_digits_end= req.body.policy_number_of_digits_end
-    const policy_count=Math.abs(policy_number_of_digits_start-policy_number_of_digits_end) 
+    const policy_number_of_digits= req.body.policy_number_of_digits
     const statusofpolicy = req.body.statusofpolicy
     const result = new Typeofbco({
         policy_type_name:policy_type_name,
         policy_size_id:policy_size_id,
         language:language,
         policy_series:policy_series,
-        policy_number_of_digits_start:policy_number_of_digits_start,
-        policy_number_of_digits_end:policy_number_of_digits_end,
-        policy_count:policy_count,
+        policy_number_of_digits:policy_number_of_digits,
         statusofpolicy:statusofpolicy,
         creatorId: req.userId
     })

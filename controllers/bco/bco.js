@@ -1,5 +1,6 @@
 const Bco = require('../../models/bco/bco')
-
+const Bcoinpolicyblank = require('../../models/bco/bcoinpolicyblank')
+const Policyblank =require('../../models/bco/policyblank')
 
 exports.getBco = async (req, res, next) => {
     const page = req.query.page || 1
@@ -13,6 +14,7 @@ exports.getBco = async (req, res, next) => {
             .populate('branch_id', 'branchname')
             .populate('statusofbcopolicy', 'name')
             .populate('employee_id', 'name')
+            .populate('policy_blank_number', 'blank_number')
 
             .skip((page - 1) * counts).limit(counts)
         res.status(200).json({
@@ -54,25 +56,22 @@ exports.getBcoById = async (req, res, next) => {
 }
 
 exports.createBco = async (req, res, next) => {
+
     const policy_type_id = req.body.policy_type_id
-    // const policy_series = req.body.policy_series
-    const policy_number = req.body.policy_number
-    const policy_qr_code = req.body.policy_qr_code
+    const policy_blank_number = req.body.policy_blank_number
     const branch_id = req.body.branch_id
     const employee_id = req.body.employee_id
-    const statusofbcopolicy = req.body.statusofbcopolicy
-
+    const statusofbcopolicy = req.body.statusofbcopolicy    
     const result = new Bco({
-        policy_type_id: policy_type_id,
-        // policy_series: policy_series,
-        policy_number: policy_number,
-        policy_qr_code: policy_qr_code,
+        policy_type_id: policy_type_id,       
+        policy_blank_number: policy_blank_number,
         branch_id: branch_id,
         employee_id: employee_id,
         statusofbcopolicy: statusofbcopolicy,
         creatorId: req.userId
     })
     const results = await result.save()
+    const bcodata = await polcybalnkinbco(policy_type_id,policy_blank_number,result._id,req.userId)
     res.status(200).json({
         message: `Type of BCO added`,
         data: results,
@@ -82,15 +81,13 @@ exports.createBco = async (req, res, next) => {
 
 exports.updateBco = async (req, res, next) => {
     const AgesId = req.params.id
-
     const policy_type_id = req.body.policy_type_id
     const policy_series = req.body.policy_series
-    const policy_number = req.body.policy_number
+    const policy_blank_number = req.body.policy_blank_number
     const policy_qr_code = req.body.policy_qr_code
     const branch_id = req.body.branch_id
     const employee_id = req.body.employee_id
     const statusofbcopolicy = req.body.statusofbcopolicy
-
     try {
         const result = await Bco.findById(AgesId)
         if (!result) {
@@ -100,12 +97,11 @@ exports.updateBco = async (req, res, next) => {
         }
         result.policy_type_id = policy_type_id
         result.policy_series = policy_series
-        result.policy_number = policy_number
+        result.policy_blank_number = policy_blank_number
         result.policy_qr_code = policy_qr_code
         result.branch_id = branch_id
         result.employee_id = employee_id
         result.statusofbcopolicy = statusofbcopolicy
-
         const data = await result.save()
         res.status(200).json({
             message: `Type of BCO changed`,
@@ -146,4 +142,42 @@ exports.deleteBco = async (req, res, next) => {
         }
         next(err)
     }
+}
+
+const polcybalnkinbco = async (policy_type_id, policy_blank_number, bco_id,creatorId)=>{
+
+    const number = policy_blank_number.length  
+   
+    const data_bco=[]
+    try {
+        for (let i = 0; i < number; i++) {
+            element = new Object()
+           element = {
+               policy_type_id:policy_type_id,
+               bco_id:bco_id,
+               policy_blank_number:policy_blank_number[i],
+               policy_qr_code:"xxxxx"+i,
+               creatorId:creatorId
+           }
+           data_bco.push(element)        
+       }       
+       const policy_blank_number_two=await Bcoinpolicyblank.insertMany(data_bco)       
+       const updatepolicy_blank = await Policyblank.updateMany({
+           _id:{
+               $in:policy_blank_number
+           }},
+           {$set:{
+               Is_usedblank:true
+           }})
+        
+    } catch (err) {
+        next(err)
+        
+    }
+   
+
+       
+
+
+
 }

@@ -81,6 +81,9 @@ const bco= require('./routes/bco/bco')
 const statusbcopolicy = require('./routes/bco/statusbcopolicy')
 const actstatus = require('./routes/bco/actstatus')
 const acts = require('./routes/bco/acts')
+const warehouse = require('./routes/bco/warehouse')
+const policyblank = require('./routes/bco/policyblank')
+const bcoinpolicyblank = require('./routes/bco/bcoinpolicyblank')
 
 const app = express();
 
@@ -183,6 +186,9 @@ app.use('/bco',bco)
 app.use('/statusbcopolicy',statusbcopolicy)
 app.use('/actstatus',actstatus)
 app.use('/acts',acts)
+app.use('/warehouse',warehouse)
+app.use('/policyblank',policyblank)
+app.use('/bcoinpolicyblank',bcoinpolicyblank)
 
 
 

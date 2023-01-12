@@ -5,35 +5,30 @@ const bcoSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Typeofbco',
         required: true
-    },
-    
-    // policy_series: {
-    //     type: String,
-    //     // required: true
-    // },
-    //номер бланка полиса
-    policy_number:{
-        type: Number,
+    },   
+    policy_blank_number:[{
+        type: Schema.Types.ObjectId,
+        ref: 'Policyblank',
         required: true
-    },
-    policy_qr_code:{
-        type: String
-    },
+    }],
     branch_id:{
         type: Schema.Types.ObjectId,
         ref: 'Breanches',
         required: true
     },
+
     employee_id:{
         type: Schema.Types.ObjectId,
         ref: 'Users',
         // required: true
     },    
+
     statusofbcopolicy:[{
         type: Schema.Types.ObjectId,
         ref: 'Statusbcopolicy',
         required: true
     }],
+
     creatorId: {
         type: Schema.Types.ObjectId,
         ref: 'Users',
