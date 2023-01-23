@@ -6,8 +6,8 @@ const IsAuth = require('../middleware/is-auth')
 
 const router = express.Router()
 
-router.get('/',IsAuth,users.getUsers)
-router.get('/:id',IsAuth,users.getUsersById)
+router.get('/',IsAuth, users.getUsers)
+router.get('/:id',IsAuth, users.getUsersById)
 router.post('/',[
     body('email')
     .isEmail()
@@ -25,8 +25,7 @@ router.post('/',[
 ],users.CreateUsers)
 router.put('/:id',IsAuth,users.UpdateUsers)
 router.delete('/:id',IsAuth,users.DeleteUsers)
-router.get('/list/filter',IsAuth,users.UserFilter)
-router.get('/list/search',IsAuth,users.Usersearch)
+
 
 
 module.exports = router

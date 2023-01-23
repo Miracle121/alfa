@@ -1,5 +1,5 @@
 const {Schema,model} = require('mongoose')
-const agentsSchema = new Schema({
+const clientSchema = new Schema({
     inn:{
         type:String,
         unique:true,
@@ -8,35 +8,12 @@ const agentsSchema = new Schema({
     branch:{
         type: Schema.Types.ObjectId,
         ref: 'Breanches'
-        // required:true     
-    },
-    agreementnumber:{
-        type:String,
-        required:true
-    },
-    agreementdate:{
-        type:Date,
-        required:true
     },
     typeofpersons:{
         type: Schema.Types.ObjectId,
         ref: 'Typeofpersones',
         required:true
-    },   
-    typeofagent:{
-        type: Schema.Types.ObjectId,
-        ref: 'Typeofagent'
-     }, 
-    isbeneficiary:{
-        type: Schema.Types.ObjectId,
-        ref: 'Products'
-     },
-    isfixedpolicyholde:{
-        type: Schema.Types.ObjectId,
-        ref: 'Products'
-     },
-
-   
+    },    
     forindividualsdata:{
         photo:{
             type:String   
@@ -200,18 +177,14 @@ const agentsSchema = new Schema({
         }]
 
      }, 
-
+     
     isUsedourpanel:{
         type:Boolean
     },
     isUserRestAPI:{
         type:Boolean
     },
-    user_id:{
-        type: Schema.Types.ObjectId,
-        ref: 'Users'
-        // required:true     
-    },   
+    
     creatorId:{
         type: Schema.Types.ObjectId,
         ref: 'Users',
@@ -220,4 +193,4 @@ const agentsSchema = new Schema({
 },
 { timestamps:true })
 
-module.exports = model('Agents',agentsSchema)
+module.exports = model('Client',clientSchema)

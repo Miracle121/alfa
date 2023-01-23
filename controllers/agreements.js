@@ -1,8 +1,6 @@
 const Agreements = require('../models/agreements')
 const Agents = require('../models/agents')
 const User = require('../models/users')
-const {validationResult} = require('express-validator')
-const bcrypt = require('bcryptjs')
 const  moment = require('moment')
 
 exports.getAgreements= async(req,res,next)=>{
@@ -12,6 +10,7 @@ exports.getAgreements= async(req,res,next)=>{
     try {
      totalItems = await Agreements.find().countDocuments()
      const data = await Agreements.find()
+     .populate('branch','inn')
      .populate('groupofproductsId','name')     
      .populate('subgroupofproductsId','name')
      .populate('products','productname')
@@ -31,8 +30,21 @@ exports.getAgreements= async(req,res,next)=>{
      .populate('franchise.baseoffranchise','name')
      .populate('termination.reason','name')
      .populate('commission.agents','inn')
-
-     .populate('policy.policyId','policynumber')
+     .populate({
+        path: 'policy',
+        populate: [
+            {
+                path: 'branch_id',
+                select: 'inn'
+            },
+            {
+                path: 'policy_blanknumber',
+                select: 'blank_number'
+            }
+           
+           
+        ]
+    })
 
 
 
@@ -55,6 +67,7 @@ exports.getAgreementsById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
         const result= await Agreements.findById(AgesId)
+        .populate('branch','inn')
         .populate('groupofproductsId','name')     
         .populate('subgroupofproductsId','name')
         .populate('products','productname')
@@ -95,12 +108,15 @@ exports.getAgreementsById = async(req,res,next)=>{
 }
 
 exports.createAgreements = async(req,res,next)=>{  
+
+    const branchs = await User.findById(req.userId).select('branch_Id')  
+    const branch= branchs.branch_Id
+    const agreementsnumber = req.body.agreementsnumber
     const groupofproductsId = req.body.groupofproductsId    
     const subgroupofproductsId = req.body.subgroupofproductsId    
     const products = req.body.products    
     const startofinsurance = req.body.startofinsurance    
-    const endofinsurance =   moment(req.body.endofinsurance ,"DD/MM/YYYY")
-      
+    const endofinsurance =   moment(req.body.endofinsurance ,"DD/MM/YYYY")      
     const clinets= req.body.clinets
     const beneficiary= req.body.beneficiary
     const pledgers = req.body.pledgers
@@ -130,6 +146,8 @@ exports.createAgreements = async(req,res,next)=>{
     const policy =req.body.policy   
     try {
             const result = new Agreements({    
+                branch:branch,
+                agreementsnumber:agreementsnumber,
                 groupofproductsId:groupofproductsId,
                 subgroupofproductsId:subgroupofproductsId,
                 products:products,
@@ -169,7 +187,7 @@ exports.createAgreements = async(req,res,next)=>{
             res.status(200).json({
                 message:`Agreements List`,
                 data: results,            
-                creatorId: req.userId,
+                creatorId: req.userId
             })
     } catch (err) {
        
@@ -180,6 +198,8 @@ exports.createAgreements = async(req,res,next)=>{
 exports.updateAgreements= async(req,res,next)=>{ 
     const agreementId = req.params.id
 
+    const branch=req.body.branch   //    branchs.branch_Id
+    const agreementsnumber = req.body.agreementsnumber
     const groupofproductsId = req.body.groupofproductsId    
     const subgroupofproductsId = req.body.subgroupofproductsId    
     const products = req.body.products    
@@ -217,6 +237,8 @@ exports.updateAgreements= async(req,res,next)=>{
         error.statusCode = 404
         throw error
     }   
+    result.branch=branch
+    result.agreementsnumber=agreementsnumber
     result.groupofproductsId=groupofproductsId
     result.subgroupofproductsId=subgroupofproductsId
     result.products=products

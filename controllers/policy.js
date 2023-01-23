@@ -1,8 +1,8 @@
 const Policy = require('../models/policy')
 const User = require('../models/users')
 const Agreements = require('../models/agreements')
-const {validationResult} = require('express-validator')
-const bcrypt = require('bcryptjs')
+const Policyblank = require('../models/bco/policyblank')
+
 const  moment = require('moment')
 
 exports.getPolicy= async(req,res,next)=>{
@@ -12,7 +12,9 @@ exports.getPolicy= async(req,res,next)=>{
     try {
      totalItems = await Policy.find().countDocuments()
      const data = await Policy.find()
-     .populate('agreementsId','agreementsnumber')     
+     .populate('branch_id','inn') 
+     .populate('agreementsId','agreementsnumber')    
+     .populate('policy_blanknumber','blank_number')    
      .populate('typeofpoliceId','name')
      .populate('statusofpolicy','name')
      .populate('statusofpayment','name')
@@ -44,7 +46,9 @@ exports.getPolicyById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
         const result= await Policy.findById(AgesId)
-        .populate('agreementsId','agreementsnumber')     
+        .populate('branch_id','inn') 
+        .populate('agreementsId','agreementsnumber')
+        .populate('policy_blanknumber','blank_number')     
         .populate('typeofpoliceId','name')
         .populate('statusofpolicy','name')
         .populate('statusofpayment','name')
@@ -56,7 +60,8 @@ exports.getPolicyById = async(req,res,next)=>{
         .populate('riskId.risk','name')
         .populate('riskId.classeId','name')
         .populate('statusofpolicy','name')
-        .populate('statusofpayment','name')      
+        .populate('statusofpayment','name')     
+       
 
         if(!result){
             const error = new Error('Object  not found')
@@ -76,8 +81,8 @@ exports.getPolicyById = async(req,res,next)=>{
 exports.createPolicy = async(req,res,next)=>{ 
 
     const agreementsId = req.body.agreementsId
-    const policynumber = req.body.policynumber
-    const formnumber = req.body.formnumber
+    const policy_blanknumber = req.body.policy_blanknumber
+    const policy_number = req.body.policy_number
     const typeofpoliceId = req.body.typeofpoliceId    
     const dateofissue = moment(req.body.dateofissue,"DD/MM/YYYY")
     const dateofend = moment(req.body.dateofend,"DD/MM/YYYY") 
@@ -93,11 +98,18 @@ exports.createPolicy = async(req,res,next)=>{
     const statusofpolicy = req.body.statusofpolicy
     const statusofpayment = req.body.statusofpayment
     const resultagreements = await Agreements.findById(agreementsId)
+    const policyblanknumber = await Policyblank.findById(policy_blanknumber)
+    
+    
+   
+    const branch_id =resultagreements.branch
+
     try {              
             const result = new Policy({    
+                branch_id:branch_id,
                 agreementsId:agreementsId,
-                policynumber:policynumber,
-                formnumber:formnumber,
+                policy_blanknumber:policy_blanknumber,
+                policy_number:policy_number,
                 typeofpoliceId:typeofpoliceId,                
                 dateofissue:dateofissue,
                 dateofend:dateofend,
@@ -110,9 +122,17 @@ exports.createPolicy = async(req,res,next)=>{
                 statusofpayment:statusofpayment,
                 creatorId: req.userId
             })
-            const results = await result.save()   
+            const results = await result.save() 
+
             resultagreements.policy= results._id
-            const data =await resultagreements.save()          
+            const data =await resultagreements.save()   
+            policyblanknumber.policy_number=policy_number
+            policyblanknumber.policy_id = results._id
+            policyblanknumber.Is_usedblank = true
+            policyblanknumber.branch_id =branch_id
+
+            const datablanknumber = await policyblanknumber.save()
+            // console.log(datablanknumber);
             res.status(200).json({
                 message:`Policy List`,
                 data: results,            
@@ -127,6 +147,7 @@ exports.createPolicy = async(req,res,next)=>{
 exports.updatePolicy= async(req,res,next)=>{ 
     
     const policyId = req.params.id
+    
     const agreementsId = req.body.agreementsId
     const policynumber = req.body.policynumber
     const formnumber = req.body.formnumber

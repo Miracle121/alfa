@@ -1,10 +1,17 @@
 const {Schema,model} = require('mongoose')
 const  moment = require('moment')
 const agreementsSchema = new Schema({
-    //==========================Продукт================
-    agreementsnumber:{
-        type:String
+    branch:{
+        type: Schema.Types.ObjectId,
+        ref: 'Breanches',
+        required:true     
     },
+    agreementsnumber:{
+        type:String,
+        required: true
+    },
+    //==========================Продукт================
+    
     groupofproductsId:{
         type: Schema.Types.ObjectId,
         ref: 'Groupsofproducts',
@@ -27,7 +34,7 @@ const agreementsSchema = new Schema({
     },
     clinets:{
             type: Schema.Types.ObjectId,
-            ref: 'Agents',        
+            ref: 'Client',        
     },
     beneficiary:{
         type: Schema.Types.ObjectId,
@@ -273,10 +280,10 @@ const agreementsSchema = new Schema({
 
     //=============Полис======
     policy:[{
-        policyId:{
+        
             type: Schema.Types.ObjectId,
             ref: 'Policy'
-        },
+        
     }],
     //==================Индоссаменты========
     endorsements:[{

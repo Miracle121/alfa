@@ -11,10 +11,24 @@ const policyblankSchema = new Schema({
     },
    
     blank_number: {
-        type: String
+        type: String,
+        required: true
     },
+    policy_number: {
+        type: String        
+    },
+    policy_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Policy'     
+    },
+
     Is_usedblank: {
         type: Boolean
+    },
+    branch_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Breanches'
+        
     },
     creatorId: {
         type: Schema.Types.ObjectId,

@@ -1,13 +1,18 @@
 const { Schema, model } = require('mongoose')
 const policySchema = new Schema({
-
+    branch_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Breanches',
+        required: true
+    },
     agreementsId: {
         type: Schema.Types.ObjectId,
         ref: 'Agreements',
         required: true
     },
-    policynumber: {
-        type: String,
+    policy_blanknumber: {
+        type: Schema.Types.ObjectId,
+        ref: 'Policyblank',
         required: true
     },
 
@@ -17,7 +22,7 @@ const policySchema = new Schema({
         required: true
     },
 
-    formnumber: {
+    policy_number: {
         type: String,
         required: true
     },
@@ -32,7 +37,7 @@ const policySchema = new Schema({
     },
     dateofissueunix: {
         type: Number,
-        
+
     },
     dateofendunix: {
         type: Number,
@@ -99,6 +104,7 @@ const policySchema = new Schema({
             required: true
         }
     }],
+
     statusofpolicy: {
         type: Schema.Types.ObjectId,
         ref: 'Statusofpolicy',

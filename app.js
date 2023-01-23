@@ -85,6 +85,9 @@ const warehouse = require('./routes/bco/warehouse')
 const policyblank = require('./routes/bco/policyblank')
 const bcoinpolicyblank = require('./routes/bco/bcoinpolicyblank')
 
+//=======================Clients=======================
+const clients = require('./routes/clients/clients')
+
 const app = express();
 
  const URL = 'mongodb://mongoadmin:alfa_123_alfa_222@localhost:27017/Alfa?authSource=admin'       
@@ -190,9 +193,14 @@ app.use('/warehouse',warehouse)
 app.use('/policyblank',policyblank)
 app.use('/bcoinpolicyblank',bcoinpolicyblank)
 
+//============================Clients============
+app.use('/clients',clients)
+
 
 
 app.use('/user',users)
+
+
 app.use((error,req,res,next)=>{   
     const status = error.statusCode || 500
     const message = error.message

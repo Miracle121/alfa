@@ -37,6 +37,33 @@ exports.getPolicyblank = async (req, res, next) => {
                 }
                 ]
              })
+             .populate({
+                path: 'policy_id',
+                populate:[
+                    {
+                        path: 'agreementsId',
+                        select: 'agreementsnumber'
+                    },
+                    {
+                        path: 'branch_id',
+                        select: 'inn'
+                    },
+                    {
+                        path: 'typeofpoliceId',
+                        select: 'name'
+                    },
+                    {
+                        path: 'statusofpolicy',
+                        select: 'name'
+                    },
+                    {
+                        path: 'statusofpayment',
+                        select: 'name'
+                    }
+                    
+                ]
+            }) 
+             
              .skip((page - 1) * counts).limit(counts)
         res.status(200).json({
             message: `Warehouse Insurance`,
@@ -82,7 +109,28 @@ exports.getPolicyblankById = async (req, res, next) => {
             }
             ]
          })
-
+         .populate({
+            path: 'policy_id',
+            populate:[
+                {
+                    path: 'agreementsId',
+                    select: 'agreementsnumber'
+                },
+                {
+                    path: 'typeofpoliceId',
+                    select: 'name'
+                },
+                {
+                    path: 'statusofpolicy',
+                    select: 'name'
+                },
+                {
+                    path: 'statusofpayment',
+                    select: 'name'
+                }
+                
+            ]
+        }) 
         if (!result) {
             const error = new Error('Object  not found')
             error.statusCode = 404
