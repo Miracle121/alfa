@@ -90,15 +90,19 @@ const clients = require('./routes/clients/clients')
 
 const app = express();
 
- const URL = 'mongodb://mongoadmin:alfa_123_alfa_222@localhost:27017/Alfa?authSource=admin'       
+//  const URL = 'mongodb://mongoadmin:alfa_123_alfa_222@localhost:27017/Alfa?authSource=admin'       
 
 // const URL = 'mongodb://mongoadmin:alfa_123_alfa_222@91.190.159.70:27017/Alfa?authSource=admin'
+
+const URL = 'mongodb://mongoAdmin:KAb3747d@localhost:27017/Alfa?authSource=admin'  
+
+//const URL = 'mongodb://mongoAdmin:KAb3747d@172.16.10.13:27017/?authMechanism=DEFAULT&authSource=admin'
 
 
 global.__basedir = __dirname;
 // var corsOptions = {
 //   origin: "http://localhost:8081"
-// };
+// };a
 app.use(cors())
 
 

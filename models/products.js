@@ -1,293 +1,295 @@
-const {Schema,model} = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 
 const productsSchema = new Schema({
-    
-    productname:{
-        type:String,
-        required:true
+
+    productname: {
+        type: String,
+        required: true
     },
-    codeproduct:{
-        type:String,
-        required:true
+    codeproduct: {
+        type: String,
+        required: true
     },
-    versionproduct:{
-        type:String,
-        required:true
+    versionproduct: {
+        type: String,
+        required: true
     },
-    groupofproductsId:{
+    groupofproductsId: {
         type: Schema.Types.ObjectId,
         ref: 'Groupsofproducts',
         required: true
     },
-    subgroupofproductsId:{
+    subgroupofproductsId: {
         type: Schema.Types.ObjectId,
         ref: 'Subgroupofproducts',
         required: true
     },
 
-    typeofsectorId:{
+    typeofsectorId: {
         type: Schema.Types.ObjectId,
         ref: 'Typeofsector',
         required: true
     },
-    isrequirepermission:{
-        type:Boolean,
-        required:true
+    isrequirepermission: {
+        type: Boolean,
+        required: true
     },
-    typeofpersones:[{
+    typeofpersones: [{
         type: Schema.Types.ObjectId,
         ref: 'Typeofpersones',
         required: true
     }],
-    typeofinsurerId:{
+    typeofinsurerId: {
         type: Schema.Types.ObjectId,
         ref: 'Typeofinsurer',
         required: true
     },
-    statusofproducts:{
+    statusofproducts: {
         type: Schema.Types.ObjectId,
         ref: 'Statusofproducts',
         required: true
     },
-    riskId:[{
-      riskgroup:{
-        type: Schema.Types.ObjectId,
-        ref: 'Typeofrisks',
-        required: true         
+    riskId: [{
+        riskgroup: {
+            type: Schema.Types.ObjectId,
+            ref: 'Typeofrisks',
+            required: true
         },
-      risk:{ 
-        type: Schema.Types.ObjectId,
-        ref: 'Risks',
-        required: true
+        risk: {
+            type: Schema.Types.ObjectId,
+            ref: 'Risks',
+            required: true
         },
-        classeId:{ 
+        classeId: {
             type: Schema.Types.ObjectId,
             ref: 'Classesofproduct',
             required: true
-            }
-    } ],
+        }
+    }],
     //======page 2=======
-    isapplicationform:{
-        type:Boolean,
-        required:true
+    isapplicationform: {
+        type: Boolean,
+        required: true
     },
-    applicationformId:[{ 
-            type: Schema.Types.ObjectId,
-            ref: 'Applicationformdocs'
-         
-        }],
-    iscontractform:{
-        type:Boolean,
-        required:true
+    applicationformId: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Applicationformdocs'
+
+    }],
+    iscontractform: {
+        type: Boolean,
+        required: true
     },
     contractform: [{
-            type: Schema.Types.ObjectId,
-            ref: 'Contractformdocs'
-           
-        }],
-    Isadditionaldocuments:{
-        type:Boolean,
-        required:true
+        type: Schema.Types.ObjectId,
+        ref: 'Contractformdocs'
+
+    }],
+    Isadditionaldocuments: {
+        type: Boolean,
+        required: true
     },
-    additionaldocuments:[{ 
-            type: Schema.Types.ObjectId,
-            ref: 'Additionaldocuments'
-           
-        }],
+    additionaldocuments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Additionaldocuments'
+
+    }],
     //=====page 3==== 
-    Isfixedpolicyholder:{
-        type:Boolean,
-        required:true
-    }, 
-    fixedpolicyholder:  { 
-            type: Schema.Types.ObjectId,
-            ref: 'Agents'   //'fixedpolicyholde', 
-            // required: true
-        },
-    Isbeneficiary:{
-            type: Boolean,            
-            required: true
-        },    
+    Isfixedpolicyholder: {
+        type: Boolean,
+        required: true
+    },
+    fixedpolicyholder: {
+        type: Schema.Types.ObjectId,
+        ref: 'Agents'   //'fixedpolicyholde', 
+        // required: true
+    },
+    Isbeneficiary: {
+        type: Boolean,
+        required: true
+    },
     Isfixedbeneficiary:
     {
-        type: Boolean,            
+        type: Boolean,
         required: true
     },
-    fixedbeneficiary: [{ 
-            type: Schema.Types.ObjectId,
-            ref: 'Agents', 
-            required: true
-        }],  
-    Isfixedpremium:{
-        type: Boolean,            
+    fixedbeneficiary: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Agents',
+        required: true
+    }],
+    Isfixedpremium: {
+        type: Boolean,
         required: true
     },
-    fixedpremium:{
-        type:Number,
+    fixedpremium: {
+        type: Number,
         // required:true
     },
-    Isbettingrange:{
-        type:Boolean,
-        required:true
+    Isbettingrange: {
+        type: Boolean,
+        required: true
     },
-    Isfixedrate:{
-        type:Boolean,
-        required:true
+    Isfixedrate: {
+        type: Boolean,
+        required: true
     },
-    fixedrate:{
-        type:String,
+    fixedrate: {
+        type: String,
         // required:true
     },
-    Isfixedsuminsured:{
-        type:Boolean,
+    Isfixedsuminsured: {
+        type: Boolean,
         // required:true
     },
-    fixedsuminsured:{
-        type:Number,
+    fixedsuminsured: {
+        type: Number,
         // required:true
     },
-    Isfixedfee:{
-        type:Boolean,
-        required:true
+    Isfixedfee: {
+        type: Boolean,
+        required: true
     },
-    fixedfee:{
-        type:Number,
+    fixedfee: {
+        type: Number,
         // required:true
     },
-    Isfixedpreventivemeasures:{
-        type:Boolean,
-        required:true
+    Isfixedpreventivemeasures: {
+        type: Boolean,
+        required: true
     },
-    fixedpreventivemeasures:{
-        type:Number,
+    fixedpreventivemeasures: {
+        type: Number,
         // required:true
     },
-    Ispolicywithoutpayment:{
-        type:Boolean,
-        required:true
+    Ispolicywithoutpayment: {
+        type: Boolean,
+        required: true
     },
-    Ismultipleagents:{
-        type:Boolean,
-        required:true
+    Ismultipleagents: {
+        type: Boolean,
+        required: true
     },
-    Isfranchisechange:{
-        type:Boolean,
-        required:true
+    Isfranchisechange: {
+        type: Boolean,
+        required: true
     },
-    Isforeigncurrency:{
-        type:Boolean,
-        required:true
+    Isforeigncurrency: {
+        type: Boolean,
+        required: true
     },
-    policyformatId:{
+    policyformatId: {
         type: Schema.Types.ObjectId,
         ref: 'Policyformats',
         required: true
     },
-    typeofclaimsettlement:{   
+    typeofclaimsettlement: {
         type: Schema.Types.ObjectId,
         ref: 'Typeofclaimsettlement',
         required: true
     },
-    typeofrefund:{
+    typeofrefund: {
         type: Schema.Types.ObjectId,
         ref: 'Typeofrefund',
         required: true
-        },
-    typeofpayment:[{   
+    },
+    typeofpayment: [{
         type: Schema.Types.ObjectId,
         ref: 'Typeofpayments',
         required: true
     }],
-    typeofpolice:[{   
+    typeofpolice: [{
         type: Schema.Types.ObjectId,
         ref: 'Typeofpolice',
         required: true
     }],
-    minimumterminsurance:{
-        type:Number,
-        required:true
+    minimumterminsurance: {
+        type: Number,
+        required: true
     },
-    maxterminsurance:{
-        type:Number,
-        required:true
+    maxterminsurance: {
+        type: Number,
+        required: true
     },
-  //==== page 4==========
-//==========tarif==========
-    tariff:[{
-        agentlist:{ 
+    //==== page 4==========
+    //==========tarif==========
+    tariff: [{
+        agentlist: {
             type: Schema.Types.ObjectId,
             ref: 'Agents',
             required: true
         },
-        Isagreement:{
-            type:Boolean,
+        Isagreement: {
+            type: Boolean,
             required: true
         },
-        limitofagreement:{
-            type:Number,
+        limitofagreement: {
+            type: Number,
             // required: true
         },
-        tariffperclasses:[{
-            classes:{ 
+        tariffperclasses: [{
+            classes: {
                 type: Schema.Types.ObjectId,
                 ref: 'Classesofproduct',
                 required: true
             },
-           max: {
-                type:Number,
+            max: {
+                type: Number,
                 // required: true
             },
-            min:{   type:Number,
+            min: {
+                type: Number,
                 // required: true
-            }}
-        ],       
+            }
+        }
+        ],
 
-    }],   
-
-
-//======================Франшиза======================
-    franchise:[{
-    risk:{
-        type: Schema.Types.ObjectId,
-        ref: 'Risks',
-        required: true
-    },
-    Isfranchise:{
-        type:Boolean,
-        required: true
-    },
-    Isfixedfranchise:{
-        type:Boolean,
-        required: true
-    },
-    fixedvalue:{
-        type:Number,
-        required: true
-    },
-    typeoffranchise:{
-        type: Schema.Types.ObjectId,
-        ref: 'Typeoffranchise',
-        // required: true
-    },
-    baseoffranchise:{        
-        type: Schema.Types.ObjectId,
-        ref: 'Baseoffranchise',
-        // required: true
-    },
-    franchise:{
-         type: String
-        //  required: true
-    }
+    }],
 
 
-    }],   
-   creatorId:{
+    //======================Франшиза======================
+    franchise: [{
+        risk: {
+            type: Schema.Types.ObjectId,
+            ref: 'Risks',
+            required: true
+        },
+        Isfranchise: {
+            type: Boolean,
+            required: true
+        },
+        Isfixedfranchise: {
+            type: Boolean,
+            required: true
+        },
+        fixedvalue: {
+            type: Number,
+            required: true
+        },
+        typeoffranchise: {
+            type: Schema.Types.ObjectId,
+            ref: 'Typeoffranchise',
+            // required: true
+        },
+        baseoffranchise: {
+            type: Schema.Types.ObjectId,
+            ref: 'Baseoffranchise',
+            // required: true
+        },
+        franchise: {
+            type: String
+            //  required: true
+        }
+
+
+    }],
+    creatorId: {
         type: Schema.Types.ObjectId,
         ref: 'Users',
         required: true
-    }  
+    }
 },
-{ timestamps:true })
+    { timestamps: true })
 
-module.exports = model('Products',productsSchema)
+module.exports = model('Products', productsSchema)
