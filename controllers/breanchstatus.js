@@ -106,13 +106,13 @@ exports.deleteBreanchstatus = async(req,res,next)=>{
         const error = new Error('Object  not found')
         error.statusCode = 404
         throw error    }
-    if(deleteddata.creatorId.toString()!==req.userId){
-        const error = new Error('bu userni ochirishga imkoni yoq')
-        error.statusCode =403
-        throw error
-        }
+    // if(deleteddata.creatorId.toString()!==req.userId){
+    //     const error = new Error('bu userni ochirishga imkoni yoq')
+    //     error.statusCode =403
+    //     throw error
+    //     }
     const data=await Breanchstatus.findByIdAndRemove(AgesId)
-    const usersdata=await User.findByIdAndRemove(userdata) 
+    // const usersdata=await User.findByIdAndRemove(userdata) 
     res.status(200).json({
         message:'Breanchstatus is deletes',
         data:data   

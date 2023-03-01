@@ -246,8 +246,6 @@ const productsSchema = new Schema({
         ],
 
     }],
-
-
     //======================Франшиза======================
     franchise: [{
         risk: {
@@ -281,8 +279,6 @@ const productsSchema = new Schema({
             type: String
             //  required: true
         }
-
-
     }],
     creatorId: {
         type: Schema.Types.ObjectId,
