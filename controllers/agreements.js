@@ -308,6 +308,7 @@ exports.deleteAgreements = async(req,res,next)=>{
 }
 
 exports.findebyquery =async(req,res,next)=>{ 
+  
     let agentsdata
     let agentscount
     const inn = req.get('inn')
@@ -322,7 +323,7 @@ exports.findebyquery =async(req,res,next)=>{
     que = {}
     
     if (inn)
-        que.inn = inn
+        que['inn'] = inn
     if (nameoforganization)
         que['corporateentitiesdata.nameoforganization'] = nameoforganization
     if (name)
@@ -337,16 +338,16 @@ exports.findebyquery =async(req,res,next)=>{
         que['forindividualsdata.passportNumber'] = passportNumber
     if (pin)
         que['forindividualsdata.pin'] = pin   
-        // console.log(que);
+    //   console.log(que);
     try {
 
         agentscount = await Agents.find(que).countDocuments()
-         agentsdata = await Agents.find(que)
+        // console.log(agentscount);
+         agentsdata = await Agents.find(que)         
          .populate('branch','branchname')        
          .populate('typeofpersons','name')     
          .populate('typeofagent','name')
-         .populate('accountstatus','name')
-         .populate('accountrole','name')  
+        //  .populate('accountrole','name')  
          .populate({
              path: 'forindividualsdata',
              populate:[
