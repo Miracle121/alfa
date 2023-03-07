@@ -143,9 +143,8 @@ const agreementsSchema = new Schema({
        
         typeoffee:{
             type: String,
-            enum:['%','sum'],
-           
-            required: true  
+            enum:['%','sum'],           
+            // required: true  
         },
         countoffee:{
             type:Number
