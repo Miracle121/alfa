@@ -25,6 +25,11 @@ const productsSchema = new Schema({
         ref: 'Subgroupofproducts',
         required: true
     },
+    typeofbco_Id:{
+        type: Schema.Types.ObjectId,
+        ref: 'Typeofbco',
+        required: true
+    },
 
     typeofsectorId: {
         type: Schema.Types.ObjectId,

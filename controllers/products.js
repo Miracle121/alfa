@@ -12,6 +12,9 @@ exports.getProducts= async(req,res,next)=>{
         const data = await Products.find()
         .populate('groupofproductsId','name')
         .populate('subgroupofproductsId','name')
+
+        .populate('typeofbco_Id','policy_type_name')
+
         .populate('typeofsectorId','name')
         .populate('typeofinsurerId','name')
         .populate('statusofproducts','name')      
@@ -77,6 +80,9 @@ exports.getProductsId =async(req,res,next)=>{
         const data= await Products.findById(riskId)
         .populate('groupofproductsId','name')
         .populate('subgroupofproductsId','name')
+
+        .populate('typeofbco_Id','policy_type_name')
+
         .populate('typeofsectorId','name')
         .populate('typeofinsurerId','name')
         .populate('statusofproducts','name')      
@@ -147,6 +153,10 @@ exports.createProducts= async (req,res,next)=>{
     const versionproduct= req.body.versionproduct
     const groupofproductsId = req.body.groupofproductsId
     const subgroupofproductsId= req.body.subgroupofproductsId
+
+    const typeofbco = req.body.typeofbco
+
+
     const typeofsectorId= req.body.typeofsectorId
     const isrequirepermission= req.body.isrequirepermission
     const typeofpersones = req.body.typeofpersones
@@ -200,6 +210,10 @@ exports.createProducts= async (req,res,next)=>{
         versionproduct:versionproduct,
         groupofproductsId:groupofproductsId,
         subgroupofproductsId:subgroupofproductsId,
+
+    
+        typeofbco_Id:typeofbco,
+
         typeofsectorId:typeofsectorId,
         typeofpersones:typeofpersones,
         isrequirepermission:isrequirepermission,
@@ -286,6 +300,7 @@ exports.updateProducts =async(req,res,next)=>{
     const codeproduct= req.body.codeproduct
     const versionproduct= req.body.versionproduct
     const groupofproductsId = req.body.groupofproductsId
+    const typeofbco = req.body.typeofbco
     const subgroupofproductsId= req.body.subgroupofproductsId
     const typeofsectorId= req.body.typeofsectorId
     const typeofpersones = req.body.typeofpersones
@@ -347,6 +362,7 @@ exports.updateProducts =async(req,res,next)=>{
     products.versionproduct=versionproduct
     products.groupofproductsId=groupofproductsId
     products.subgroupofproductsId=subgroupofproductsId
+    products.typeofbco_Id =typeofbco
     products.typeofsectorId=typeofsectorId
     products.typeofpersones =typeofpersones
     products.isrequirepermission=isrequirepermission
@@ -447,7 +463,51 @@ exports.getTariff = async(req,res,next)=>{
         que.subgroupofproductsId = subgroupofproductsId        
         try {
             const  totalItems = await Products.find(que).countDocuments()
-            const  products = await Products.find(que)
+            const  products = await Products.find(que) 
+            .populate('groupofproductsId','name')
+            .populate('subgroupofproductsId','name')
+            .populate('typeofbco_Id','policy_type_name')
+            .populate('typeofsectorId','name')
+            .populate('typeofinsurerId','name')
+            .populate('statusofproducts','name')      
+            .populate('riskId.riskgroup','name')
+            .populate('riskId.risk','name')
+            .populate('riskId.classeId','name')
+            .populate('applicationformId','name')
+            .populate('additionaldocuments','name')
+            .populate('fixedpolicyholder','inn')
+            .populate('fixedbeneficiary','fullName')
+            .populate('policyformatId','name')
+            .populate('typeofclaimsettlement','name')
+            .populate('typeofrefund','name')
+            .populate('typeofrefund','name')
+            .populate('typeofpayment','name')
+            .populate('typeofpolice','name')
+            // .populate('agentlist','fullName')
+            // .populate('tariffperclasses.classes','name')
+            .populate('franchise.risk','name')
+            .populate('franchise.typeoffranchise','name')
+            .populate('franchise.baseoffranchise','name')
+            .populate({
+                path: 'tariff',
+                populate:[                
+                    {               
+                        path: 'agentlist',
+                        select: 'inn'
+                    },
+                    {
+                        path: 'tariffperclasses',
+                        populate:[
+                            {
+                                path: 'classes',
+                                select: 'name'
+                            },
+                        ]
+                    }
+               
+    
+                ]           
+             })
             res.status(200).json({
                 message: `Products list`,
                 oreders: products,
