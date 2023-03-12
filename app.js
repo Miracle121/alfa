@@ -84,6 +84,11 @@ const acts = require('./routes/bco/acts')
 const warehouse = require('./routes/bco/warehouse')
 const policyblank = require('./routes/bco/policyblank')
 const bcoinpolicyblank = require('./routes/bco/bcoinpolicyblank')
+const statusoftypebco = require('./routes/bco/statusoftypebco')
+
+const statusBco = require('./routes/bco/status_bco')
+const statusActs = require('./routes/bco/status_acts')
+
 
 //=======================Clients=======================
 const clients = require('./routes/clients/clients')
@@ -191,11 +196,15 @@ app.use('/languagepolicy',languagepolicy)
 app.use('/typeofbco',typeofbco)
 app.use('/bco',bco)
 app.use('/statusbcopolicy',statusbcopolicy)
+app.use('/statusoftypebco',statusoftypebco)
 app.use('/actstatus',actstatus)
 app.use('/acts',acts)
 app.use('/warehouse',warehouse)
 app.use('/policyblank',policyblank)
 app.use('/bcoinpolicyblank',bcoinpolicyblank)
+
+app.use('/statusbco',statusBco)
+app.use('/statusacts',statusActs)
 
 //============================Clients============
 app.use('/clients',clients)

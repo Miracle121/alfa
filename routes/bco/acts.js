@@ -11,6 +11,7 @@ router.get('/:id',IsAuth,acts.getActsById)
 router.post('/',IsAuth,acts.createActs)
 router.put('/:id',IsAuth,acts.updateActs)
 router.delete('/:id',IsAuth,acts.deleteActs)
+router.post('/f/cheakblank',IsAuth,acts.cheakBlanks)
 
 
 module.exports = router

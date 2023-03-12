@@ -12,9 +12,8 @@ exports.getWarehouse = async (req, res, next) => {
         totalItems = await Warehouse.find()
             .countDocuments()
         const data = await Warehouse.find()
-            //  .populate('policy_type_id','policy_type_name')      
-
             .populate('statusofpolicy', 'name')
+            .populate('branch_id','branchname')
             .populate({
                 path: 'policy_type_id',
                 populate: [
@@ -47,8 +46,22 @@ exports.getWarehouseById = async (req, res, next) => {
     const AgesId = req.params.id
     try {
         const result = await Warehouse.findById(AgesId)
-            .populate('policy_type_id', 'name')
-            .populate('statusofpolicy', 'name')
+        .populate('statusofpolicy', 'name')
+        .populate('branch_id','branchname')
+        .populate({
+            path: 'policy_type_id',
+            populate: [
+                {
+                    path: 'policy_size_id',
+                    select: 'name'
+                },
+                {
+                    path: 'language',
+                    select: 'name'
+
+                }
+            ]
+        })
         if (!result) {
             const error = new Error('Object  not found')
             error.statusCode = 404
@@ -71,9 +84,9 @@ exports.createWarehouse = async (req, res, next) => {
     const policy_type_id = req.body.policy_type_id
     const policy_number_of_digits_start = req.body.policy_number_of_digits_start
     const policy_number_of_digits_end = req.body.policy_number_of_digits_end
-    const policy_count = Math.abs(policy_number_of_digits_start - policy_number_of_digits_end)
-    const statusofpolicy = req.body.statusofpolicy
-
+    const policy_count = Math.abs(policy_number_of_digits_start - policy_number_of_digits_end) + 1
+    const statusofpolicy = "63a1f3f370bcecacc39fc2ed"
+    const branch_id = "62dfd0f1a098c2cd901d7f6a"
     try {
         const result = new Warehouse({
             policy_type_id: policy_type_id,
@@ -81,18 +94,20 @@ exports.createWarehouse = async (req, res, next) => {
             policy_number_of_digits_end: policy_number_of_digits_end,
             policy_count: policy_count,
             statusofpolicy: statusofpolicy,
+            branch_id: branch_id,
             creatorId: req.userId
         })
         const results = await result.save()
-
+        const status_blank = "63a1f3f370bcecacc39fc2ed"
         const policy_blank_number = await gettingNumberOfDigits(
+            results._id,
             policy_type_id,
             policy_number_of_digits_start,
             policy_number_of_digits_end,
-            results._id,
+            branch_id,
+            status_blank,
             req.userId)
         const policyblank = await Policyblank.insertMany(policy_blank_number)
-       
         res.status(200).json({
             message: `Creat new policy blank`,
             data: results,
@@ -103,10 +118,6 @@ exports.createWarehouse = async (req, res, next) => {
     } catch (error) {
 
     }
-
-
-
-
 }
 
 exports.updateWarehouse = async (req, res, next) => {
@@ -196,33 +207,34 @@ exports.getPolicyblanknumberByTypeId = async (req, res, next) => {
 
 }
 
-const gettingNumberOfDigits = async (policy_type_id, policy_number_of_digits_start, policy_number_of_digits_end, warehouse_id, creatorId) => {
-
+const gettingNumberOfDigits = async (
+    warehouse_id,
+    policy_type_id,
+    policy_number_of_digits_start,
+    policy_number_of_digits_end,
+    branch_id,
+    status_blank,
+    creatorId) => {
     const typebco = await Typeofbco.findById(policy_type_id)
     const policynumerdigits = typebco.policy_number_of_digits
     const numerofpolicy_blank = []
-
-
     for (let i = policy_number_of_digits_start; i < (policy_number_of_digits_end + 1); i++) {
-
         testobject = new Object()
         testobject = {
-            warehouse_id: warehouse_id,
+            warehous_id: warehouse_id,
+            branch_id: branch_id,
             policy_type_id: policy_type_id,
             blank_number: await addzero(policynumerdigits, i),
             Is_usedblank: false,
+            status_blank: status_blank,
+            Is_given: false,
             creatorId: creatorId
         }
-
         numerofpolicy_blank.push(testobject)
     }
     const policy_blank_number = numerofpolicy_blank
-    // console.log(policy_blank_number);
 
     return policy_blank_number
-
-
-
 }
 
 const addzero = async (policy_count, numer) => {
@@ -234,6 +246,6 @@ const addzero = async (policy_count, numer) => {
     return zeros_rep
 }
 
-exports.getPolicyblankByPolicytypeId= async(req,res,next)=>{
-    
+exports.getPolicyblankByPolicytypeId = async (req, res, next) => {
+
 }

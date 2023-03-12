@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose')
 const actsSchema = new Schema({
+
     act_number: {
         type: String,
         required: true
@@ -29,17 +30,45 @@ const actsSchema = new Schema({
         required: true
     },
     //===========================
-    policy_type_id: {
+    bco_data: [
+        {
+            policy_type_id: {
+                type: Schema.Types.ObjectId,
+                ref: 'Typeofbco',
+                required: true
+            },
+            policy_blank_number_from: {
+                type: Number,
+                required: true
+            },
+            policy_blank_number_to: {
+                type: Number,
+                required: true
+            },
+            blank_number: {
+                type:Array
+            },
+            blank_counts: {
+                type: Number,
+                required: true
+            }
+        }
+    ],
+
+    // blanksinact: [
+    //     {
+    //         blanks_id: {
+    //             type: Schema.Types.ObjectId,
+    //             ref: 'StatusActs'
+    //         }
+    //     }],
+        
+    statusofact: {
         type: Schema.Types.ObjectId,
-        ref: 'Typeofbco',
+        ref: 'StatusActs',
         required: true
     },
-    policyId:[{
-        type: Schema.Types.ObjectId,
-        ref: 'Bco',
-        required: true
-    }],
-    //============================
+
     creatorId: {
         type: Schema.Types.ObjectId,
         ref: 'Users',

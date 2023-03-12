@@ -14,21 +14,26 @@ const warehouseSchema = new Schema({
         type: Number,
         required: true
     },
-    policy_count:{
+    policy_count: {
         type: Number
     },
 
-//     policy_blank_number:[{
-//         blank_number: {
-//             type:String
-//         },
-//         Is_usedblank:{
-//             type:Boolean
-//         },
-//     }    
-// ],
+    //     policy_blank_number:[{
+    //         blank_number: {
+    //             type:String
+    //         },
+    //         Is_usedblank:{
+    //             type:Boolean
+    //         },
+    //     }    
+    // ],
+    branch_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Breanches'
+        // required: true
+    },
 
-    statusofpolicy:{
+    statusofpolicy: {
         type: Schema.Types.ObjectId,
         ref: 'Statusbcopolicy',
         required: true

@@ -25,7 +25,7 @@ const typeofbcoSchema = new Schema({
     },   
     statusofpolicy:{
         type: Schema.Types.ObjectId,
-        ref: 'Statusbcopolicy',
+        ref: 'Statusoftypebco',
         required: true
     },
     creatorId: {

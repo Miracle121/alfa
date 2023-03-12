@@ -1,5 +1,5 @@
 const Warehouse = require('../../models/bco/warehouse')
-const Typeofbco= require('../../models/bco/typeofbco')
+const Typeofbco = require('../../models/bco/typeofbco')
 const Policyblank = require('../../models/bco/policyblank')
 
 exports.getPolicyblank = async (req, res, next) => {
@@ -9,37 +9,42 @@ exports.getPolicyblank = async (req, res, next) => {
     try {
         totalItems = await Policyblank.find()
             .countDocuments()
-        const data = await Policyblank.find()  
-             .populate({
-                path:'warehouse_id',
-                populate:[
-                    { 
+        const data = await Policyblank.find()
+            .populate({
+                path: 'warehous_id',
+                populate: [
+                    {
                         path: 'policy_type_id',
                         select: 'policy_type_name'
                     },
-                    { 
+                    {
                         path: 'statusofpolicy',
                         select: 'name'
+                    },
+                    {
+                        path: 'branch_id',
+                        select: 'branchname'
                     }
                 ]
             })
-             .populate({
+            .populate('branch_id', 'branchname')
+            .populate({
                 path: 'policy_type_id',
-                populate:[
-                    { 
-                    path: 'policy_size_id',
-                    select: 'name'
-                },
-                { 
-                    path: 'language',
-                    select: 'name'
+                populate: [
+                    {
+                        path: 'policy_size_id',
+                        select: 'name'
+                    },
+                    {
+                        path: 'language',
+                        select: 'name'
 
-                }
+                    }
                 ]
-             })
-             .populate({
+            })
+            .populate({
                 path: 'policy_id',
-                populate:[
+                populate: [
                     {
                         path: 'agreementsId',
                         select: 'agreementsnumber'
@@ -60,11 +65,12 @@ exports.getPolicyblank = async (req, res, next) => {
                         path: 'statusofpayment',
                         select: 'name'
                     }
-                    
+
                 ]
-            }) 
-             
-             .skip((page - 1) * counts).limit(counts)
+            })
+            .populate('status_blank','name')
+
+            .skip((page - 1) * counts).limit(counts)
         res.status(200).json({
             message: `Warehouse Insurance`,
             data: data,
@@ -82,55 +88,55 @@ exports.getPolicyblankById = async (req, res, next) => {
     const AgesId = req.params.id
     try {
         const result = await Policyblank.findById(AgesId)
-        .populate({
-            path:'warehouse_id',
-            populate:[
-                { 
-                    path: 'policy_type_id',
-                    select: 'name'
-                },
-                { 
-                    path: 'statusofpolicy',
-                    select: 'name'
-                }
-            ]
-        })
-         .populate({
-            path: 'policy_type_id',
-            populate:[
-                { 
-                path: 'policy_size_id',
-                select: 'name'
-            },
-            { 
-                path: 'language',
-                select: 'name'
+            .populate({
+                path: 'branch_id',
+                populate: [
+                    {
+                        path: 'policy_type_id',
+                        select: 'name'
+                    },
+                    {
+                        path: 'statusofpolicy',
+                        select: 'name'
+                    }
+                ]
+            })
+            .populate({
+                path: 'policy_type_id',
+                populate: [
+                    {
+                        path: 'policy_size_id',
+                        select: 'name'
+                    },
+                    {
+                        path: 'language',
+                        select: 'name'
 
-            }
-            ]
-         })
-         .populate({
-            path: 'policy_id',
-            populate:[
-                {
-                    path: 'agreementsId',
-                    select: 'agreementsnumber'
-                },
-                {
-                    path: 'typeofpoliceId',
-                    select: 'name'
-                },
-                {
-                    path: 'statusofpolicy',
-                    select: 'name'
-                },
-                {
-                    path: 'statusofpayment',
-                    select: 'name'
-                }
-                
-            ]
-        }) 
+                    }
+                ]
+            })
+            .populate({
+                path: 'policy_id',
+                populate: [
+                    {
+                        path: 'agreementsId',
+                        select: 'agreementsnumber'
+                    },
+                    {
+                        path: 'typeofpoliceId',
+                        select: 'name'
+                    },
+                    {
+                        path: 'statusofpolicy',
+                        select: 'name'
+                    },
+                    {
+                        path: 'statusofpayment',
+                        select: 'name'
+                    }
+
+                ]
+            })
         if (!result) {
             const error = new Error('Object  not found')
             error.statusCode = 404
@@ -150,16 +156,16 @@ exports.getPolicyblankById = async (req, res, next) => {
 
 exports.createPolicyblank = async (req, res, next) => {
 
-    const warehouse_id = req.body.warehouse_id
+    const branch_id = req.body.branch_id
     const policy_type_id = req.body.policy_type_id
     const blank_number = req.body.blank_number
-    const Is_usedblank = req.body.Is_usedblank 
+    const Is_usedblank = req.body.Is_usedblank
 
     const result = new Policyblank({
-        warehouse_id: warehouse_id,
-        policy_type_id:policy_type_id,
+        branch_id: branch_id,
+        policy_type_id: policy_type_id,
         blank_number: blank_number,
-        Is_usedblank:Is_usedblank,
+        Is_usedblank: Is_usedblank,
         creatorId: req.userId
     })
     const results = await result.save()
@@ -175,7 +181,7 @@ exports.updatePolicyblank = async (req, res, next) => {
     const warehouse_id = req.body.warehouse_id
     const policy_type_id = req.body.policy_type_id
     const blank_number = req.body.blank_number
-    const Is_usedblank = req.body.Is_usedblank 
+    const Is_usedblank = req.body.Is_usedblank
     try {
         const result = await Policyblank.findById(AgesId)
         if (!result) {
@@ -231,10 +237,10 @@ exports.deletePolicyblank = async (req, res, next) => {
     }
 }
 
-exports.getPolicyblanknumberByTypeId= async(req,res,next)=>{
+exports.getPolicyblanknumberByTypeId = async (req, res, next) => {
     const policy_type_id = req.params.id
     try {
-        const result = await Policyblank.find({policy_type_id: policy_type_id}&&{Is_usedblank:false}).select("blank_number")
+        const result = await Policyblank.find({ policy_type_id: policy_type_id } && { Is_usedblank: false }).select("blank_number")
         // .populate({
         //     path:'warehouse_id',
         //     populate:[
@@ -262,7 +268,7 @@ exports.getPolicyblanknumberByTypeId= async(req,res,next)=>{
         //     }
         //     ]
         //  })           
-           
+
         if (!result) {
             const error = new Error('Object  not found')
             error.statusCode = 404

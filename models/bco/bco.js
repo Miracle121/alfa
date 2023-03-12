@@ -6,33 +6,26 @@ const bcoSchema = new Schema({
         ref: 'Typeofbco',
         required: true
     },   
-    policy_blank_number:[{
-        type: Schema.Types.ObjectId,
-        ref: 'Policyblank',
-        required: true
-    }],
-    branch_id:{
-        type: Schema.Types.ObjectId,
-        ref: 'Breanches',
+    policy_blank_number_from:{
+        type: Number,       
         required: true
     },
-
-    employee_id:{
-        type: Schema.Types.ObjectId,
-        ref: 'Users',
-        // required: true
-    },    
-
-    statusofbcopolicy:[{
-        type: Schema.Types.ObjectId,
-        ref: 'Statusbcopolicy',
+    policy_blank_number_to:{
+        type: Number,       
         required: true
-    }],
-
+    },
+  
+    blank_number:{
+        type:Array
+    },
+    act_id:{
+        type: Schema.Types.ObjectId,
+        ref: 'Acts'       
+    },
     creatorId: {
         type: Schema.Types.ObjectId,
-        ref: 'Users',
-        required: true
+        ref: 'Users'
+        // required: true
     }
 },
 

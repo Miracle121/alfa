@@ -11,10 +11,10 @@ exports.getBco = async (req, res, next) => {
             .countDocuments()
         const data = await Bco.find()
             .populate('policy_type_id', 'policy_type_name')
-            .populate('branch_id', 'branchname')
-            .populate('statusofbcopolicy', 'name')
-            .populate('employee_id', 'name')
-            .populate('policy_blank_number', 'blank_number')
+            .populate('act_id', 'act_number')
+            // .populate('statusofbcopolicy', 'name')
+            // .populate('employee_id', 'name')
+            // .populate('policy_blank_number', 'blank_number')
 
             .skip((page - 1) * counts).limit(counts)
         res.status(200).json({
