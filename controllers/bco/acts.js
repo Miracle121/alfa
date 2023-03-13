@@ -67,7 +67,7 @@ exports.createActs = async (req, res, next) => {
     const receiver_branch_id = req.body.receiver_branch_id
     const receiver_employee_id = req.body.receiver_employee_id
     const bco_data = req.body.bco_data
-    const statusofact = req.body.statusofact
+    const statusofact = "6409a29a1ffcc491f7f4c2e5"    //req.body.statusofact
 
     const bco = await gettingNumberOfDigits(bco_data)
     const result = new Acts({
@@ -77,8 +77,7 @@ exports.createActs = async (req, res, next) => {
         sender_employee_id: sender_employee_id,
         receiver_branch_id: receiver_branch_id,
         receiver_employee_id: receiver_employee_id,
-        bco_data: bco,
-       
+        bco_data: bco,       
         statusofact: statusofact,
         creatorId: req.userId
     })
@@ -173,8 +172,7 @@ exports.cheakBlanks = async (req, res, next) => {
 
         }
     })
-    const typeofbco = await Typeofbco.findById(policy_type_id) //.select('__id','policy_type_name')
-    
+    const typeofbco = await Typeofbco.findById(policy_type_id) //.select('__id','policy_type_name')   
 
     blanks = {
         policy_type_id: typeofbco,

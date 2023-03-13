@@ -27,8 +27,8 @@ const productsSchema = new Schema({
     },
     typeofbco_Id:{
         type: Schema.Types.ObjectId,
-        ref: 'Typeofbco',
-        required: true
+        ref: 'Typeofbco'
+        // required: true
     },
 
     typeofsectorId: {
