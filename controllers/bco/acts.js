@@ -1,5 +1,6 @@
 const Acts = require('../../models/bco/acts')
 const Warehouse = require('../../models/bco/warehouse')
+const Typeofbco = require('../../models/bco/typeofbco')
 const Bco = require('../../models/bco/bco')
 const Policyblank = require('../../models/bco/policyblank')
 const moment = require('moment')
@@ -159,23 +160,24 @@ exports.deleteActs = async (req, res, next) => {
     }
 }
 exports.cheakBlanks = async (req, res, next) => {
-
     let blank = []
     let blanks = {}
     const policy_type_id = req.body.policy_type_id
     const policy_blank_number_from = req.body.policy_blank_number_from
     const policy_blank_number_to = req.body.policy_blank_number_to
-
     const policy_blank = await Policyblank.find({ policy_type_id: policy_type_id })
 
     policy_blank.forEach(b => {
         if (((b.blank_number >= policy_blank_number_from) && (b.blank_number <= policy_blank_number_to) && (b.Is_usedblank === false))) {
             blank.push(b.blank_number)
+
         }
     })
+    const typeofbco = await Typeofbco.findById(policy_type_id) //.select('__id','policy_type_name')
+    
 
     blanks = {
-        policy_type_id: policy_type_id,
+        policy_type_id: typeofbco,
         policy_blank_number_from: policy_blank_number_from,
         policy_blank_number_to: policy_blank_number_to,
         blank_counts: blank.length,
