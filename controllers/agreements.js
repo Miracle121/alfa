@@ -181,7 +181,8 @@ exports.createAgreements = async(req,res,next)=>{
                 documents:documents,
                 policy:policy,                                 
                 creatorId: req.userId
-            })        
+            })     
+            // console.log(result);   
             const results = await result.save()   
 
             res.status(200).json({

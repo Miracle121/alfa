@@ -1,302 +1,303 @@
-const {Schema,model} = require('mongoose')
-const  moment = require('moment')
+const { Schema, model } = require('mongoose')
+const moment = require('moment')
 const agreementsSchema = new Schema({
-    branch:{
+    branch: {
         type: Schema.Types.ObjectId,
         ref: 'Breanches',
-        required:true     
+        required: true
     },
-    agreementsnumber:{
-        type:String,
+    agreementsnumber: {
+        type: String,
         required: true
     },
     //==========================Продукт================
-    
-    groupofproductsId:{
+
+    groupofproductsId: {
         type: Schema.Types.ObjectId,
         ref: 'Groupsofproducts',
         required: true
     },
-    subgroupofproductsId:{
+    subgroupofproductsId: {
         type: Schema.Types.ObjectId,
         ref: 'Subgroupofproducts',
         required: true
     },
-    products:{
+    products: {
         type: Schema.Types.ObjectId,
         ref: 'Products',
     },
-    startofinsurance:{
-        type:Date 
+    startofinsurance: {
+        type: Date
     },
-    endofinsurance:{
-        type:Date 
+    endofinsurance: {
+        type: Date
     },
-    clinets:{
-            type: Schema.Types.ObjectId,
-            ref: 'Client',        
+    clinets: {
+        type: Schema.Types.ObjectId,
+        ref: 'Client',
     },
-    beneficiary:{
+    beneficiary: {
         type: Schema.Types.ObjectId,
         ref: 'Agents'
     },
-    pledgers:[{
+    pledgers: [{
         type: Schema.Types.ObjectId,
-        ref: 'Agents', 
+        ref: 'Agents',
         required: true
     }],
     //===================
-    objectofinsurance:[{
-        typeofobjects:{
+    objectofinsurance: [{
+        typeofobjects: {
             type: Schema.Types.ObjectId,
             ref: 'Typeofobjects',
-            required:true
+            required: true
         },
-        objects:{
+        objects: {
             type: Schema.Types.ObjectId,
             ref: 'Objects',
-            required:true
+            required: true
         },
-        quantity:{
+        quantity: {
             type: Number,
             required: true
         },
-        regionId:{
+        regionId: {
             type: Schema.Types.ObjectId,
             ref: 'Region',
-            required:true
+            required: true
         },
-        districtsId:{
+        districtsId: {
             type: Schema.Types.ObjectId,
             ref: 'Districts',
-            required:true
+            required: true
         }
     }],
     //====================
- 
-    riskId:[{
-        riskgroup:{
-          type: Schema.Types.ObjectId,
-          ref: 'Typeofrisks',
-          required: true         
-          },
-        risk:{ 
-          type: Schema.Types.ObjectId,
-          ref: 'Risks',
-          required: true
-          },
-        classeId:{ 
-              type: Schema.Types.ObjectId,
-              ref: 'Classesofproduct',
-              required: true
-              },
-        startdate:{
-            type:Date 
-            },
-        enddate:{
-                type:Date
-            },
-        insurancepremium:{
-            type:Number
+
+    riskId: [{
+        riskgroup: {
+            type: Schema.Types.ObjectId,
+            ref: 'Typeofrisks',
+            required: true
         },
-        insurancerate:{
-            type:Number
-        },
-        suminsured:{
-            type:Number
-        }        
-      } ],
-    totalsuminsured:{
-        type:Number
-    },
-    totalinsurancepremium:{
-        type:Number
-    },
-    accruedinsurancepremium:{
-        type:Number
-    },
-    paidinsurancepremium:{
-        type:Number
-    },
-    paymentcurrency:{
-        type: Schema.Types.ObjectId,
-        ref: 'Paymentcurrency',
-        required: true  
-    },
-    duplicatefee:{
-        Isduplicatefee:{
-            type:Boolean
-        },
-        typeoffee:{
-            type: String,
-            enum:['%','sum'],
-            required: true  
-        },
-        countoffee:{
-            type:Number
-        }
-    },
-    demonstrablecosts:{
-        Isdemonstrablecosts:{
-            type:Boolean
-        },
-       
-        typeoffee:{
-            type: String,
-            enum:['%','sum'],           
-            // required: true  
-        },
-        countoffee:{
-            type:Number
-        }
-    },
-    premiumpaymentschedule:[{
-        scheduledate:{
-            type:Date
-        },
-        schedulecount:{
-            type:Number
-        }
-        
-    }],
-    franchise:[{
-        risk:{
+        risk: {
             type: Schema.Types.ObjectId,
             ref: 'Risks',
             required: true
         },
-        Isfranchise:{
-            type:Boolean,
+        classeId: {
+            type: Schema.Types.ObjectId,
+            ref: 'Classesofproduct',
             required: true
         },
-        Isfixedfranchise:{
-            type:Boolean,
+        startdate: {
+            type: Date
+        },
+        enddate: {
+            type: Date
+        },
+        insurancepremium: {
+            type: Number
+        },
+        insurancerate: {
+            type: Number
+        },
+        suminsured: {
+            type: Number
+        }
+    }],
+    totalsuminsured: {
+        type: Number
+    },
+    totalinsurancepremium: {
+        type: Number
+    },
+    accruedinsurancepremium: {
+        type: Number
+    },
+    paidinsurancepremium: {
+        type: Number
+    },
+    paymentcurrency: {
+        type: Schema.Types.ObjectId,
+        ref: 'Paymentcurrency'
+        // required: true
+    },
+    duplicatefee: {
+        Isduplicatefee: {
+            type: Boolean
+        },
+        typeoffee: {
+            type: String,
+            enum: ['%', 'sum'],
             required: true
         },
-        fixedvalue:{
-            type:Number,
+        countoffee: {
+            type: Number
+        }
+    },
+    demonstrablecosts: {
+        Isdemonstrablecosts: {
+            type: Boolean
+        },
+
+        typeoffee: {
+            type: String,
+            enum: ['%', 'sum'],
+            // required: true  
+        },
+        countoffee: {
+            type: Number
+        }
+    },
+    premiumpaymentschedule: [{
+        scheduledate: {
+            type: Date
+        },
+        schedulecount: {
+            type: Number
+        }
+
+    }],
+    franchise: [{
+        risk: {
+            type: Schema.Types.ObjectId,
+            ref: 'Risks',
             required: true
         },
-        typeoffranchise:{
+        Isfranchise: {
+            type: Boolean,
+            required: true
+        },
+        Isfixedfranchise: {
+            type: Boolean,
+            required: true
+        },
+        fixedvalue: {
+            type: Number,
+            required: true
+        },
+        typeoffranchise: {
             type: Schema.Types.ObjectId,
             ref: 'Typeoffranchise',
             // required: true
         },
-        baseoffranchise:{        
+        baseoffranchise: {
             type: Schema.Types.ObjectId,
             ref: 'Baseoffranchise',
             // required: true
         },
-        franchise:{
-             type: String
+        franchise: {
+            type: String
             //  required: true
-        }   
-        }],     
+        }
+    }],
     //==========Расторжение=====
-    termination:[{
-        terminationdate:{
-            type:Date
+    termination: [{
+        terminationdate: {
+            type: Date
         },
-        chargedamountreturned:{
-            type:String
+        chargedamountreturned: {
+            type: String
         },
-        amountreturned:{
-            type:String
+        amountreturned: {
+            type: String
         },
-         //== endi qilinadi
-        reason:{
+        //== endi qilinadi
+        reason: {
             type: Schema.Types.ObjectId,
             ref: 'Reasons',
             required: true
         },
 
-         }],     
-    commission:[{
-        agents:{
+    }],
+    commission: [{
+        agents: {
             type: Schema.Types.ObjectId,
             ref: 'Agents',
             required: true
         },
-        percentageremuneration:{
-            type:String
+        percentageremuneration: {
+            type: String
         },
-        accruedcommissionamount:{
-            type:String
+        accruedcommissionamount: {
+            type: String
         },
-        commissionamountpaid:{
-            type:String
+        commissionamountpaid: {
+            type: String
         },
-        accruedcommissionrefund:{
-            type:String
+        accruedcommissionrefund: {
+            type: String
         },
         // accruedcommissionrefund:{
         //     type:String
         // },
-        returnedcommission:{
-            type:String
+        returnedcommission: {
+            type: String
         }
-         }],
-    rpm:[{
-            perdeductionsRPM:{
-                type:String
-            },
-            amountdeductionsRPM:{
-                type:String
-            }
-         }],
+    }],
+    rpm: [{
+        perdeductionsRPM: {
+            type: String
+        },
+        amountdeductionsRPM: {
+            type: String
+        }
+    }],
     //=======Документооборот========
-    appregistrationnumber:{
-        type:String
+    appregistrationnumber: {
+        type: String
     },
-    applicationdate:{
-        type:Date
+    applicationdate: {
+        type: Date
     },
-    whoaccepted:{
-        type:String
+    whoaccepted: {
+        type: String
     },
-    copyofdocuments:{
-        type:String
+    copyofdocuments: {
+        type: String
     },
     //======Договор=======
-    generalagreement:{
-        type:Boolean
+    generalagreement: {
+        type: Boolean
     },
-    numberofcontract:{
-        type:String
+    numberofcontract: {
+        type: String
     },
-    agreementdate:{
-        type:Date
+    agreementdate: {
+        type: Date
     },
-    copyofagreement:{
-        type:String
+    copyofagreement: {
+        type: String
     },
     //=============Приложения===============
-    documents:[{
-        editaneldocumentation:{
-            type:String
+    documents: [{
+        editaneldocumentation: {
+            type: String
         }
     }],
 
     //=============Полис======
-    policy:[{
-        
-            type: Schema.Types.ObjectId,
-            ref: 'Policy'
-        
+    policy: [{
+
+        type: Schema.Types.ObjectId,
+        ref: 'Policy'
+
     }],
     //==================Индоссаменты========
-    endorsements:[{
-        endorsementsId:{
-        type: Schema.Types.ObjectId,
-        ref: 'Endorsements'
-    }}],
-    
-    creatorId:{
+    endorsements: [{
+        endorsementsId: {
+            type: Schema.Types.ObjectId,
+            ref: 'Endorsements'
+        }
+    }],
+
+    creatorId: {
         type: Schema.Types.ObjectId,
         ref: 'Users',
         required: true
-    }  
+    }
 },
 
-{ timestamps:true })
-module.exports = model('Agreements',agreementsSchema)
+    { timestamps: true })
+module.exports = model('Agreements', agreementsSchema)
