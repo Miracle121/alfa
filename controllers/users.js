@@ -57,7 +57,7 @@ exports.getUsersById = async (req, res, next) => {
 exports.CreateUsers = async (req, res, next) => {
     try {
        
-        const agent_Id = req.get('agent_Id')
+        const agent_Id = req.get('agentId')
         const branch_Id = req.get('branch_Id')
         console.log(agent_Id);
         const email = req.body.email
