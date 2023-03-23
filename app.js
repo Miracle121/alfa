@@ -93,6 +93,9 @@ const statusActs = require('./routes/bco/status_acts')
 //=======================Clients=======================
 const clients = require('./routes/clients/clients')
 
+//===========================Employee=======================
+const employee = require('./routes/employee/employee')
+const positions = require('./routes/employee/positions')
 const app = express();
 
 //  const URL = 'mongodb://mongoadmin:alfa_123_alfa_222@localhost:27017/Alfa?authSource=admin'       
@@ -205,7 +208,9 @@ app.use('/bcoinpolicyblank',bcoinpolicyblank)
 
 app.use('/statusbco',statusBco)
 app.use('/statusacts',statusActs)
-
+//===========================
+app.use('/employee',employee)
+app.use('/positions',positions)
 //============================Clients============
 app.use('/clients',clients)
 
