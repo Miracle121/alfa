@@ -56,10 +56,9 @@ exports.getUsersById = async (req, res, next) => {
 
 exports.CreateUsers = async (req, res, next) => {
     try {
-       
+
         const agent_Id = req.get('agentId')
         const branch_Id = req.get('branch_Id')
-        console.log(agent_Id);
         const email = req.body.email
         const password = req.body.password
         const accountstatus = req.body.accountstatus
@@ -76,17 +75,19 @@ exports.CreateUsers = async (req, res, next) => {
         })
 
         const users = await user.save()
-        const agent = await Agents.findByIdAndUpdate(agent_Id,{
-            user_id:users._id
+
+        const agent = await Agents.findByIdAndUpdate(agent_Id, {
+            user_id: users._id
         })
-        const agents = await agent.save()
-     
+        if (agent != null) {
+            const agents = await agent.save()
+        }
         res.status(201).json({
             message: 'User bazaga kiritildi',
             users: users
         })
     } catch (err) {
-       
+
         next(err)
     }
 }
@@ -100,7 +101,7 @@ exports.UpdateUsers = async (req, res, next) => {
     const accountstatus = req.body.accountstatus
     const accountrole = req.body.accountrole
     const hashpass = await bcrypt.hash(password, 12)
-    
+
     try {
         const user = await User.findById(userId)
         if (!user) {
@@ -140,7 +141,7 @@ exports.DeleteUsers = async (req, res, next) => {
             error.statusCode = 404
             throw error
         }
-    
+
         const data = await User.findByIdAndRemove(usersId)
         res.status(200).json({
             message: 'Region is deletes',
