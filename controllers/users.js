@@ -76,12 +76,14 @@ exports.CreateUsers = async (req, res, next) => {
 
         const users = await user.save()
 
-        const agent = await Agents.findByIdAndUpdate(agent_Id, {
-            user_id: users._id
-        })
-        if (agent != null) {
-            const agents = await agent.save()
-        }
+        // const agent = await Agents.findByIdAndUpdate(agent_Id, {
+        //     user_id: users._id
+        // })
+
+        // if (agent != null) {
+        //     const agents = await agent.save()
+        // }
+
         res.status(201).json({
             message: 'User bazaga kiritildi',
             users: users
