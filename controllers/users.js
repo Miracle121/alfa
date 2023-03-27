@@ -1,5 +1,6 @@
 const User = require('../models/users')
 const Agents = require('../models/agents')
+const Employee = require('../models/employee/employee')
 const bcrypt = require('bcryptjs')
 
 exports.getUsers = async (req, res, next) => {
@@ -57,8 +58,9 @@ exports.getUsersById = async (req, res, next) => {
 exports.CreateUsers = async (req, res, next) => {
     try {
 
-        const agent_Id = req.get('agentId')
+        const agent_Id = req.get('agentId') || null
         const branch_Id = req.get('branch_Id')
+        const emp_id = req.get('emp_id') || null
         const email = req.body.email
         const password = req.body.password
         const accountstatus = req.body.accountstatus
@@ -67,23 +69,26 @@ exports.CreateUsers = async (req, res, next) => {
         const user = new User({
             agent_Id: agent_Id,
             branch_Id: branch_Id,
+            emp_Id: emp_id,
             email: email,
             password: hashpass,
             accountstatus: accountstatus,
             accountrole: accountrole,
             creatorId: req.userId
         })
-
         const users = await user.save()
-
-        // const agent = await Agents.findByIdAndUpdate(agent_Id, {
-        //     user_id: users._id
-        // })
-
-        // if (agent != null) {
-        //     const agents = await agent.save()
-        // }
-
+        if (agent_Id) {
+            const agent = await Agents.findByIdAndUpdate(agent_Id, {
+                user_id: users._id
+            })
+            const agents = await agent.save()
+        }
+        if (emp_id) {
+            const employee = await Employee.findByIdAndUpdate(emp_id, {
+                user_id: users._id
+            })
+            const emp = await employee.save()
+        }
         res.status(201).json({
             message: 'User bazaga kiritildi',
             users: users
@@ -96,8 +101,9 @@ exports.CreateUsers = async (req, res, next) => {
 
 exports.UpdateUsers = async (req, res, next) => {
     const userId = req.params.id
-    const agent_Id = req.get('agent_Id')
+    const agent_Id = req.get('agent_Id') || null
     const branch_Id = req.get('branch_Id')
+    const emp_id = req.get('emp_id') || null
     const email = req.body.email
     const password = req.body.password
     const accountstatus = req.body.accountstatus
@@ -113,6 +119,7 @@ exports.UpdateUsers = async (req, res, next) => {
         }
         const hashpass = await bcrypt.hash(password, 12)
         user.agent_Id = agent_Id
+        user.emp_Id = emp_id
         user.branch_Id = branch_Id
         user.email = email
         user.password = hashpass

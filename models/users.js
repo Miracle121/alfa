@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
 const userSchema = new Schema({
-
     branch_Id: {
         type: Schema.Types.ObjectId,
         ref: 'Breanches'
@@ -10,8 +9,13 @@ const userSchema = new Schema({
     },
     agent_Id: {
         type: Schema.Types.ObjectId,
-        ref: 'Agents',
-        required: true
+        ref: 'Agents'
+        // required: true
+    },
+    emp_Id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Employee',
+        // required: true
     },
     email: {
         type: String,

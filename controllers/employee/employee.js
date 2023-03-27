@@ -15,6 +15,26 @@ exports.getEmployees = async (req, res, next) => {
                .populate('regions','name')
                .populate('districts','name')
                .populate('position','name')
+               .populate({
+                path: 'user_id',
+                select:'email branch_Id accountstatus accountrole ',
+                populate:[ 
+                  
+                    {               
+                        path: 'branch_Id',
+                        select: 'branchname'
+                    },
+                    {               
+                        path: 'accountstatus',
+                        select: 'name'
+                    },
+                    {               
+                        path: 'accountrole',
+                        select: 'name'
+                    },
+                ]
+               })
+
                .skip((page - 1) * counts).limit(counts)
         res.status(200).json({
             message: `Employees List`,
@@ -37,6 +57,25 @@ exports.getEmployeesById = async (req, res, next) => {
         .populate('regions','name')
         .populate('districts','name')
         .populate('position','name')
+        .populate({
+            path: 'user_id',
+            select:'email branch_Id accountstatus accountrole ',
+            populate:[ 
+              
+                {               
+                    path: 'branch_Id',
+                    select: 'branchname'
+                },
+                {               
+                    path: 'accountstatus',
+                    select: 'name'
+                },
+                {               
+                    path: 'accountrole',
+                    select: 'name'
+                },
+            ]
+           })
         if (!result) {
             const error = new Error('Object  not found')
             error.statusCode = 404
@@ -54,7 +93,7 @@ exports.getEmployeesById = async (req, res, next) => {
 }
 
 exports.createEmployees = async (req, res, next) => {
-// console.log("keldiiiiiii");
+
 // const testss=req.branch
 //     console.log(testss);
 //     console.log(req.file.path);
@@ -62,7 +101,7 @@ exports.createEmployees = async (req, res, next) => {
     const branch = req.body.branch
     const photo = req.body.photo
     const name = req.body.name 
-    const secondname = req.body.secondname  //moment(req.body.agreementdate,"DD/MM/YYYY")       
+    const secondname = req.body.secondname  
     const middlename = req.body.middlename
     const gender = req.body.gender 
     const dateofbirth =moment( req.body.dateofbirth,"DD/MM/YYYY")   
@@ -77,6 +116,7 @@ exports.createEmployees = async (req, res, next) => {
     const job_title = req.body.job_title
     const position = req.body.position
     try {
+        
         const result = new Employees({
             branch: branch,
             photo: photo,
