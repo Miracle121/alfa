@@ -10,7 +10,7 @@ exports.getRisks= async(req,res,next)=>{
         const risks = await Risks.find()
         .populate('typeofrisksId','name')
         .populate('classesId','name')
-        .skip((page-1)*counts).limit(counts)
+        // .skip((page-1)*counts).limit(counts)
          res.status(200).json({
          message:`Risks list`,
          data:risks,
