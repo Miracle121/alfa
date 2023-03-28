@@ -61,13 +61,7 @@ exports.login = (req,res,next)=>{
             error.statusCode = 401
             throw error
         }
-        //++++++++++=======================================================
-        // if(user.accountstatus.toString()!=="61725efc542dc7b6563396a5"){
-        //     const error = new Error('Bu login vaqtinchalik blocklangan iltimos administratorga murojat qiling')
-        //     error.statusCode = 401
-        //     throw error
-        // }
-        //================================================================
+       
         userLoad =user
         return bcrypt.compare(password,user.password)
     })

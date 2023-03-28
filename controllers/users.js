@@ -2,7 +2,7 @@ const User = require('../models/users')
 const Agents = require('../models/agents')
 const Employee = require('../models/employee/employee')
 const bcrypt = require('bcryptjs')
-
+const jwt = require('jsonwebtoken')
 exports.getUsers = async (req, res, next) => {
     const page = req.query.page || 1
     const counts = 20 //req.query.count ||20
@@ -162,5 +162,45 @@ exports.DeleteUsers = async (req, res, next) => {
         }
         next(err)
     }
+
+}
+
+exports.getMe = async (req, res, next) => {
+    const token = req.get('auth')
+
+    if (!token) {
+        const err = new Error('Token is not exist')
+        err.statusCode = 401
+        throw err
+    }
+    decodedToken = jwt.verify(token, 'testtest!@#123')
+    try {
+        if (decodedToken) {
+            const users = await User.findById(decodedToken.userId)
+                .populate('accountstatus', 'name')
+                .populate('accountrole', 'name')
+                .populate('branch_Id', 'branchname')
+                .populate('agent_Id')
+                .populate('emp_Id', 'name secondname middlename')
+            if (!users) {
+                const error = new Error('Object  not found')
+                error.statusCode = 404
+                throw error
+            }
+            res.status(200).json({
+                message: `ma'lumotlar topildi`,
+                users: users
+            })
+
+        } else {
+            res.status(404).json({
+                message: `ma'lumotlar topilmadi`
+            })
+        }
+
+    } catch (err) {
+        next()
+    }
+
 
 }

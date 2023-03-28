@@ -25,6 +25,7 @@ router.post('/',[
 ],users.CreateUsers)
 router.put('/:id',IsAuth,users.UpdateUsers)
 router.delete('/:id',IsAuth,users.DeleteUsers)
+router.get('/f/getme',IsAuth,users.getMe)
 
 
 

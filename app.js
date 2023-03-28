@@ -108,12 +108,12 @@ const URL = 'mongodb://mongoAdmin:KAb3747d@localhost:27017/Alfa?authSource=admin
 
 
 global.__basedir = __dirname;
+
 // var corsOptions = {
 //   origin: "http://localhost:8081"
 // };a
+
 app.use(cors())
-
-
 
 app.use(express.json())
 app.use(bodyParser.json());

@@ -94,10 +94,7 @@ exports.getEmployeesById = async (req, res, next) => {
 
 exports.createEmployees = async (req, res, next) => {
 
-// const testss=req.branch
-//     console.log(testss);
-//     console.log(req.file.path);
-//     console.log("++++++++++++++++++++");   
+
     const branch = req.body.branch
     const photo = req.body.photo
     const name = req.body.name 
