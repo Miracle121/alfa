@@ -62,7 +62,7 @@ exports.CreateUsers = async (req, res, next) => {
         const branch_Id = req.get('branch_Id')
         const emp_id = req.get('emp_id') || null
         console.log("================agentId==================");
-        console.log(agentId);
+        console.log(agent_Id);
         console.log("=====================");
         console.log("================emp==================");
         console.log(emp_id);
