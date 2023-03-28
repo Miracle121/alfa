@@ -77,24 +77,31 @@ exports.CreateUsers = async (req, res, next) => {
             creatorId: req.userId
         })
         const users = await user.save()
-        // console.log(users);
+        console.log(users);
         if (agent_Id) {
+            console.log("Agentga keldi ==========");
+
             const agent = await Agents.findByIdAndUpdate(agent_Id, {
                 user_id: users._id
             })
             const agents = await agent.save()
+            console.log(agents);
+            console.log();
         }
         if (emp_id) {
+            console.log("emp ga keldi");
             const employee = await Employee.findByIdAndUpdate(emp_id, {
                 user_id: users._id
             })
             const emp = await employee.save()
+            console.log(emp);
         }
         res.status(201).json({
             message: 'User bazaga kiritildi',
             users: users
         })
     } catch (err) {
+        console.log(err);
         next(err)
     }
 }
