@@ -77,6 +77,7 @@ exports.CreateUsers = async (req, res, next) => {
             creatorId: req.userId
         })
         const users = await user.save()
+        // console.log(users);
         if (agent_Id) {
             const agent = await Agents.findByIdAndUpdate(agent_Id, {
                 user_id: users._id
@@ -94,7 +95,6 @@ exports.CreateUsers = async (req, res, next) => {
             users: users
         })
     } catch (err) {
-
         next(err)
     }
 }
