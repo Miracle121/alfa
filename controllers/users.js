@@ -61,6 +61,12 @@ exports.CreateUsers = async (req, res, next) => {
         const agent_Id = req.get('agentId') || null
         const branch_Id = req.get('branch_Id')
         const emp_id = req.get('emp_id') || null
+        console.log("================agentId==================");
+        console.log(agentId);
+        console.log("=====================");
+        console.log("================emp==================");
+        console.log(emp_id);
+        console.log("=====================");
         const email = req.body.email
         const password = req.body.password
         const accountstatus = req.body.accountstatus
