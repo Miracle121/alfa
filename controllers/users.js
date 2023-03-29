@@ -58,15 +58,10 @@ exports.getUsersById = async (req, res, next) => {
 exports.CreateUsers = async (req, res, next) => {
     try {
 
-        const agent_Id = req.get('agentId') || null
-        const branch_Id = req.get('branch_Id')
-        const emp_id = req.get('emp_id') || null
-        console.log("================agentId==================");
-        console.log(agent_Id);
-        console.log("=====================");
-        console.log("================emp==================");
-        console.log(emp_id);
-        console.log("=====================");
+        const agent_Id = req.body.agentId  || null//req.get('agentId') || null
+        const branch_Id =req.body.branch_Id || null //req.get('branch_Id')
+        const emp_id = req.body.emp_id //req.get('emp_id') || null
+      
         const email = req.body.email
         const password = req.body.password
         const accountstatus = req.body.accountstatus
@@ -85,23 +80,22 @@ exports.CreateUsers = async (req, res, next) => {
         const users = await user.save()
         console.log(users);
         if (agent_Id) {
-            console.log("Agentga keldi ==========");
+           
 
             const agent = await Agents.findByIdAndUpdate(agent_Id,{$set: {
                 user_id: users._id
             }})
             const agents = await agent.save()
-            console.log(agents);
-            console.log();
+           
         }
         if (emp_id) {
-            console.log("emp ga keldi");
+            
             const employee = await Employee.findByIdAndUpdate(emp_id,
                 {$set: {
                 user_id: users._id
             }})
             const emp = await employee.save()
-            console.log(emp);
+            
         }
         res.status(201).json({
             message: 'User bazaga kiritildi',
