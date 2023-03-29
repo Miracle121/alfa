@@ -87,18 +87,19 @@ exports.CreateUsers = async (req, res, next) => {
         if (agent_Id) {
             console.log("Agentga keldi ==========");
 
-            const agent = await Agents.findByIdAndUpdate(agent_Id, {
+            const agent = await Agents.findByIdAndUpdate(agent_Id,{$set: {
                 user_id: users._id
-            })
+            }})
             const agents = await agent.save()
             console.log(agents);
             console.log();
         }
         if (emp_id) {
             console.log("emp ga keldi");
-            const employee = await Employee.findByIdAndUpdate(emp_id, {
+            const employee = await Employee.findByIdAndUpdate(emp_id,
+                {$set: {
                 user_id: users._id
-            })
+            }})
             const emp = await employee.save()
             console.log(emp);
         }
