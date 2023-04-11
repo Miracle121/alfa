@@ -22,9 +22,7 @@ exports.getBreanches = async (req, res, next) => {
                     }
                 ]
             })
-
-
-            .skip((page - 1) * counts).limit(counts)
+            // .skip((page - 1) * counts).limit(counts)
         res.status(200).json({
             message: `Breanches List`,
             data: data,

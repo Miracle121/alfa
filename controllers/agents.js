@@ -303,3 +303,84 @@ exports.deleteAgents = async (req, res, next) => {
         next(err)
     }
 }
+
+exports.getAgentsBybrancheId = async (req, res, next) => {
+  
+    const AgesId = req.params.id
+    try {
+           
+        const result = await Agents.find({branch:AgesId})
+            .populate('branch', 'branchname')
+            .populate('typeofpersons', 'name')
+            .populate('typeofagent', 'name')
+            .populate({
+                path: 'forindividualsdata',
+                populate: [
+                    {
+                        path: 'gender',
+                        select: 'name'
+                    },
+                ]
+            })
+            .populate({
+                path: 'corporateentitiesdata',
+                populate: [
+                    {
+                        path: 'regionId',
+                        select: 'name'
+                    },
+                    {
+                        path: 'districts',
+                        select: 'name'
+                    },
+                    {
+                        path: 'employees',
+                        populate: [
+                            {
+                                path: 'positions',
+                                select: 'name'
+                            },
+                            {
+                                path: 'typeofdocumentsformanager',
+                                select: 'name'
+                            },
+                        ]
+                    }
+                ]
+            })
+            .populate({
+                path: 'user_id',
+                select: 'email branch_Id accountstatus accountrole ',
+                populate: [
+
+                    {
+                        path: 'branch_Id',
+                        select: 'branchname'
+                    },
+                    {
+                        path: 'accountstatus',
+                        select: 'name'
+                    },
+                    {
+                        path: 'accountrole',
+                        select: 'name'
+                    },
+                ]
+            })
+
+
+        if (!result) {
+            const error = new Error('Object  not found')
+            error.statusCode = 404
+            throw error
+        }
+        res.status(200).json({
+            message: `Agents List`,
+            data: result
+        })
+    }
+    catch (err) {
+
+        next(err)
+    }
+}
