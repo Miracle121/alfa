@@ -87,6 +87,10 @@ const breanchesSchema = new Schema({
         ref: 'Breanchsstatus',
         required: true
      },
+     fond_id:{
+        type: Number,
+       default:0
+     },
     
     creatorId:{
         type: Schema.Types.ObjectId,

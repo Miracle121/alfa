@@ -1,5 +1,6 @@
 const Agents = require('../models/agents')
 const User = require('../models/users')
+const Breanches = require('../models/breanches')
 const moment = require('moment')
 
 exports.getAgents = async (req, res, next) => {
@@ -306,10 +307,15 @@ exports.deleteAgents = async (req, res, next) => {
 
 exports.getAgentsBybrancheId = async (req, res, next) => {
   
-    const AgesId = req.params.id
+    const fond_id = req.params.id
+    console.log(fond_id);
+    
     try {
-           
-        const result = await Agents.find({branch:AgesId})
+        const breanches = await Breanches.find({fond_id:fond_id})
+        console.log(breanches);
+       
+           if(breanches){
+            const result = await Agents.find({branch:breanches[0]._id})
             .populate('branch', 'branchname')
             .populate('typeofpersons', 'name')
             .populate('typeofagent', 'name')
@@ -378,6 +384,14 @@ exports.getAgentsBybrancheId = async (req, res, next) => {
             message: `Agents List`,
             data: result
         })
+
+           }else{
+            res.status(200).json({
+                message: `Agentlar mavjud emas`,
+                data: result
+            })
+           }
+     
     }
     catch (err) {
 
