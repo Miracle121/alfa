@@ -6,6 +6,8 @@ const IsAuth = require('../middleware/is-auth')
 const router = express.Router()
 
 router.get('/',IsAuth,breanches.getBreanches)
+router.get('/all',breanches.getAllBreanches)
+
 router.get('/:id',IsAuth,breanches.getBreanchesById)
 
 router.post('/',IsAuth,[body('name').trim().isLength({min:3})],breanches.createBreanches)

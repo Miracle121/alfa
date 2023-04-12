@@ -235,3 +235,36 @@ exports.deleteBreanches = async (req, res, next) => {
         next(err)
     }
 }
+
+
+exports.getAllBreanches = async (req, res, next) => {
+    // const page = req.query.page || 1
+    // const counts = 20 //req.query.count ||20
+    let totalItems
+    try {
+        totalItems = await Breanches.find().countDocuments()
+        const data = await Breanches.find()
+            .populate('regionId', 'name')
+            .populate('breanchstatus', 'name')
+            .populate({
+                path: 'employees',
+                populate: [
+                    {
+                        path: 'positions',
+                        select: 'name'
+                    }
+                ]
+            })
+           
+        res.status(200).json({
+            message: `Breanches List`,
+            data: data
+            // totalItems: totalItems
+        })
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+}
