@@ -82,7 +82,8 @@ exports.login = (req,res,next)=>{
         res.status(200).json({
             token:token,
             userId: userLoad._id.toString(),
-            accountrole: userLoad.accountrole
+            accountrole: userLoad.accountrole,
+            
         })
     })
     .catch(err=>{

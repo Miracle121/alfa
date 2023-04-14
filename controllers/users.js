@@ -187,7 +187,7 @@ exports.getMe = async (req, res, next) => {
             const users = await User.findById(decodedToken.userId)
                 .populate('accountstatus', 'name')
                 .populate('accountrole', 'name')
-                .populate('branch_Id', 'branchname')
+                .populate('branch_Id')
                 .populate('agent_Id')
                 .populate('emp_Id', 'name secondname middlename')
             if (!users) {

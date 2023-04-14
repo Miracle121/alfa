@@ -11,6 +11,6 @@ router.get('/:id',IsAuth,agents.getAgentsById)
 router.post('/',IsAuth,[body('name').trim().isLength({min:3})],agents.createAgents)
 router.put('/:id',IsAuth,agents.updateAgents)
 router.delete('/:id',IsAuth,agents.deleteAgents)
-router.get('/f/:id',agents.getAgentsBybrancheId)
+router.get('/f/:id',IsAuth,agents.getAgentsBybrancheId)
 
 module.exports = router
