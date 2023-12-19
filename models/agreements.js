@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose')
 const moment = require('moment')
 const agreementsSchema = new Schema({
+    
     branch: {
         type: Schema.Types.ObjectId,
         ref: 'Breanches',
@@ -10,6 +11,7 @@ const agreementsSchema = new Schema({
         type: String,
         required: true
     },
+
     //==========================Продукт================
 
     groupofproductsId: {
