@@ -6,39 +6,38 @@ const AppUtil = require("../util/AppUtil");
 const maxSize = 2 * 1024 * 1024;
 
 const storage = multer.diskStorage({
-    destination: async function (req, file, cb) {
-        let dirname = `images/${moment().format("YYYY/MM/DD")}/${req.userId}`;
-        let dir = await AppUtil.checkPath(dirname);
-        req.filePath = dirname;
-        cb(null, dir);
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
-    },
-
+  destination: async function (req, file, cb) {
+    let dirname = `images/${moment().format("YYYY/MM/DD")}/${req.userId}`;
+    let dir = await AppUtil.checkPath(dirname);
+    req.filePath = dirname;
+    cb(null, dir);
+  },
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
 });
 
 const upload = multer({
-    storage: storage,
-    fileFilter: function(_req, file, cb){
-      checkFileType(file, cb);
-  }
+  storage: storage,
+  fileFilter: function (_req, file, cb) {
+    checkFileType(file, cb);
+  },
 });
 
-function checkFileType(file, cb){
+function checkFileType(file, cb) {
   // Allowed ext
-  const whiteList = [
-    'jpg',
-    'png'
-  ]
+  const whiteList = ["jpg", "png"];
   // Check ext
   // Check mime
   const mimetype = whiteList.includes(file.mimetype);
   // console.log(mimetype);
-  if( mimetype){
-    return cb(null,true);
+  if (mimetype) {
+    return cb(null, true);
   } else {
-    cb('Error: Images Only!');
+    cb("Error: Images Only!");
   }
 }
 
