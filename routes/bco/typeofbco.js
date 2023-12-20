@@ -1,16 +1,26 @@
-const express = require('express')
+const express = require("express");
 
-const typeofbco = require('../../controllers/bco/typeofbco')
-const IsAuth = require('../../middleware/is-auth')
+const Typeofbco = require("../../models/bco/typeofbco");
+const typeofbco = require("../../controllers/bco/typeofbco");
 
-const router = express.Router()
+const IsAuth = require("../../middleware/is-auth");
+const { advancedResults } = require("../../middleware/advancedResults");
 
-router.get('/',IsAuth,typeofbco.getTypeofbco)
-router.get('/:id',IsAuth,typeofbco.getTypeofbcoById)
+const router = express.Router();
 
-router.post('/',IsAuth,typeofbco.createTypeofbco)
-router.put('/:id',IsAuth,typeofbco.updateTypeofbco)
-router.delete('/:id',IsAuth,typeofbco.deleteTypeofbco)
+router.use(IsAuth);
 
+const poplate = [
+  { path: "policy_size_id", select: "name" },
+  { path: "language", select: "name" },
+  { path: "statusofpolicy", select: "name" },
+];
 
-module.exports = router
+router.get("/", advancedResults(Typeofbco, poplate), typeofbco.getTypeofbco);
+router.get("/:id", typeofbco.getTypeofbcoById);
+
+router.post("/", typeofbco.createTypeofbco);
+router.put("/:id", typeofbco.updateTypeofbco);
+router.delete("/:id", typeofbco.deleteTypeofbco);
+
+module.exports = router;

@@ -1,16 +1,32 @@
-const express = require('express')
+const express = require("express");
 
-const bco = require('../../controllers/bco/bco')
-const IsAuth = require('../../middleware/is-auth')
+const Bco = require("../../models/bco/bco");
+const bco = require("../../controllers/bco/bco");
 
-const router = express.Router()
+const IsAuth = require("../../middleware/is-auth");
+const { advancedResults } = require("../../middleware/advancedResults");
 
-router.get('/',IsAuth,bco.getBco)
-router.get('/:id',IsAuth,bco.getBcoById)
+const router = express.Router();
 
-router.post('/',IsAuth,bco.createBco)
-router.put('/:id',IsAuth,bco.updateBco)
-router.delete('/:id',IsAuth,bco.deleteBco)
+router.use(IsAuth);
 
+const populate = [
+  { path: "policy_type_id", select: "policy_type_name" },
+  { path: "branch_id", select: "name" },
+  { path: "statusofbcopolicy", select: "name" },
+  { path: "employee_id", select: "name" },
+];
 
-module.exports = router
+router.get(
+  "/",
+  advancedResults(Bco),
+  advancedResults(Bco, populate),
+  bco.getBco
+);
+router.get("/:id", bco.getBcoById);
+
+router.post("/", bco.createBco);
+router.put("/:id", bco.updateBco);
+router.delete("/:id", bco.deleteBco);
+
+module.exports = router;

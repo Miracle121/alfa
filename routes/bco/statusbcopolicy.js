@@ -1,16 +1,24 @@
-const express = require('express')
+const express = require("express");
 
-const statusbcopolicy = require('../../controllers/bco/statusbcopolicy')
-const IsAuth = require('../../middleware/is-auth')
+const Statusbcopolicy = require("../../models/bco/statusbcopolicy");
+const statusbcopolicy = require("../../controllers/bco/statusbcopolicy");
 
-const router = express.Router()
+const IsAuth = require("../../middleware/is-auth");
+const { advancedResults } = require("../../middleware/advancedResults");
 
-router.get('/',IsAuth,statusbcopolicy.getStatusbcopolicy)
-router.get('/:id',IsAuth,statusbcopolicy.getStatusbcopolicyById)
+const router = express.Router();
 
-router.post('/',IsAuth,statusbcopolicy.createStatusbcopolicy)
-router.put('/:id',IsAuth,statusbcopolicy.updateStatusbcopolicy)
-router.delete('/:id',IsAuth,statusbcopolicy.deleteStatusbcopolicy)
+router.use(IsAuth);
 
+router.get(
+  "/",
+  advancedResults(Statusbcopolicy),
+  statusbcopolicy.getStatusbcopolicy
+);
+router.get("/:id", statusbcopolicy.getStatusbcopolicyById);
 
-module.exports = router
+router.post("/", statusbcopolicy.createStatusbcopolicy);
+router.put("/:id", statusbcopolicy.updateStatusbcopolicy);
+router.delete("/:id", statusbcopolicy.deleteStatusbcopolicy);
+
+module.exports = router;

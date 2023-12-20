@@ -1,16 +1,20 @@
-const express = require('express')
+const express = require("express");
 
-const actstatus = require('../../controllers/bco/actstatus')
-const IsAuth = require('../../middleware/is-auth')
+const Actstatus = require("../../models/bco/actstatus");
+const actstatus = require("../../controllers/bco/actstatus");
 
-const router = express.Router()
+const IsAuth = require("../../middleware/is-auth");
+const { advancedResults } = require("../../middleware/advancedResults");
 
-router.get('/',IsAuth,actstatus.getActstatus)
-router.get('/:id',IsAuth,actstatus.getActstatusById)
+const router = express.Router();
 
-router.post('/',IsAuth,actstatus.createActstatus)
-router.put('/:id',IsAuth,actstatus.updateActstatus)
-router.delete('/:id',IsAuth,actstatus.deleteActstatus)
+router.use(IsAuth);
 
+router.get("/", advancedResults(Actstatus), actstatus.getActstatus);
+router.get("/:id", actstatus.getActstatusById);
 
-module.exports = router
+router.post("/", actstatus.createActstatus);
+router.put("/:id", actstatus.updateActstatus);
+router.delete("/:id", actstatus.deleteActstatus);
+
+module.exports = router;

@@ -1,17 +1,33 @@
-const express = require('express')
+const express = require("express");
 
-const warehouse = require('../../controllers/bco/warehouse')
-const IsAuth = require('../../middleware/is-auth')
+const Warehouse = require("../../models/bco/warehouse");
+const warehouse = require("../../controllers/bco/warehouse");
 
-const router = express.Router()
+const IsAuth = require("../../middleware/is-auth");
+const { advancedResults } = require("../../middleware/advancedResults");
 
-router.get('/',IsAuth,warehouse.getWarehouse)
-router.get('/:id',IsAuth,warehouse.getWarehouseById)
+const router = express.Router();
 
-router.post('/',IsAuth,warehouse.createWarehouse)
-router.put('/:id',IsAuth,warehouse.updateWarehouse)
-router.delete('/:id',IsAuth,warehouse.deleteWarehouse)
-router.get('/f/:id',IsAuth,warehouse.getPolicyblanknumberByTypeId)
+router.use(IsAuth);
 
+const poplate = [
+  { path: "statusofpolicy", select: "name" },
+  { path: "branch_id", select: "branchname" },
+  {
+    path: "policy_type_id",
+    populate: [
+      { path: "policy_size_id", select: "name" },
+      { path: "language", select: "name" },
+    ],
+  },
+];
 
-module.exports = router
+router.get("/", advancedResults(Warehouse, poplate), warehouse.getWarehouse);
+router.get("/:id", warehouse.getWarehouseById);
+
+router.post("/", warehouse.createWarehouse);
+router.put("/:id", warehouse.updateWarehouse);
+router.delete("/:id", warehouse.deleteWarehouse);
+router.get("/f/:id", warehouse.getPolicyblanknumberByTypeId);
+
+module.exports = router;
