@@ -1,4 +1,4 @@
-const asyncHandler = require("express-asyncHandlerasync-handler");
+const asyncHandler = require("express-async-handler");
 const StatusBco = require("../../models/bco/status_bco");
 const { findModelById } = require("../../util/findModelById");
 const { ErrorResponse } = require("../../util/errorResponse");
@@ -23,7 +23,7 @@ exports.createStatusBco = asyncHandler(async (req, res, next) => {
 
   const result = new StatusBco({
     name: name,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 
   const results = await result.save();
@@ -31,7 +31,7 @@ exports.createStatusBco = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     message: `Status of  bco`,
     data: results,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 });
 

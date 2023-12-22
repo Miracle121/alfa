@@ -33,13 +33,13 @@ exports.createTypeofbco = asyncHandler(async (req, res, next) => {
     policy_series: policy_series,
     policy_number_of_digits: policy_number_of_digits,
     statusofpolicy: statusofpolicy,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
   const results = await result.save();
   res.status(200).json({
     message: `Type of BCO added`,
     data: results,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 });
 
@@ -84,8 +84,7 @@ exports.deleteTypeofbco = asyncHandler(async (req, res, next) => {
     throw error;
   }
   if (deleteddata.creatorId.toString() !== req.userId) {
-    const error = new Error("bu userni ochirishga imkoni yoq");
-    error.statusCode = 403;
+    const error = new ErrorResponse("Bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
   const data = await Typeofbco.findByIdAndRemove(AgesId);

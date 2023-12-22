@@ -86,7 +86,7 @@ exports.createBcoinpolicyblank = asyncHandler(async (req, res, next) => {
     receiver_employee_id,
     policy_type_id,
     policyId,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 
   const savedResult = await result.save();
@@ -94,7 +94,7 @@ exports.createBcoinpolicyblank = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     message: "Type of Acts added",
     data: savedResult,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 });
 
@@ -176,8 +176,7 @@ exports.deleteBcoinpolicyblank = asyncHandler(async (req, res, next) => {
     throw error;
   }
   if (deleteddata.creatorId.toString() !== req.userId) {
-    const error = new Error("bu userni ochirishga imkoni yoq");
-    error.statusCode = 403;
+    const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
   const data = await Bcoinpolicyblank.findByIdAndRemove(AgesId);

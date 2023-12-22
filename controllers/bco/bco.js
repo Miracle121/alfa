@@ -3,38 +3,22 @@ const Bco = require("../../models/bco/bco");
 const Bcoinpolicyblank = require("../../models/bco/bcoinpolicyblank");
 const Policyblank = require("../../models/bco/policyblank");
 const { ErrorResponse } = require("../../util/errorResponse");
+const { findModelById } = require("../../util/findModelById");
 
 exports.getBco = asyncHandler(async (req, res, next) => {
-  //   const page = req.query.page || 1;
-  //   const counts = 20; //req.query.count ||20
-  //   let totalItems;
-
-  //   totalItems = await Bco.find().countDocuments();
-  //   const data = await Bco.find()
-  //     .populate("policy_type_id", "policy_type_name")
-  //     .populate("act_id", "act_number")
-  //     // .populate('statusofbcopolicy', 'name')
-  //     // .populate('employee_id', 'name')
-  //     // .populate('policy_blank_number', 'blank_number')
-
-  //     .skip((page - 1) * counts)
-  //     .limit(counts);
-  res.status(200).json(res.advencedResults);
+  res.status(200).json(res.advancedResults);
 });
 
 exports.getBcoById = asyncHandler(async (req, res, next) => {
   const AgesId = req.params.id;
 
-  const result = await Bco.findById(AgesId)
-    .populate("policy_type_id", "policy_type_name")
-    .populate("branch_id", "name")
-    .populate("statusofbcopolicy", "name")
-    .populate("employee_id", "name");
-  if (!result) {
-    const error = new Error("Object  not found");
-    error.statusCode = 404;
-    throw error;
-  }
+  const result = await findModelById(Bco, AgesId, [
+    { path: "policy_type_id", select: "policy_type_name" },
+    // { path: "branch_id", select: "name" },
+    // { path: "statusofbcopolicy", select: "name" },
+    // { path: "employee_id", select: "name" },
+  ]);
+
   res.status(200).json({
     message: `Type of BCO`,
     data: result,
@@ -56,7 +40,7 @@ exports.createBco = asyncHandler(async (req, res, next) => {
     branch_id,
     employee_id,
     statusofbcopolicy,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 
   const results = await result.save();
@@ -65,13 +49,13 @@ exports.createBco = asyncHandler(async (req, res, next) => {
     policy_type_id,
     policy_blank_number,
     result._id,
-    req.userId
+    req.user._id
   );
 
   res.status(200).json({
     message: `Type of BCO added`,
     data: results,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 });
 
@@ -130,29 +114,24 @@ const polcybalnkinbco = async (
   bco_id,
   creatorId
 ) => {
-  try {
-    const data_bco = policy_blank_numbers.map((policy_blank_number, index) => ({
-      policy_type_id,
-      bco_id,
-      policy_blank_number,
-      policy_qr_code: `xxxxx${index}`,
-      creatorId,
-    }));
+  const data_bco = policy_blank_numbers.map((policy_blank_number, index) => ({
+    policy_type_id,
+    bco_id,
+    policy_blank_number,
+    policy_qr_code: `xxxxx${index}`,
+    creatorId,
+  }));
 
-    await Bcoinpolicyblank.insertMany(data_bco);
+  await Bcoinpolicyblank.insertMany(data_bco);
 
-    await Policyblank.updateMany(
-      {
-        _id: { $in: policy_blank_numbers },
+  await Policyblank.updateMany(
+    {
+      _id: { $in: policy_blank_numbers },
+    },
+    {
+      $set: {
+        Is_usedblank: true,
       },
-      {
-        $set: {
-          Is_usedblank: true,
-        },
-      }
-    );
-  } catch (err) {
-    console.error(err);
-    throw new ErrorResponse(err.message, 500);
-  }
+    }
+  );
 };

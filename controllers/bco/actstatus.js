@@ -4,18 +4,6 @@ const Actstatus = require("../../models/bco/actstatus");
 const { ErrorResponse } = require("../../util/errorResponse");
 
 exports.getActstatus = asyncHandler(async (req, res, next) => {
-  //   const page = req.query.page || 1;
-  //   const counts = 20; //req.query.count ||20
-  //   let totalItems;
-  //     totalItems = await Actstatus.find().countDocuments();
-  //   const data = await Actstatus.find()
-  //     .skip((page - 1) * counts)
-  //     .limit(counts);
-  //   res.status(200).json({
-  //     message: `Act status`,
-  //     data: data,
-  //     totalItems: totalItems,
-  //   });
   res.status(200).json(res.advancedResults);
 });
 
@@ -35,7 +23,7 @@ exports.createActstatus = asyncHandler(async (req, res, next) => {
 
   const result = new Actstatus({
     name: name,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 
   const results = await result.save();
@@ -43,7 +31,7 @@ exports.createActstatus = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     message: `Act status`,
     data: results,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 });
 

@@ -1,400 +1,237 @@
-const Agents = require('../models/agents')
-const User = require('../models/users')
-const Breanches = require('../models/breanches')
-const moment = require('moment')
+const asyncHandler = require("express-async-handler");
+const Agents = require("../models/agents");
+const User = require("../models/users");
+const Breanches = require("../models/breanches");
+const { findModelById } = require("../util/findModelById");
+const { ErrorResponse } = require("../util/errorResponse");
 
-exports.getAgents = async (req, res, next) => {
-    const page = req.query.page || 1
-    const counts = 20 //req.query.count ||20
-    let totalItems
-    try {
-        totalItems = await Agents.find().countDocuments()
-        const data = await Agents.find()
-            .populate('branch', 'branchname')
-            .populate('typeofpersons', 'name')
-            .populate('typeofagent', 'name')
+const populateOptions = [
+  { path: "branch", select: "branchname" },
+  { path: "typeofpersons", select: "name" },
+  { path: "typeofagent", select: "name" },
+  {
+    path: "forindividualsdata",
+    populate: [
+      { path: "gender", select: "name" },
+      { path: "citizenship", select: "name" },
+      { path: "typeofdocument", select: "name" },
+      { path: "regions", select: "name" },
+      { path: "districts", select: "name" },
+    ],
+  },
+  {
+    path: "corporateentitiesdata",
+    populate: [
+      { path: "regionId", select: "name" },
+      { path: "districts", select: "name" },
+      {
+        path: "employees",
+        populate: [
+          { path: "positions", select: "name" },
+          { path: "typeofdocumentsformanager", select: "name" },
+        ],
+      },
+    ],
+  },
+  {
+    path: "user_id",
+    select: "email branch_Id accountstatus accountrole",
+    populate: [
+      { path: "branch_Id", select: "branchname" },
+      { path: "accountstatus", select: "name" },
+      { path: "accountrole", select: "name" },
+    ],
+  },
+];
+////
 
-            .populate({
-                path: 'forindividualsdata',
-                populate: [
-                    {
-                        path: 'gender',
-                        select: 'name'
-                    },
-                    {
-                        path: 'citizenship',
-                        select: 'name'
-                    },
-                    {
-                        path: 'typeofdocument',
-                        select: 'name'
-                    },
-                    {
-                        path: 'regions',
-                        select: 'name'
-                    },
-                    {
-                        path: 'districts',
-                        select: 'name'
-                    },
+exports.getAgents = asyncHandler(async (req, res, next) => {
+  res.status(200).json(res.advancedResults);
+});
 
+exports.getAgentsById = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
 
-                ]
-            })
-            .populate({
-                path: 'corporateentitiesdata',
-                populate: [
-                    {
-                        path: 'regionId',
-                        select: 'name'
-                    },
-                    {
-                        path: 'districts',
-                        select: 'name'
-                    },
-                    {
-                        path: 'employees',
-                        populate: [
-                            {
-                                path: 'positions',
-                                select: 'name'
-                            },
-                            {
-                                path: 'typeofdocumentsformanager',
-                                select: 'name'
-                            },
-                        ]
-                    }
-                ]
-            })
-            .populate({
-                path: 'user_id',
-                select: 'email branch_Id accountstatus accountrole ',
-                populate: [
+  const result = await findModelById(Agents, AgesId).populate(populateOptions);
 
-                    {
-                        path: 'branch_Id',
-                        select: 'branchname'
-                    },
-                    {
-                        path: 'accountstatus',
-                        select: 'name'
-                    },
-                    {
-                        path: 'accountrole',
-                        select: 'name'
-                    },
-                ]
-            })
-            .skip((page - 1) * counts).limit(counts)
-        res.status(200).json({
-            message: `Agents List`,
-            data: data,
-            totalItems: totalItems
-        })
-    } catch (err) {
+  res.status(200).json({
+    message: `Agents List`,
+    data: result,
+  });
+});
 
-        next(err)
-    }
-}
+exports.createAgents = asyncHandler(async (req, res, next) => {
+  const inn = req.body.inn;
+  const branch = req.body.branch;
+  const agreementnumber = req.body.agreementnumber || null;
+  const agreementdate = req.body.agreementdate || null; //moment(req.body.agreementdate,"DD/MM/YYYY")
+  const typeofpersons = req.body.typeofpersons;
+  const isbeneficiary = req.body.isbeneficiary || null;
+  const isfixedpolicyholde = req.body.isfixedpolicyholde || null;
+  const typeofagent = req.body.typeofagent;
+  let forindividualsdata = req.body.forindividualsdata || null;
+  let corporateentitiesdata = req.body.corporateentitiesdata || null;
+  const isUsedourpanel = req.body.isUsedourpanel;
+  const isUserRestAPI = req.body.isUserRestAPI;
 
-exports.getAgentsById = async (req, res, next) => {
-    const AgesId = req.params.id
-    try {
-        const result = await Agents.findById(AgesId)
-            .populate('branch', 'branchname')
-            .populate('typeofpersons', 'name')
-            .populate('typeofagent', 'name')
-            .populate({
-                path: 'forindividualsdata',
-                populate: [
-                    {
-                        path: 'gender',
-                        select: 'name'
-                    },
-                ]
-            })
-            .populate({
-                path: 'corporateentitiesdata',
-                populate: [
-                    {
-                        path: 'regionId',
-                        select: 'name'
-                    },
-                    {
-                        path: 'districts',
-                        select: 'name'
-                    },
-                    {
-                        path: 'employees',
-                        populate: [
-                            {
-                                path: 'positions',
-                                select: 'name'
-                            },
-                            {
-                                path: 'typeofdocumentsformanager',
-                                select: 'name'
-                            },
-                        ]
-                    }
-                ]
-            })
-            .populate({
-                path: 'user_id',
-                select: 'email branch_Id accountstatus accountrole ',
-                populate: [
+  const inn1 = await Agents.find({ inn: inn });
+  if (inn1.length === 0) {
+    const result = new Agents({
+      inn: inn,
+      branch: branch,
+      agreementnumber: agreementnumber,
+      agreementdate: agreementdate,
+      typeofpersons: typeofpersons,
+      isbeneficiary: isbeneficiary,
+      isfixedpolicyholde: isfixedpolicyholde,
+      typeofagent: typeofagent,
+      forindividualsdata: forindividualsdata,
+      corporateentitiesdata: corporateentitiesdata,
+      isUsedourpanel: isUsedourpanel,
+      isUserRestAPI: isUserRestAPI,
 
-                    {
-                        path: 'branch_Id',
-                        select: 'branchname'
-                    },
-                    {
-                        path: 'accountstatus',
-                        select: 'name'
-                    },
-                    {
-                        path: 'accountrole',
-                        select: 'name'
-                    },
-                ]
-            })
-        if (!result) {
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        res.status(200).json({
-            message: `Agents List`,
-            data: result
-        })
-    }
-    catch (err) {
+      creatorId: req.user._id,
+    });
+    const results = await result.save();
+    res.status(200).json({
+      message: `Agents List`,
+      data: results,
+      creatorId: req.user._id,
+    });
+  } else {
+    res.status(200).json({
+      message: `Agents List`,
+      data: inn1,
+      creatorId: req.user._id,
+    });
+  }
+});
 
-        next(err)
-    }
-}
+exports.updateAgents = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
+  const inn = req.body.inn;
+  const branch = req.body.branch;
+  const agreementnumber = req.body.agreementnumber || null;
+  const agreementdate = req.body.agreementdate || null; //moment(req.body.agreementdate,"DD/MM/YYYY")
+  const typeofpersons = req.body.typeofpersons;
+  const isbeneficiary = req.body.isbeneficiary || null;
+  const isfixedpolicyholde = req.body.isfixedpolicyholde || null;
+  const typeofagent = req.body.typeofagent;
+  let forindividualsdata = req.body.forindividualsdata || null;
+  let corporateentitiesdata = req.body.corporateentitiesdata || null;
+  const isUsedourpanel = req.body.isUsedourpanel;
+  const isUserRestAPI = req.body.isUserRestAPI;
 
-exports.createAgents = async (req, res, next) => {
-    const inn = req.body.inn
-    const branch = req.body.branch
-    const agreementnumber = req.body.agreementnumber || null
-    const agreementdate = req.body.agreementdate || null //moment(req.body.agreementdate,"DD/MM/YYYY")       
-    const typeofpersons = req.body.typeofpersons
-    const isbeneficiary = req.body.isbeneficiary || null
-    const isfixedpolicyholde = req.body.isfixedpolicyholde || null
-    const typeofagent = req.body.typeofagent
-    let forindividualsdata = req.body.forindividualsdata || null
-    let corporateentitiesdata = req.body.corporateentitiesdata || null
-    const isUsedourpanel = req.body.isUsedourpanel
-    const isUserRestAPI = req.body.isUserRestAPI
-    try {
-        const inn1 = await Agents.find({ "inn": inn })
-        if (inn1.length === 0) {
-            const result = new Agents({
-                inn: inn,
-                branch: branch,
-                agreementnumber: agreementnumber,
-                agreementdate: agreementdate,
-                typeofpersons: typeofpersons,
-                isbeneficiary: isbeneficiary,
-                isfixedpolicyholde: isfixedpolicyholde,
-                typeofagent: typeofagent,
-                forindividualsdata: forindividualsdata,
-                corporateentitiesdata: corporateentitiesdata,
-                isUsedourpanel: isUsedourpanel,
-                isUserRestAPI: isUserRestAPI,
+  const result = await findModelById(Agents, AgesId);
+  if (!result) {
+    const error = new Error("Object  not found");
+    error.statusCode = 404;
+    throw error;
+  }
+  result.inn = inn;
+  result.branch = branch;
+  result.agreementnumber = agreementnumber;
+  result.agreementdate = agreementdate;
+  result.typeofpersons = typeofpersons;
+  result.isbeneficiary = isbeneficiary;
+  result.isfixedpolicyholde = isfixedpolicyholde;
+  result.typeofagent = typeofagent;
+  result.forindividualsdata = forindividualsdata;
+  result.corporateentitiesdata = corporateentitiesdata;
+  result.isUsedourpanel = isUsedourpanel;
+  result.isUserRestAPI = isUserRestAPI;
 
-                creatorId: req.userId
-            })
-            const results = await result.save()
-            res.status(200).json({
-                message: `Agents List`,
-                data: results,
-                creatorId: req.userId,
-            })
-        } else {
-            res.status(200).json({
-                message: `Agents List`,
-                data: inn1,
-                creatorId: req.userId,
-            })
-        }
-    } catch (err) {
-        next(err)
-    }
-}
+  const data = await result.save();
+  res.status(200).json({
+    message: `Agents List`,
+    data: data,
+  });
+});
 
-exports.updateAgents = async (req, res, next) => {
-    const AgesId = req.params.id
-    const inn = req.body.inn
-    const branch = req.body.branch
-    const agreementnumber = req.body.agreementnumber || null
-    const agreementdate = req.body.agreementdate || null //moment(req.body.agreementdate,"DD/MM/YYYY")       
-    const typeofpersons = req.body.typeofpersons
-    const isbeneficiary = req.body.isbeneficiary || null
-    const isfixedpolicyholde = req.body.isfixedpolicyholde || null
-    const typeofagent = req.body.typeofagent
-    let forindividualsdata = req.body.forindividualsdata || null
-    let corporateentitiesdata = req.body.corporateentitiesdata || null
-    const isUsedourpanel = req.body.isUsedourpanel
-    const isUserRestAPI = req.body.isUserRestAPI
+exports.deleteAgents = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
 
-    try {
-        const result = await Agents.findById(AgesId)
-        if (!result) {
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        result.inn = inn
-        result.branch = branch
-        result.agreementnumber = agreementnumber
-        result.agreementdate = agreementdate
-        result.typeofpersons = typeofpersons
-        result.isbeneficiary = isbeneficiary
-        result.isfixedpolicyholde = isfixedpolicyholde
-        result.typeofagent = typeofagent
-        result.forindividualsdata = forindividualsdata
-        result.corporateentitiesdata = corporateentitiesdata
-        result.isUsedourpanel = isUsedourpanel
-        result.isUserRestAPI = isUserRestAPI
+  const deleteddata = await findModelById(Agents, AgesId);
 
-        const data = await result.save()
-        res.status(200).json({
-            message: `Agents List`,
-            data: data
-        })
-    }
-    catch (err) {
-        if (!err.statusCode) {
-            const error = new Error('Intenall error11111')
-            error.statusCode = 500
-            throw error
-        }
-        next(err)
-    }
-}
+  if (deleteddata.creatorId.toString() !== req.userId) {
+    const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
+    throw error;
+  }
 
-exports.deleteAgents = async (req, res, next) => {
-    const AgesId = req.params.id
-    try {
-        const deleteddata = await Agents.findById(AgesId)
-        const userdata = await User.find({ "agentId": AgesId })
-        if (!deleteddata) {
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        if (deleteddata.creatorId.toString() !== req.userId) {
-            const error = new Error('bu userni ochirishga imkoni yoq')
-            error.statusCode = 403
-            throw error
-        }
-        const data = await Agents.findByIdAndRemove(AgesId)
-        const usersdata = await User.findByIdAndRemove(userdata)
-        res.status(200).json({
-            message: 'Region is deletes',
-            data: data
-        })
-    } catch (err) {
-        if (!err.statusCode) {
-            err.statusCode = 500
-        }
-        next(err)
-    }
-}
+  const data = await Agents.findByIdAndRemove(AgesId);
+  await User.deleteMany({ agentId: AgesId });
 
-exports.getAgentsBybrancheId = async (req, res, next) => {
-  
-    const fond_id = req.params.id
-    console.log(fond_id);
-    
-    try {
-        const breanches = await Breanches.find({fond_id:fond_id})
-        console.log(breanches);
-       
-           if(breanches){
-            const result = await Agents.find({branch:breanches[0]._id})
-            .populate('branch', 'branchname')
-            .populate('typeofpersons', 'name')
-            .populate('typeofagent', 'name')
-            .populate({
-                path: 'forindividualsdata',
-                populate: [
-                    {
-                        path: 'gender',
-                        select: 'name'
-                    },
-                ]
-            })
-            .populate({
-                path: 'corporateentitiesdata',
-                populate: [
-                    {
-                        path: 'regionId',
-                        select: 'name'
-                    },
-                    {
-                        path: 'districts',
-                        select: 'name'
-                    },
-                    {
-                        path: 'employees',
-                        populate: [
-                            {
-                                path: 'positions',
-                                select: 'name'
-                            },
-                            {
-                                path: 'typeofdocumentsformanager',
-                                select: 'name'
-                            },
-                        ]
-                    }
-                ]
-            })
-            .populate({
-                path: 'user_id',
-                select: 'email branch_Id accountstatus accountrole ',
-                populate: [
+  res.status(200).json({
+    message: "Agent is deleted",
+    data: data,
+  });
+});
 
-                    {
-                        path: 'branch_Id',
-                        select: 'branchname'
-                    },
-                    {
-                        path: 'accountstatus',
-                        select: 'name'
-                    },
-                    {
-                        path: 'accountrole',
-                        select: 'name'
-                    },
-                ]
-            })
+exports.deleteAgents = asyncHandler(async (req, res, next) => {
+  const agentId = req.params.id;
 
+  const { deletedAgent, deletedUserData } = await deleteAgentAndRelatedData(
+    agentId
+  );
 
-        if (!result) {
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        res.status(200).json({
-            message: `Agents List`,
-            data: result
-        })
+  res.status(200).json({
+    message: "Agent and related user data deleted successfully",
+    data: {
+      deletedAgent,
+      deletedUserData,
+    },
+  });
+});
 
-           }else{
-            res.status(200).json({
-                message: `Agentlar mavjud emas`,
-                data: result
-            })
-           }
-     
-    }
-    catch (err) {
+exports.getAgentsByBranchId = asyncHandler(async (req, res, next) => {
+  const fondId = req.params.id;
 
-        next(err)
-    }
+  const branch = await Breanches.findOne({ fond_id: fondId });
+
+  if (!branch) {
+    return res.status(200).json({
+      message: `Bunday filial topilmadi`,
+      data: [],
+    });
+  }
+
+  const agents = await Agents.find({ branch }).populate(populateOptions);
+
+  if (!agents || agents.length === 0) {
+    return res.status(200).json({
+      message: `Agentlar mavjud emas`,
+      data: [],
+    });
+  }
+
+  res.status(200).json({
+    message: `Agents List`,
+    data: agents,
+  });
+});
+
+//--------------//
+async function deleteAgentAndRelatedData(agentId) {
+  // Check if the agent exists
+  const agent = await findModelById(Agents, agentId);
+
+  // Check if the current user has the permission to delete the agent
+  if (agent.creatorId.toString() !== req.userId) {
+    const error = new ErrorResponse(
+      "You don't have permission to delete this agent",
+      403
+    );
+    throw error;
+  }
+
+  // Find and delete the agent
+  const deletedAgent = await Agents.findByIdAndRemove(agentId);
+
+  // Find and delete related user data
+  const deletedUserData = await User.deleteMany({ agentId });
+
+  return {
+    deletedAgent,
+    deletedUserData,
+  };
 }

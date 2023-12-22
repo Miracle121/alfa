@@ -76,7 +76,7 @@ exports.createPolicyblank = asyncHandler(async (req, res, next) => {
     policy_type_id,
     blank_number,
     Is_usedblank,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 
   const results = await result.save();
@@ -84,7 +84,7 @@ exports.createPolicyblank = asyncHandler(async (req, res, next) => {
   res.status(201).json({
     message: `Creat new policy blank`,
     data: results,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 });
 
@@ -132,7 +132,7 @@ exports.getPolicyblanknumberByTypeId = asyncHandler(async (req, res, next) => {
   const policy_type_id = req.params.id;
 
   const result = await Policyblank.find(
-    { policy_type_id: policy_type_id } && { Is_usedblank: false }
+    { policy_type_id } && { Is_usedblank: false }
   ).select("blank_number");
   // .populate({
   //     path:'warehouse_id',

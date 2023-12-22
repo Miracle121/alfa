@@ -22,13 +22,13 @@ exports.createStatusActs = asyncHandler(async (req, res, next) => {
   const name = req.body.name;
   const result = new StatusActs({
     name: name,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
   const results = await result.save();
   res.status(200).json({
     message: `Status of  Acts`,
     data: results,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 });
 

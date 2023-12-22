@@ -23,14 +23,14 @@ exports.createStatusoftypebco = asyncHandler(async (req, res, next) => {
 
   const result = new Statusoftypebco({
     name: name,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 
   const results = await result.save();
   res.status(200).json({
     message: `Status of type bco`,
     data: results,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 });
 

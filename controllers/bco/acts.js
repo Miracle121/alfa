@@ -77,7 +77,7 @@ exports.createActs = asyncHandler(async (req, res, next) => {
     receiver_employee_id,
     bco_data: bco,
     statusofact,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 
   const savedAct = await newAct.save();
@@ -93,7 +93,7 @@ exports.createActs = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     message: "Type of Acts added",
     data: savedAct,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 });
 
@@ -181,7 +181,7 @@ exports.checkBlanks = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     message: "Results of checking blanks",
     data: blanks,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 });
 

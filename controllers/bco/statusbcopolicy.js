@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Statusbcopolicy = require("../../models/bco/statusbcopolicy");
 const { ErrorResponse } = require("../../util/errorResponse");
+const { findModelById } = require("../../util/findModelById");
 
 exports.getStatusbcopolicy = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
@@ -22,7 +23,7 @@ exports.createStatusbcopolicy = asyncHandler(async (req, res, next) => {
 
   const result = new Statusbcopolicy({
     name: name,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 
   const results = await result.save();
@@ -30,7 +31,7 @@ exports.createStatusbcopolicy = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     message: `Status bco policy`,
     data: results,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 });
 

@@ -23,7 +23,7 @@ exports.createLanguagepolicy = asyncHandler(async (req, res, next) => {
 
   const result = new Languagepolicy({
     name: name,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 
   await result.save();
@@ -31,7 +31,7 @@ exports.createLanguagepolicy = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     message: `Language Policy added`,
     data: result,
-    creatorId: req.userId,
+    creatorId: req.user._id,
   });
 });
 
