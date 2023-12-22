@@ -1,17 +1,19 @@
-const express = require('express')
-const {body} = require('express-validator')
-const transaction = require('../../controllers/billing/transaction')
-// const IsAuth = require('../../middleware/is-auth')
-const IsAuth = require('../../middleware/is-auth')
-const upload = require('../../middleware/upload')
-const router = express.Router()
+const express = require("express");
+const transaction = require("../../controllers/billing/transaction");
+const Transaction = require("../../models/billing/transactions");
+const IsAuth = require("../../middleware/is-auth");
+const upload = require("../../middleware/upload");
+const { advancedResults } = require("../../middleware/advancedResults");
 
-router.get('/',IsAuth,transaction.getTransaction)
-router.get('/:id',IsAuth,transaction.getTransactionById)
+const router = express.Router();
 
-router.post('/',IsAuth,upload.single("files"),transaction.createTransaction)
-router.put('/:id',IsAuth,transaction.updateTransaction)
-router.delete('/:id',IsAuth,transaction.deleteTransaction)
+router.use(IsAuth);
 
+router.get("/", advancedResults(Transaction), transaction.getTransaction);
+router.get("/:id", transaction.getTransactionById);
 
-module.exports = router
+router.post("/", upload.single("files"), transaction.createTransaction);
+router.put("/:id", transaction.updateTransaction);
+router.delete("/:id", transaction.deleteTransaction);
+
+module.exports = router;

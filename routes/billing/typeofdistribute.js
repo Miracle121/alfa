@@ -1,16 +1,22 @@
-const express = require('express')
-const {body} = require('express-validator')
-const typeofdistribute = require('../../controllers/billing/typeofdistribute')
-const IsAuth = require('../../middleware/is-auth')
+const express = require("express");
+const typeofdistribute = require("../../controllers/billing/typeofdistribute");
+const Typeofdistribute = require("../../models/billing/typeofdistribute");
+const IsAuth = require("../../middleware/is-auth");
+const { advancedResults } = require("../../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,typeofdistribute.getTypeofdistributes)
-router.get('/:id',IsAuth,typeofdistribute.getTypeofdistributesById)
+router.use(IsAuth);
 
-router.post('/',IsAuth,typeofdistribute.createTypeofdistributes)
-router.put('/:id',IsAuth,typeofdistribute.updateTypeofdistributes)
-router.delete('/:id',IsAuth,typeofdistribute.deleteTypeofdistributes)
+router.get(
+  "/",
+  advancedResults(Typeofdistribute),
+  typeofdistribute.getTypeofdistributes
+);
+router.get("/:id", typeofdistribute.getTypeofdistributesById);
 
+router.post("/", typeofdistribute.createTypeofdistributes);
+router.put("/:id", typeofdistribute.updateTypeofdistributes);
+router.delete("/:id", typeofdistribute.deleteTypeofdistributes);
 
-module.exports = router
+module.exports = router;

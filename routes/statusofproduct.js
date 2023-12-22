@@ -1,16 +1,27 @@
-const express = require('express')
-const {body} = require('express-validator')
-const statusofproduct = require('../controllers/statusofproduct')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
+const statusofproduct = require("../controllers/statusofproduct");
+const Statusofproduct = require("../models/statusofproduct");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,statusofproduct.getStatusOfProduct)
-router.get('/:id',IsAuth,statusofproduct.getStatusOfProductById)
+router.use(IsAuth);
 
-router.post('/',IsAuth,[body('name').trim().isLength({min:3})],statusofproduct.createStatusOfProduct)
-router.put('/:id',IsAuth,statusofproduct.updateStatusOfProduct)
-router.delete('/:id',IsAuth,statusofproduct.deleteStatusOfProduct)
+router.get(
+  "/",
+  advancedResults(Statusofproduct),
+  statusofproduct.getStatusOfProduct
+);
+router.get("/:id", statusofproduct.getStatusOfProductById);
 
+router.post(
+  "/",
+  [body("name").trim().isLength({ min: 3 })],
+  statusofproduct.createStatusOfProduct
+);
+router.put("/:id", statusofproduct.updateStatusOfProduct);
+router.delete("/:id", statusofproduct.deleteStatusOfProduct);
 
-module.exports = router
+module.exports = router;

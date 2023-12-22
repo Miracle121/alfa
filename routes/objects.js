@@ -1,16 +1,22 @@
-const express = require('express')
-const {body} = require('express-validator')
-const objects = require('../controllers/objects')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
+const objects = require("../controllers/objects");
+const Objects = require("../models/objects");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,objects.getObject)
-router.get('/:id',IsAuth,objects.getObjectId)
-router.get('/type/:id',IsAuth,objects.getByTypeofObjectId)
-router.post('/',IsAuth,[body('name').trim().isLength({min:3})],objects.createObject)
-router.put('/:id',IsAuth,objects.updateObject)
-router.delete('/:id',IsAuth,objects.deleteObject)
+router.use(IsAuth);
 
+router.get("/", advancedResults(Objects), objects.getObject);
+router.get("/:id", objects.getObjectId);
+router.post(
+  "/",
+  [body("name").trim().isLength({ min: 3 })],
+  objects.createObject
+);
+router.put("/:id", objects.updateObject);
+router.delete("/:id", objects.deleteObject);
 
-module.exports = router
+module.exports = router;

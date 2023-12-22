@@ -1,17 +1,36 @@
-const express = require('express')
-const {body} = require('express-validator')
-const policy = require('../controllers/policy')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const policy = require("../controllers/policy");
+const Policy = require("../models/policy");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,policy.getPolicy)
-router.get('/:id',IsAuth,policy.getPolicyById)
+router.use(IsAuth);
 
-router.post('/',IsAuth,policy.createPolicy)
-router.put('/:id',IsAuth,policy.updatePolicy)
-router.delete('/:id',IsAuth,policy.deletePolicy)
-router.get('/f/:id',IsAuth,policy.getPolicyByAgeementId)
+const populateOptions = [
+  { path: "branch_id", select: "inn" },
+  { path: "agreementsId", select: "agreementsnumber" },
+  { path: "policy_blanknumber", select: "blank_number" },
+  { path: "typeofpoliceId", select: "name" },
+  { path: "statusofpolicy", select: "name" },
+  { path: "statusofpayment", select: "name" },
+  { path: "objectofinsurance.typeofobjects", select: "name" },
+  { path: "objectofinsurance.objects", select: "name" },
+  { path: "objectofinsurance.regionId", select: "name" },
+  { path: "objectofinsurance.districtsId", select: "name" },
+  { path: "riskId.riskgroup", select: "name" },
+  { path: "riskId.risk", select: "name" },
+  { path: "riskId.classeId", select: "name" },
+  { path: "statusofpolicy", select: "name" },
+  { path: "statusofpayment", select: "name" },
+];
 
+router.get("/", advancedResults(Policy, populateOptions), policy.getPolicy);
+router.get("/:id", policy.getPolicyById);
 
-module.exports = router
+router.post("/", policy.createPolicy);
+router.put("/:id", policy.updatePolicy);
+router.delete("/:id", policy.deletePolicy);
+
+module.exports = router;

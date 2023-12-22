@@ -1,15 +1,22 @@
-const express = require('express')
-const typeofposition = require('../controllers/typeofposition')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const typeofposition = require("../controllers/typeofposition");
+const Typeofposition = require("../models/typeofposition");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,typeofposition.getTypeofposition)
-router.get('/:id',IsAuth,typeofposition.getTypeofpositionId)
+router.use(IsAuth);
 
-router.post('/',IsAuth,typeofposition.createTypeofposition)
-router.put('/:id',IsAuth,typeofposition.updateTypeofposition)
-router.delete('/:id',IsAuth,typeofposition.deleteTypeofposition)
+router.get(
+  "/",
+  advancedResults(Typeofposition),
+  typeofposition.getTypeofposition
+);
+router.get("/:id", typeofposition.getTypeofpositionId);
 
+router.post("/", typeofposition.createTypeofposition);
+router.put("/:id", typeofposition.updateTypeofposition);
+router.delete("/:id", typeofposition.deleteTypeofposition);
 
-module.exports = router
+module.exports = router;

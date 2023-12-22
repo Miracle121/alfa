@@ -12,17 +12,10 @@ router.use(IsAuth);
 
 const populate = [
   { path: "policy_type_id", select: "policy_type_name" },
-  { path: "branch_id", select: "name" },
-  { path: "statusofbcopolicy", select: "name" },
-  { path: "employee_id", select: "name" },
+  { path: "act_id", select: "act_number" },
 ];
 
-router.get(
-  "/",
-  advancedResults(Bco),
-  advancedResults(Bco, populate),
-  bco.getBco
-);
+router.get("/", advancedResults(Bco, populate), bco.getBco);
 router.get("/:id", bco.getBcoById);
 
 router.post("/", bco.createBco);

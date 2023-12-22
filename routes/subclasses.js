@@ -1,16 +1,23 @@
-const express = require('express')
-const {body} = require('express-validator')
-const subclasses = require('../controllers/subclasses')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
+const subclasses = require("../controllers/subclasses");
+const Subclasses = require("../models/subclasses");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,subclasses.getSubClassesofproduct)
-router.get('/:id',IsAuth,subclasses.getSubClassesofproductId)
+router.use(IsAuth);
 
-router.post('/',IsAuth,[body('name').trim().isLength({min:3})],subclasses.createSubClassesofproduct)
-router.put('/:id',IsAuth,subclasses.updateSubClassesofproduct)
-router.delete('/:id',IsAuth,subclasses.deleteSubClassesofproduct)
+router.get("/", advancedResults(Subclasses), subclasses.getSubClassesofproduct);
+router.get("/:id", subclasses.getSubClassesofproductId);
 
+router.post(
+  "/",
+  [body("name").trim().isLength({ min: 3 })],
+  subclasses.createSubClassesofproduct
+);
+router.put("/:id", subclasses.updateSubClassesofproduct);
+router.delete("/:id", subclasses.deleteSubClassesofproduct);
 
-module.exports = router
+module.exports = router;

@@ -1,16 +1,19 @@
-const express = require('express')
-const {body} = require('express-validator')
-const roles = require('../controllers/role')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
+const roles = require("../controllers/role");
+const Roles = require("../models/role");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,roles.getRole)
-router.get('/:id',IsAuth,roles.getRoleId)
+router.use(IsAuth);
 
-router.post('/',IsAuth,[body('name').trim().isLength({min:3})],roles.createRole)
-router.put('/:id',IsAuth,roles.updateRole)
-router.delete('/:id',IsAuth,roles.deleteRole)
+router.get("/", advancedResults(Roles), roles.getRole);
+router.get("/:id", roles.getRoleId);
 
+router.post("/", [body("name").trim().isLength({ min: 3 })], roles.createRole);
+router.put("/:id", roles.updateRole);
+router.delete("/:id", roles.deleteRole);
 
-module.exports = router
+module.exports = router;

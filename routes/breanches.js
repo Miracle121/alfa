@@ -1,18 +1,37 @@
-const express = require('express')
-const {body} = require('express-validator')
-const breanches = require('../controllers/breanches')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
+const breanches = require("../controllers/breanches");
+const Breanches = require("../models/breanches");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,breanches.getBreanches)
-router.get('/all',IsAuth,breanches.getAllBreanches)
+router.use(IsAuth);
 
-router.get('/:id',IsAuth,breanches.getBreanchesById)
+const populateOptions = [
+  { path: "regionId", select: "name" },
+  { path: "breanchstatus", select: "name" },
+  {
+    path: "employees",
+    populate: [{ path: "positions", select: "name" }],
+  },
+];
 
-router.post('/',IsAuth,[body('name').trim().isLength({min:3})],breanches.createBreanches)
-router.put('/:id',IsAuth,breanches.updateBreanches)
-router.delete('/:id',IsAuth,breanches.deleteBreanches)
+router.get(
+  "/",
+  advancedResults(Breanches, populateOptions),
+  breanches.getBreanches
+);
 
+router.get("/:id", breanches.getBreanchesById);
 
-module.exports = router
+router.post(
+  "/",
+  [body("name").trim().isLength({ min: 3 })],
+  breanches.createBreanches
+);
+router.put("/:id", breanches.updateBreanches);
+router.delete("/:id", breanches.deleteBreanches);
+
+module.exports = router;

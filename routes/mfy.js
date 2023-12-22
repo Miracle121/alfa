@@ -1,18 +1,26 @@
-const express = require('express')
-const {body} = require('express-validator')
-const mfy = require('../controllers/mfy')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
+const mfy = require("../controllers/mfy");
+const Mfy = require("../models/mfy");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,mfy.getMfy)
-router.get('/:id',IsAuth,mfy.getMfyById)
-router.get('/regId/:id',IsAuth,mfy.getByRegId)
-router.get('/distId/:id',IsAuth,mfy.getByDistId)
+router.use(IsAuth);
 
-router.post('/',IsAuth,[body('name').trim().isLength({min:3})],mfy.createMfy)
-router.put('/:id',IsAuth,mfy.updateMfy)
-router.delete('/:id',IsAuth,mfy.deleteMfy)
+router.get(
+  "/",
+  advancedResults(Mfy, [
+    { path: "districtId", select: "name" },
+    { path: "regionId", select: "name" },
+  ]),
+  mfy.getMfy
+);
+router.get("/:id", mfy.getMfyById);
 
+router.post("/", [body("name").trim().isLength({ min: 3 })], mfy.createMfy);
+router.put("/:id", mfy.updateMfy);
+router.delete("/:id", mfy.deleteMfy);
 
-module.exports = router
+module.exports = router;

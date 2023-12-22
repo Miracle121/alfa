@@ -1,16 +1,27 @@
-const express = require('express')
-const {body} = require('express-validator')
-const typeoffranchise = require('../controllers/typeoffranchise')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
+const typeoffranchise = require("../controllers/typeoffranchise");
+const Typeoffranchise = require("../models/typeoffranchise");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,typeoffranchise.getTypeoffranchise)
-router.get('/:id',IsAuth,typeoffranchise.getTypeoffranchiseById)
+router.use(IsAuth);
 
-router.post('/',IsAuth,[body('name').trim().isLength({min:3})],typeoffranchise.createTypeoffranchise)
-router.put('/:id',IsAuth,typeoffranchise.updateTypeoffranchise)
-router.delete('/:id',IsAuth,typeoffranchise.deleteTypeoffranchise)
+router.get(
+  "/",
+  advancedResults(Typeoffranchise),
+  typeoffranchise.getTypeoffranchise
+);
+router.get("/:id", typeoffranchise.getTypeoffranchiseById);
 
+router.post(
+  "/",
+  [body("name").trim().isLength({ min: 3 })],
+  typeoffranchise.createTypeoffranchise
+);
+router.put("/:id", typeoffranchise.updateTypeoffranchise);
+router.delete("/:id", typeoffranchise.deleteTypeoffranchise);
 
-module.exports = router
+module.exports = router;

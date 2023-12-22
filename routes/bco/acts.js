@@ -12,11 +12,11 @@ router.use(IsAuth);
 
 // Populate path
 const populate = [
-  { path: "senderBranch", select: "branchname" },
+  { path: "sender_branch_id", select: "branchname" },
   // { path: 'senderEmployee', select: 'name' },
-  { path: "receiverBranch", select: "branchname" },
+  { path: "receiver_branch_id", select: "branchname" },
   // { path: 'receiverEmployee', select: 'email' },
-  { path: "statusOfAct", select: "name" },
+  { path: "statusofact", select: "name" },
 ];
 
 router.get("/", advancedResults(Acts, populate), acts.getActs);
