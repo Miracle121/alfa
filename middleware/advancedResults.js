@@ -69,11 +69,10 @@ const advancedResults = (model, populate) =>
         limit,
       };
     }
-
     res.advancedResults = {
       success: true,
       count: data.length,
-      total: total.length,
+      total,
       data,
       pagination,
     };

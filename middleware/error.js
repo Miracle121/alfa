@@ -1,3 +1,4 @@
+require("colors");
 const { config } = require("../config/config");
 const { ErrorResponse } = require("../util/errorResponse");
 
@@ -7,7 +8,6 @@ const errorHandler = (err, req, res, next) => {
   if (config.env === "development") {
     console.error(err.stack.red); // Log the modified error for debugging
   }
-
   error.message = err.message; // Preserve the original error message
 
   // Customize error messages and status codes based on error types

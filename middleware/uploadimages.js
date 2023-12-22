@@ -1,4 +1,3 @@
-const util = require("util");
 const multer = require("multer");
 const path = require("path");
 const moment = require("moment/moment");
@@ -7,7 +6,7 @@ const maxSize = 2 * 1024 * 1024;
 
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {
-    let dirname = `images/${moment().format("YYYY/MM/DD")}/${req.userId}`;
+    let dirname = `images/${moment().format("YYYY/MM/DD")}/${req.user._id}`;
     let dir = await AppUtil.checkPath(dirname);
     req.filePath = dirname;
     cb(null, dir);
@@ -20,25 +19,21 @@ const storage = multer.diskStorage({
   },
 });
 
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/png"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
 const upload = multer({
   storage: storage,
-  fileFilter: function (_req, file, cb) {
-    checkFileType(file, cb);
-  },
+  fileFilter: fileFilter,
 });
-
-function checkFileType(file, cb) {
-  // Allowed ext
-  const whiteList = ["jpg", "png"];
-  // Check ext
-  // Check mime
-  const mimetype = whiteList.includes(file.mimetype);
-  // console.log(mimetype);
-  if (mimetype) {
-    return cb(null, true);
-  } else {
-    cb("Error: Images Only!");
-  }
-}
 
 module.exports = upload;
