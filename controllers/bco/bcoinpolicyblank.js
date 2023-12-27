@@ -4,47 +4,6 @@ const moment = require("moment");
 const { findModelById } = require("../../util/findModelById");
 
 exports.getBcoinpolicyblank = asyncHandler(async (req, res, next) => {
-  //   const page = req.query.page || 1;
-  //   const counts = 20;
-  //   let totalItems;
-
-  //   totalItems = await Bcoinpolicyblank.find().countDocuments();
-  //   const data = await Bcoinpolicyblank.find()
-  //     .populate("policy_type_id", "policy_type_name")
-  //     .populate({
-  //       path: "bco_id",
-  //       populate: [
-  //         {
-  //           path: "policy_type_id",
-  //           select: "policy_type_name",
-  //         },
-  //         {
-  //           path: "policy_blank_number",
-  //           select: "blank_number",
-  //         },
-  //         {
-  //           path: "branch_id",
-  //           select: "branchname",
-  //         },
-  //         {
-  //           path: "employee_id",
-  //           select: "name",
-  //         },
-  //         {
-  //           path: "statusofbcopolicy",
-  //           select: "name",
-  //         },
-  //       ],
-  //     })
-  //     .populate("policy_blank_number", "blank_number")
-
-  //     .skip((page - 1) * counts)
-  //     .limit(counts);
-  //   res.status(200).json({
-  //     message: `Type of bco `,
-  //     data: data,
-  //     totalItems: totalItems,
-  //   });
   res.status(200).json(res.advancedResults);
 });
 

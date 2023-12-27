@@ -9,27 +9,6 @@ const { findModelById } = require("../../util/findModelById");
 const { ErrorResponse } = require("../../util/errorResponse");
 
 exports.getActs = asyncHandler(async (req, res, next) => {
-  // const page = req.query.page || 1;
-  // const counts = 20; //req.query.count ||20
-  // let totalItems;
-
-  // totalItems = await Acts.find().countDocuments();
-  // const data = await Acts.find()
-  //   .populate([
-  //     { path: "senderBranch", select: "branchname" },
-  //     // { path: 'senderEmployee', select: 'name' },
-  //     { path: "receiverBranch", select: "branchname" },
-  //     // { path: 'receiverEmployee', select: 'email' },
-  //     { path: "statusOfAct", select: "name" },
-  //   ])
-  //   // .populate("sender_branch_id", "branchname")
-  //   // // .populate('sender_employee_id', 'name')
-  //   // .populate("receiver_branch_id", "branchname")
-  //   // // .populate('receiver_employee_id','email')
-  //   // .populate("statusofact", "name")
-
-  //   .skip((page - 1) * counts)
-  //   .limit(counts);
   res.status(200).json(res.advancedResults);
 });
 

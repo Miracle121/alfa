@@ -71,7 +71,7 @@ exports.getPolicyblankById = asyncHandler(async (req, res, next) => {
 exports.createPolicyblank = asyncHandler(async (req, res, next) => {
   const { branch_id, policy_type_id, blank_number, Is_usedblank } = req.body;
 
-  const result = new Policyblank({
+  const result = await Policyblank.create({
     branch_id,
     policy_type_id,
     blank_number,

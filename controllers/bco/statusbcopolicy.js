@@ -56,7 +56,7 @@ exports.deleteStatusbcopolicy = asyncHandler(async (req, res, next) => {
   const deleteddata = await findModelById(Statusbcopolicy, AgesId);
 
   if (deleteddata.creatorId.toString() !== req.userId) {
-    const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
+    const error = new ErrorResponse("Bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
 
