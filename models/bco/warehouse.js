@@ -29,7 +29,7 @@ const warehouseSchema = new Schema(
     // ],
     branch_id: {
       type: Schema.Types.ObjectId,
-      ref: "Breanches",
+      ref: "Branches",
       // required: true
     },
 
