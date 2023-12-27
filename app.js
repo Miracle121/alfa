@@ -9,7 +9,6 @@ const helmet = require("helmet");
 const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
-const cors = require("cors");
 
 const connectDB = require("./config/db");
 const { config } = require("./config/config");
@@ -58,8 +57,8 @@ const citizenship = require("./routes/citizenship");
 const position = require("./routes/position");
 const typeofdocuments = require("./routes/typeofdocuments");
 const levelofbranch = require("./routes/levelofbranch");
-const breanches = require("./routes/breanches");
-const breanchstatus = require("./routes/breanchstatus");
+const branches = require("./routes/branches");
+const branchstatus = require("./routes/branchstatus");
 //============agreements=================
 const agreements = require("./routes/agreements");
 const reasons = require("./routes/reasons");
@@ -125,7 +124,7 @@ app.use(helmet());
 app.use(xss());
 
 // Rate limiting
-const limiter = rateLimit({ windowMs: 10 * 10 * 1000, max: 100 });
+const limiter = rateLimit({ windowMs: 10 * 10 * 1000, max: 300 });
 
 app.use(limiter);
 
@@ -186,8 +185,8 @@ app.use("/citizenship", citizenship);
 app.use("/position", position);
 app.use("/typeofdocuments", typeofdocuments);
 app.use("/levelofbranch", levelofbranch);
-app.use("/breanches", breanches);
-app.use("/breanchstatus", breanchstatus);
+app.use("/branches", branches);
+app.use("/branchstatus", branchstatus);
 //================agreements=====
 app.use("/agreements", agreements);
 app.use("/reasons", reasons);

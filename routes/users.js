@@ -9,7 +9,14 @@ const router = express.Router();
 
 router.use(IsAuth);
 
-router.get("/", advancedResults(User), users.getUsers);
+const populateOptions = [
+  { path: "accountstatus", select: "name" },
+  { path: "accountrole", select: "name" },
+  { path: "branch_Id", select: "branchname" },
+  { path: "agent_Id", select: "inn" },
+];
+
+router.get("/", advancedResults(User, populateOptions), users.getUsers);
 router.get("/:id", users.getUsersById);
 router.post(
   "/",
@@ -17,12 +24,11 @@ router.post(
     body("email")
       .isEmail()
       .withMessage("iltimos email adress kiriting")
-      .custom((value, { req }) => {
-        return User.findOne({ email: value }).then((userDoc) => {
-          if (userDoc) {
-            return Promise.reject("E-mail bor");
-          }
-        });
+      .custom(async (value, { req }) => {
+        const userDoc = await User.findOne({ email: value });
+        if (userDoc) {
+          return Promise.reject("E-mail bor");
+        }
       })
       .normalizeEmail(),
     body("password").trim().isLength({ min: 5 }),

@@ -10,9 +10,39 @@ const router = express.Router();
 
 router.use(IsAuth);
 
+const populateOptions = [
+  { path: "policy_type_id", select: "policy_type_name" },
+  {
+    path: "bco_id",
+    populate: [
+      {
+        path: "policy_type_id",
+        select: "policy_type_name",
+      },
+      {
+        path: "policy_blank_number",
+        select: "blank_number",
+      },
+      {
+        path: "branch_id",
+        select: "branchname",
+      },
+      {
+        path: "employee_id",
+        select: "name",
+      },
+      {
+        path: "statusofbcopolicy",
+        select: "name",
+      },
+    ],
+  },
+  { path: "policy_blank_number", select: "blank_number" },
+];
+
 router.get(
   "/",
-  advancedResults(Bcoinpolicyblank),
+  advancedResults(Bcoinpolicyblank, populateOptions),
   bcoinpolicyblank.getBcoinpolicyblank
 );
 router.get("/:id", bcoinpolicyblank.getBcoinpolicyblankById);

@@ -14,18 +14,11 @@ const populateOptions = [
   { path: "typeofpersons", select: "name" },
   {
     path: "forindividualsdata",
-    populate: [
-      { path: "gender", select: "name" },
-      { path: "citizenship", select: "name" },
-      { path: "typeofdocument", select: "name" },
-      { path: "regions", select: "name" },
-      { path: "districts", select: "name" },
-    ],
   },
   {
     path: "corporateentitiesdata",
     populate: [
-      { path: "regionId", select: "name" },
+      { path: "region", select: "name" },
       { path: "districts", select: "name" },
       {
         path: "employees",

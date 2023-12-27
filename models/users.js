@@ -8,7 +8,7 @@ const userSchema = new Schema(
   {
     branch_Id: {
       type: Schema.Types.ObjectId,
-      ref: "Breanches",
+      ref: "Branches",
       // required:true
     },
     agent_Id: {

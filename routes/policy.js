@@ -17,7 +17,7 @@ const populateOptions = [
   { path: "statusofpayment", select: "name" },
   { path: "objectofinsurance.typeofobjects", select: "name" },
   { path: "objectofinsurance.objects", select: "name" },
-  { path: "objectofinsurance.regionId", select: "name" },
+  { path: "objectofinsurance.region", select: "name" },
   { path: "objectofinsurance.districtsId", select: "name" },
   { path: "riskId.riskgroup", select: "name" },
   { path: "riskId.risk", select: "name" },

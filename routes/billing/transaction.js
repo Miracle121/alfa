@@ -9,7 +9,27 @@ const router = express.Router();
 
 router.use(IsAuth);
 
-router.get("/", advancedResults(Transaction), transaction.getTransaction);
+router.get(
+  "/",
+  advancedResults(Transaction, [
+    {
+      path: "client",
+      select:
+        "forindividualsdata.middlename forindividualsdata.secondname forindividualsdata.name",
+    },
+    {
+      path: "branch",
+      select: "branchname",
+      populate: [
+        { path: "policies", select: "policy_number" },
+        { path: "blanks" },
+      ],
+    },
+    { path: "region", select: "name" },
+    { path: "district", select: "name" },
+  ]),
+  transaction.getTransaction
+);
 router.get("/:id", transaction.getTransactionById);
 
 router.post("/", upload.single("files"), transaction.createTransaction);

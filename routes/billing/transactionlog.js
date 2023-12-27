@@ -10,7 +10,7 @@ router.use(IsAuth);
 
 router.get(
   "/",
-  advancedResults(Transactionlog),
+  advancedResults(Transactionlog, "branch"),
   transactionlog.getTransactionlog
 );
 router.get("/:id", transactionlog.getTransactionlogById);

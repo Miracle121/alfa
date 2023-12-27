@@ -3,7 +3,7 @@ const policySchema = new Schema(
   {
     branch_id: {
       type: Schema.Types.ObjectId,
-      ref: "Breanches",
+      ref: "Branches",
       required: true,
     },
     agreementsId: {
@@ -96,14 +96,14 @@ const policySchema = new Schema(
           type: Number,
           required: true,
         },
-        regionId: {
+        region: {
           type: Schema.Types.ObjectId,
           ref: "Region",
           required: true,
         },
         districtsId: {
           type: Schema.Types.ObjectId,
-          ref: "Districts",
+          ref: "District",
           required: true,
         },
       },

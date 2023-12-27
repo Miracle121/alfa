@@ -26,7 +26,7 @@ const populateOptions = [
   {
     path: "corporateentitiesdata",
     populate: [
-      { path: "regionId", select: "name" },
+      { path: "region", select: "name" },
       { path: "districts", select: "name" },
       {
         path: "employees",

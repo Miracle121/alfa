@@ -8,23 +8,7 @@ const { findModelById } = require("../util/findModelById");
 const { config } = require("../config/config");
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
-  const page = req.query.page || 1;
-  const counts = 20; //req.query.count ||20
-  let totalItems;
-  totalItems = await User.find().countDocuments();
-  const users = await User.find()
-    .populate("accountstatus", "name")
-    .populate("accountrole", "name")
-    .populate("branch_Id", "branchname")
-    .populate("agent_Id", "inn")
-
-    .skip((page - 1) * counts)
-    .limit(counts);
-  res.status(200).json({
-    message: `User haqida ma'/lumot`,
-    data: users,
-    totalItems: totalItems,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 exports.getUsersById = asyncHandler(async (req, res, next) => {
@@ -45,41 +29,44 @@ exports.getUsersById = asyncHandler(async (req, res, next) => {
 exports.CreateUsers = asyncHandler(async (req, res, next) => {
   const agent_Id = req.body.agentId || null; //req.get('agentId') || null
   const branch_Id = req.body.branch_Id || null; //req.get('branch_Id')
-  const emp_id = req.body.emp_id; //req.get('emp_id') || null
+  const emp_Id = req.body.emp_id; //req.get('emp_id') || null
 
   const email = req.body.email;
   const password = req.body.password;
   const accountstatus = req.body.accountstatus;
   const accountrole = req.body.accountrole;
-  const hashpass = await bcrypt.hash(password, 12);
-  const user = new User({
-    agent_Id: agent_Id,
-    branch_Id: branch_Id,
-    emp_Id: emp_id,
-    email: email,
-    password: hashpass,
-    accountstatus: accountstatus,
-    accountrole: accountrole,
+
+  const user = await User.create({
+    agent_Id,
+    branch_Id,
+    emp_Id,
+    email,
+    password,
+    accountstatus,
+    accountrole,
     creatorId: req.user._id,
   });
+
   const users = await user.save();
-  console.log(users);
+
   if (agent_Id) {
     const agent = await Agents.findByIdAndUpdate(agent_Id, {
       $set: {
         user_id: users._id,
       },
     });
-    const agents = await agent.save();
+    await agent.save();
   }
-  if (emp_id) {
-    const employee = await Employee.findByIdAndUpdate(emp_id, {
+
+  if (emp_Id) {
+    const employee = await Employee.findByIdAndUpdate(emp_Id, {
       $set: {
         user_id: users._id,
       },
     });
-    const emp = await employee.save();
+    await employee.save();
   }
+
   res.status(201).json({
     message: "User bazaga kiritildi",
     users: users,
@@ -92,17 +79,17 @@ exports.UpdateUsers = asyncHandler(async (req, res, next) => {
   const branch_Id = req.get("branch_Id");
   const emp_id = req.get("emp_id") || null;
   const email = req.body.email;
-  const password = req.body.password;
   const accountstatus = req.body.accountstatus;
   const accountrole = req.body.accountrole;
-  const hashpass = await bcrypt.hash(password, 12);
 
-  const user = await User.findById(userId);
+  const user = await findModelById(User, userId);
+
   if (!user) {
     const error = new Error("Object  not found");
     error.statusCode = 404;
     throw error;
   }
+
   user.agent_Id = agent_Id;
   user.emp_Id = emp_id;
   user.branch_Id = branch_Id;
@@ -110,7 +97,9 @@ exports.UpdateUsers = asyncHandler(async (req, res, next) => {
   user.password = hashpass;
   user.accountstatus = accountstatus;
   user.accountrole = accountrole;
+
   const data = await user.save();
+
   res.status(200).json({
     message: `ma'lumotlar o'zgartirildi`,
     data: data,
@@ -119,15 +108,11 @@ exports.UpdateUsers = asyncHandler(async (req, res, next) => {
 
 exports.DeleteUsers = asyncHandler(async (req, res, next) => {
   const usersId = req.params.id;
-  const deleteddata = await User.findById(usersId);
 
-  if (!deleteddata) {
-    const error = new Error("Object  not found");
-    error.statusCode = 404;
-    throw error;
-  }
+  await findModelById(User, usersId);
 
   const data = await User.findByIdAndRemove(usersId);
+
   res.status(200).json({
     message: "Region is deletes",
     data: data,

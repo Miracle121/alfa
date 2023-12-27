@@ -18,25 +18,20 @@ const policyblankSchema = new Schema(
     blank_number: {
       type: String,
       required: true,
+      unique: true,
     },
-    policy_number: {
-      type: String,
-    },
-    policy_id: {
+    policy: {
       type: Schema.Types.ObjectId,
       ref: "Policy",
     },
-
     Is_usedblank: {
       type: Boolean,
       default: false,
     },
-
     Is_given: {
       type: Boolean,
       default: false,
     },
-
     status_blank: {
       type: Schema.Types.ObjectId,
       ref: "Statusbcopolicy",

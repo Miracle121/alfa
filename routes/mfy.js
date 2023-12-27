@@ -12,8 +12,8 @@ router.use(IsAuth);
 router.get(
   "/",
   advancedResults(Mfy, [
-    { path: "districtId", select: "name" },
-    { path: "regionId", select: "name" },
+    { path: "district", select: "name" },
+    { path: "region", select: "name" },
   ]),
   mfy.getMfy
 );

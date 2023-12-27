@@ -1,4 +1,8 @@
-node_modules
-public/images
+# Ignore node_modules
+node_modules/
+
+# Ignore public directory
+/public/
+
+# Ignore config file with environment variables
 config/config.env
-public/
