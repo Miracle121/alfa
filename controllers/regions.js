@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Region = require("../models/regions");
-const Districts = require("../models/districts");
+const District = require("../models/districts");
 const { validationResult } = require("express-validator");
 const { findModelById } = require("../util/findModelById");
 const { ErrorResponse } = require("../util/errorResponse");
@@ -12,7 +12,9 @@ exports.getRegions = asyncHandler(async (req, res, next) => {
 exports.getRegionsById = asyncHandler(async (req, res, next) => {
   const regId = req.params.id;
 
-  const region = await findModelById(Region, regId);
+  const region = await findModelById(Region, regId, {
+    path: "disticts",
+  });
 
   res.status(200).json({
     message: `ma'lumotlar topildi`,
@@ -78,9 +80,9 @@ exports.deleteRegions = asyncHandler(async (req, res, next) => {
   const deletedRegion = await Region.findByIdAndRemove(regId);
 
   // Find and delete associated districts
-  const districtList = await Districts.find({ regiId: regId });
+  const districtList = await District.find({ regiId: regId });
 
-  const deletedDistricts = await Districts.deleteMany({
+  const deletedDistricts = await District.deleteMany({
     _id: { $in: districtList },
   });
 

@@ -1,19 +1,19 @@
 const asyncHandler = require("express-async-handler");
-const Districts = require("../models/districts");
+const District = require("../models/districts");
 const Mfy = require("../models/mfy");
 const { findModelById } = require("../util/findModelById");
 const { ErrorResponse } = require("../util/errorResponse");
 
 exports.getMfy = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.advancedresults);
+  res.status(200).json(res.advancedResults);
 });
 
 exports.getMfyById = asyncHandler(async (req, res, next) => {
   const mfyId = req.params.id;
 
   const mfy = await findModelById(Mfy, mfyId, [
-    { path: "districtId", select: "name" },
-    { path: "regionId", select: "name" },
+    { path: "district", select: "name" },
+    { path: "region", select: "name" },
   ]);
 
   res.status(200).json({
@@ -24,42 +24,32 @@ exports.getMfyById = asyncHandler(async (req, res, next) => {
 
 exports.createMfy = asyncHandler(async (req, res, next) => {
   const name = req.body.name;
-  const regionId = req.body.regionId;
-  const districtId = req.body.districtId;
+  const region = req.body.region;
+  const district = req.body.district;
 
-  const mahalla = new Mfy({
+  const mfy = await Mfy.create({
     name: name,
-    regionId: regionId,
-    districtId: districtId,
+    region: region,
+    district: district,
     creatorId: req.user._id,
   });
-
-  const mfy = await mahalla.save();
-  const dist = await Districts.findById({ _id: districtId });
-
-  dist.mfy.push(mfy._id);
-
-  const district = await dist.save();
 
   res.status(200).json({
     message: `ma'lumotlar kiritildi`,
     data: mfy,
-    district: district,
     creatorId: req.user._id,
   });
 });
 
 exports.updateMfy = asyncHandler(async (req, res, next) => {
   const mfyId = req.params.id;
-  const name = req.body.name;
-  const regionId = req.body.regionId;
-  const districtId = req.body.districtId;
+  const { name, region, district } = req.body;
 
   const mfy = await findModelById(Mfy, mfyId);
 
   mfy.name = name;
-  mfy.regionId = regionId;
-  mfy.districtId = districtId;
+  mfy.region = region;
+  mfy.district = district;
 
   const data = await mfy.save();
 
@@ -81,9 +71,9 @@ exports.deleteMfy = asyncHandler(async (req, res, next) => {
 
   const data = await Mfy.findByIdAndRemove(mfyId);
 
-  const districtId = data.districtId.toString();
+  const district = data.district.toString();
 
-  const dist = await findModelById(Districts, districtId);
+  const dist = await findModelById(District, district);
 
   dist.mfy.pull(mfyId);
 

@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Agents = require("../models/agents");
 const User = require("../models/users");
-const Breanches = require("../models/breanches");
+const Branches = require("../models/branches");
 const { findModelById } = require("../util/findModelById");
 const { ErrorResponse } = require("../util/errorResponse");
 
@@ -22,7 +22,7 @@ const populateOptions = [
   {
     path: "corporateentitiesdata",
     populate: [
-      { path: "regionId", select: "name" },
+      { path: "region", select: "name" },
       { path: "districts", select: "name" },
       {
         path: "employees",
@@ -43,7 +43,6 @@ const populateOptions = [
     ],
   },
 ];
-////
 
 exports.getAgents = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
@@ -64,7 +63,7 @@ exports.createAgents = asyncHandler(async (req, res, next) => {
   const inn = req.body.inn;
   const branch = req.body.branch;
   const agreementnumber = req.body.agreementnumber || null;
-  const agreementdate = req.body.agreementdate || null; //moment(req.body.agreementdate,"DD/MM/YYYY")
+  const agreementdate = moment(req.body.agreementdate, "DD/MM/YYYY") || null;
   const typeofpersons = req.body.typeofpersons;
   const isbeneficiary = req.body.isbeneficiary || null;
   const isfixedpolicyholde = req.body.isfixedpolicyholde || null;
@@ -123,11 +122,7 @@ exports.updateAgents = asyncHandler(async (req, res, next) => {
   const isUserRestAPI = req.body.isUserRestAPI;
 
   const result = await findModelById(Agents, AgesId);
-  if (!result) {
-    const error = new Error("Object  not found");
-    error.statusCode = 404;
-    throw error;
-  }
+
   result.inn = inn;
   result.branch = branch;
   result.agreementnumber = agreementnumber;
@@ -186,7 +181,7 @@ exports.deleteAgents = asyncHandler(async (req, res, next) => {
 exports.getAgentsByBranchId = asyncHandler(async (req, res, next) => {
   const fondId = req.params.id;
 
-  const branch = await Breanches.findOne({ fond_id: fondId });
+  const branch = await Branches.findOne({ fond_id: fondId });
 
   if (!branch) {
     return res.status(200).json({

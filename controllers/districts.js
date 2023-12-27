@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const Districts = require("../models/districts");
+const District = require("../models/districts");
 const Region = require("../models/regions");
 const { findModelById } = require("../util/findModelById");
 
@@ -8,9 +8,9 @@ exports.getDistricts = asyncHandler(async (req, res, next) => {
 });
 
 exports.getDistrictsById = asyncHandler(async (req, res, next) => {
-  const regId = req.params.id;
+  const region = req.params.id;
 
-  const dist = await findModelById(Districts, regId, ("regiId", "name"));
+  const dist = await findModelById(District, region, ("region", "name"));
 
   res.status(200).json({
     message: `ma'lumotlar topildi`,
@@ -18,13 +18,13 @@ exports.getDistrictsById = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.getDistrictsByRegId = asyncHandler(async (req, res, next) => {
-  const regId = req.params.id;
+exports.getDistrictsByregion = asyncHandler(async (req, res, next) => {
+  const region = req.params.id;
 
-  const dist = await Districts.find({ regiId: regId }).populate({
-    path: "regiId",
+  const dist = await District.find({ region: region }).populate({
+    path: "region",
     select: "name",
-    match: { _id: regId },
+    match: { _id: region },
   });
 
   res.status(200).json({
@@ -35,39 +35,32 @@ exports.getDistrictsByRegId = asyncHandler(async (req, res, next) => {
 
 exports.createDistricts = asyncHandler(async (req, res, next) => {
   const name = req.body.name;
-  const regiId = req.body.regiId;
+  const region = req.body.region;
 
-  const dist = new Districts({
+  const dist = new District({
     name,
-    regiId,
+    region,
     creatorId: req.user._id,
   });
 
   const districts = await dist.save();
 
-  const region = await findModelById(Region, regiId);
-
-  region.districts.push(districts);
-
-  const reg = await region.save();
-
   res.status(200).json({
     message: `ma'lumotlar kiritildi`,
     data: districts,
     creatorId: req.user._id,
-    reg: reg,
   });
 });
 
 exports.updateDistricts = asyncHandler(async (req, res, next) => {
   const distId = req.params.id;
   const name = req.body.name;
-  const regId = req.body.regiId;
+  const region = req.body.region;
 
-  const district = await findModelById(Districts, distId);
+  const district = await findModelById(District, distId);
 
   district.name = name;
-  district.regiId = regId;
+  district.region = region;
 
   const data = await district.save();
 
@@ -80,7 +73,7 @@ exports.updateDistricts = asyncHandler(async (req, res, next) => {
 exports.deleteDistricts = asyncHandler(async (req, res, next) => {
   const destId = req.params.id;
 
-  const deletedData = await findModelById(Districts, destId);
+  const deletedData = await findModelById(District, destId);
 
   if (deletedData.creatorId.toString() !== req.userId) {
     const error = new Error(
@@ -90,11 +83,11 @@ exports.deleteDistricts = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Districts.findByIdAndRemove(destId);
+  const data = await District.findByIdAndRemove(destId);
 
-  const regId = data.regiId.toString();
+  const region = data.region.toString();
 
-  const reg = await findModelById(Region, regId);
+  const reg = await findModelById(Region, region);
 
   reg.districts.pull(destId);
 
