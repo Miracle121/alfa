@@ -1,6 +1,4 @@
 const asyncHandler = require("express-async-handler");
-const reader = require("xlsx");
-const path = require("path");
 const Transactionlog = require("../../models/billing/transactionlog");
 const { findModelById } = require("../../util/findModelById");
 
@@ -11,7 +9,9 @@ exports.getTransactionlog = asyncHandler(async (req, res, next) => {
 exports.getTransactionlogById = asyncHandler(async (req, res, next) => {
   const AgesId = req.params.id;
 
-  const result = await Transactionlog.findById(AgesId);
+  const result = await Transactionlog.findById(AgesId).populate(
+    "debt_account_obj2_ID"
+  );
 
   res.status(200).json({
     message: `Transaction list`,
@@ -137,7 +137,7 @@ exports.deleteTransactionlog = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     message: "Transaction is deleted",
-    data: data,
+    data,
   });
 });
 

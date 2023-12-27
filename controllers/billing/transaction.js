@@ -1,9 +1,28 @@
 const asyncHandler = require("express-async-handler");
 const reader = require("xlsx");
+const moment = require("moment");
 const { findModelById } = require("../../util/findModelById");
 const { ErrorResponse } = require("../../util/errorResponse");
 const Transaction = require("../../models/billing/transactions");
 
+const convertQueryToObject = (reqQuery) => {
+  const query = { ...reqQuery };
+  const removeFields = ["select", "sort", "page", "limit"];
+
+  removeFields.forEach((param) => delete query[param]);
+
+  let queryStr = JSON.stringify(query);
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
+
+  return JSON.parse(queryStr);
+};
+
+/**
+ *  ?branch=5b76sdf767fds64&region=b2342g53232t3
+ */
 exports.getTransaction = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
@@ -19,35 +38,34 @@ exports.getTransactionById = asyncHandler(async (req, res, next) => {
 });
 
 exports.createTransaction = asyncHandler(async (req, res, next) => {
-  const file = reader.readFile(req.file.path); //"C:/Users/Mrxone/Desktop/123.xlsx"
+  const file = reader.readFile(req.file.path);
   const data = [];
 
   file.SheetNames.forEach((sheetName) => {
-    const sheetData = XLSX.utils.sheet_to_json(file.Sheets[sheetName]);
+    const sheetData = reader.utils.sheet_to_json(file.Sheets[sheetName]);
     data.push(...sheetData);
   });
-
+  console.log(data);
   const objectDataArray = data.map((values) => ({
-    payment_order_number: values["транзакция номера"],
-    payment_order_date: values["дата транзакции"],
+    payment_order_number: values["№ п/п"],
+    status_of_attachment: values["Действие"] || "Новый",
+    payment_order_date: moment(values["Дата п/п"], "DD/MM/YYYY").toDate(),
+    sender_name: values["Наименование отправителя"],
     payment_amount: values["Сумма поступления"],
     payment_details: values["Детали платежа"],
-    sender_name: values["Наименование отправителя"],
     sender_taxpayer_number: values["ИНН отправителя"],
-    sender_bank_account: values["р/с отправителя"],
-    sender_bank_code: values["МФО отправителя"],
     sender_bank_taxpayer_number: values["ИНН банка отправителя"],
-    recipient_bank_account: values["р/с получателя"],
-    recipient_bank_code: values["МФО получателя"],
+    sender_bank_code: values["МФО банка отправителя"],
+    sender_bank_account: values["Р/с отправителя"],
     recipient_bank_taxpayer_number: values["ИНН банка получателя"],
+    recipient_bank_code: values["МФО банка получателя"],
+    recipient_bank_account: values["Р/с получателя"],
     creatorId: req.user._id,
   }));
 
-  const results = await Transaction.insertMany(objectDataArray, {
-    ordered: false,
-  });
+  const results = await Transaction.insertMany(objectDataArray);
 
-  res.status(200).json({
+  res.status(201).json({
     message: "File added",
     data: results,
     creatorId: req.user._id,
