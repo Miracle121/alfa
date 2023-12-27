@@ -22,7 +22,7 @@ exports.getClientsById = asyncHandler(async (req, res, next) => {
     {
       path: "corporateentitiesdata",
       populate: [
-        { path: "regionId", select: "name" },
+        { path: "region", select: "name" },
         { path: "districts", select: "name" },
         {
           path: "employees",
@@ -64,7 +64,7 @@ exports.createClients = asyncHandler(async (req, res, next) => {
     });
   }
 
-  const newClient = new Clients({
+  const newClient = await Clients.create({
     inn,
     branch,
     typeofpersons,
@@ -77,7 +77,7 @@ exports.createClients = asyncHandler(async (req, res, next) => {
 
   const savedClient = await newClient.save();
 
-  res.status(200).json({
+  res.status(201).json({
     message: "Client created successfully",
     data: savedClient,
     creatorId: req.user._id,
@@ -149,7 +149,7 @@ exports.getClientsByInn = asyncHandler(async (req, res, next) => {
     {
       path: "corporateentitiesdata",
       populate: [
-        { path: "regionId", select: "name" },
+        { path: "region", select: "name" },
         { path: "districts", select: "name" },
         {
           path: "employees",
