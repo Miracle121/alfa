@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+
 const policySchema = new Schema(
   {
     branch_id: {
@@ -6,7 +7,10 @@ const policySchema = new Schema(
       ref: "Branches",
       required: true,
     },
-    agreementsId: {
+    invois: {
+      type: String,
+    },
+    agreementId: {
       type: Schema.Types.ObjectId,
       ref: "Agreements",
       required: true,
@@ -119,14 +123,25 @@ const policySchema = new Schema(
       ref: "Statusofpayment",
       required: true,
     },
+    typeofpayment: {
+      type: Schema.Types.ObjectId,
+      ref: "Typeofpayment",
+      required: true,
+    },
     creatorId: {
       type: Schema.Types.ObjectId,
       ref: "Users",
       required: true,
     },
   },
-
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+policySchema.virtual("agreement", {
+  ref: "Agreements",
+  localField: "agreementsId",
+  foreignField: "_id",
+  justOne: true,
+});
 
 module.exports = model("Policy", policySchema);
