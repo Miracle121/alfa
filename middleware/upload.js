@@ -1,9 +1,7 @@
-const util = require("util");
 const multer = require("multer");
 const path = require("path");
 const moment = require("moment/moment");
 const AppUtil = require("../util/AppUtil");
-const maxSize = 2 * 1024 * 1024;
 
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {
