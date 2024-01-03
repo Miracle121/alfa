@@ -16,7 +16,7 @@ const populateOptions = [
     path: "employees",
     populate: [{ path: "positions", select: "name" }],
   },
-  { path: "policies", select: "policy_number" },
+  { path: "policy", select: "policy_number", populate: { path: "agreement" } },
 ];
 
 router.get(

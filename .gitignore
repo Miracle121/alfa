@@ -6,3 +6,5 @@ node_modules/
 
 # Ignore config file with environment variables
 config/config.env
+
+*.xlsx

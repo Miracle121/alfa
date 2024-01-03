@@ -10,7 +10,7 @@ router.use(IsAuth);
 
 const populateOptions = [
   { path: "branch_id", select: "inn" },
-  { path: "agreementsId", select: "agreementsnumber" },
+  { path: "agreement", select: "agreementsnumber" },
   { path: "policy_blanknumber", select: "blank_number" },
   { path: "typeofpoliceId", select: "name" },
   { path: "statusofpolicy", select: "name" },
