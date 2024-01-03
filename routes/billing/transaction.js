@@ -9,27 +9,37 @@ const router = express.Router();
 
 router.use(IsAuth);
 
+const populateOptions = [
+  {
+    path: "client",
+    select:
+      "forindividualsdata.middlename forindividualsdata.secondname forindividualsdata.name",
+  },
+  {
+    path: "branch",
+    select: "branchname",
+    populate: [
+      {
+        path: "policy",
+        select: "policy_number",
+        populate: { path: "agreement", select: "agreementsnumber" },
+      },
+      {
+        path: "blank",
+        select: "blank_number",
+      },
+    ],
+  },
+  { path: "region", select: "name" },
+  { path: "district", select: "name" },
+];
+
 router.get(
   "/",
-  advancedResults(Transaction, [
-    {
-      path: "client",
-      select:
-        "forindividualsdata.middlename forindividualsdata.secondname forindividualsdata.name",
-    },
-    {
-      path: "branch",
-      select: "branchname",
-      populate: [
-        { path: "policies", select: "policy_number" },
-        { path: "blanks" },
-      ],
-    },
-    { path: "region", select: "name" },
-    { path: "district", select: "name" },
-  ]),
+  advancedResults(Transaction, populateOptions),
   transaction.getTransaction
 );
+router.get("/division", transaction.divisionTranactions);
 router.get("/:id", transaction.getTransactionById);
 
 router.post("/", upload.single("files"), transaction.createTransaction);
