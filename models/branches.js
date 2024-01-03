@@ -108,7 +108,6 @@ const branchesSchema = new Schema(
 
 branchesSchema.pre("save", async function (next) {
   try {
-    console.log(this);
     const district = await this.model("District").findById(this.district);
 
     this.region = district.region;
@@ -119,18 +118,18 @@ branchesSchema.pre("save", async function (next) {
   }
 });
 
-branchesSchema.virtual("policies", {
+branchesSchema.virtual("policy", {
   ref: "Policy",
   localField: "_id",
   foreignField: "branch_id",
-  justOne: false,
+  justOne: true,
 });
 
-branchesSchema.virtual("blanks", {
+branchesSchema.virtual("blank", {
   ref: "Policyblank",
   localField: "_id",
   foreignField: "branch_id",
-  justOne: false,
+  justOne: true,
   match: {
     Is_given: true,
   },
