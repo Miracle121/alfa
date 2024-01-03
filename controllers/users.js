@@ -2,10 +2,7 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/users");
 const Agents = require("../models/agents");
 const Employee = require("../models/employee/employee");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const { findModelById } = require("../util/findModelById");
-const { config } = require("../config/config");
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
@@ -84,12 +81,6 @@ exports.UpdateUsers = asyncHandler(async (req, res, next) => {
 
   const user = await findModelById(User, userId);
 
-  if (!user) {
-    const error = new Error("Object  not found");
-    error.statusCode = 404;
-    throw error;
-  }
-
   user.agent_Id = agent_Id;
   user.emp_Id = emp_id;
   user.branch_Id = branch_Id;
@@ -101,7 +92,7 @@ exports.UpdateUsers = asyncHandler(async (req, res, next) => {
   const data = await user.save();
 
   res.status(200).json({
-    message: `ma'lumotlar o'zgartirildi`,
+    message: "User data updated successfully.",
     data: data,
   });
 });
@@ -115,7 +106,7 @@ exports.DeleteUsers = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     message: "Region is deletes",
-    data: data,
+    data,
   });
 });
 
