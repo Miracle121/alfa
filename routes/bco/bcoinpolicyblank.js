@@ -1,16 +1,54 @@
-const express = require('express')
+const express = require("express");
 
-const bcoinpolicyblank = require('../../controllers/bco/bcoinpolicyblank')
-const IsAuth = require('../../middleware/is-auth')
+const Bcoinpolicyblank = require("../../models/bco/bcoinpolicyblank");
+const bcoinpolicyblank = require("../../controllers/bco/bcoinpolicyblank");
 
-const router = express.Router()
+const IsAuth = require("../../middleware/is-auth");
+const { advancedResults } = require("../../middleware/advancedResults");
 
-router.get('/',IsAuth,bcoinpolicyblank.getBcoinpolicyblank)
-router.get('/:id',IsAuth,bcoinpolicyblank.getBcoinpolicyblankById)
+const router = express.Router();
 
-router.post('/',IsAuth,bcoinpolicyblank.createBcoinpolicyblank)
-router.put('/:id',IsAuth,bcoinpolicyblank.updateBcoinpolicyblank)
-router.delete('/:id',IsAuth,bcoinpolicyblank.deleteBcoinpolicyblank)
+router.use(IsAuth);
 
+const populateOptions = [
+  { path: "policy_type_id", select: "policy_type_name" },
+  {
+    path: "bco_id",
+    populate: [
+      {
+        path: "policy_type_id",
+        select: "policy_type_name",
+      },
+      {
+        path: "policy_blank_number",
+        select: "blank_number",
+      },
+      {
+        path: "branch_id",
+        select: "branchname",
+      },
+      {
+        path: "employee_id",
+        select: "name",
+      },
+      {
+        path: "statusofbcopolicy",
+        select: "name",
+      },
+    ],
+  },
+  { path: "policy_blank_number", select: "blank_number" },
+];
 
-module.exports = router
+router.get(
+  "/",
+  advancedResults(Bcoinpolicyblank, populateOptions),
+  bcoinpolicyblank.getBcoinpolicyblank
+);
+router.get("/:id", bcoinpolicyblank.getBcoinpolicyblankById);
+
+router.post("/", bcoinpolicyblank.createBcoinpolicyblank);
+router.put("/:id", bcoinpolicyblank.updateBcoinpolicyblank);
+router.delete("/:id", bcoinpolicyblank.deleteBcoinpolicyblank);
+
+module.exports = router;

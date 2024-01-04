@@ -1,289 +1,174 @@
-const Warehouse = require('../../models/bco/warehouse')
-const Typeofbco = require('../../models/bco/typeofbco')
-const Policyblank = require('../../models/bco/policyblank')
+const asyncHandler = require("express-async-handler");
+const Policyblank = require("../../models/bco/policyblank");
+const { findModelById } = require("../../util/findModelById");
+const { ErrorResponse } = require("../../util/errorResponse");
 
-exports.getPolicyblank = async (req, res, next) => {
-    const page = req.query.page || 1
-    const counts = 20 //req.query.count ||20
-    let totalItems
-    try {
-        totalItems = await Policyblank.find()
-            .countDocuments()
-        const data = await Policyblank.find()
-            .populate({
-                path: 'warehous_id',
-                populate: [
-                    {
-                        path: 'policy_type_id',
-                        select: 'policy_type_name'
-                    },
-                    {
-                        path: 'statusofpolicy',
-                        select: 'name'
-                    },
-                    {
-                        path: 'branch_id',
-                        select: 'branchname'
-                    }
-                ]
-            })
-            .populate('branch_id', 'branchname')
-            .populate({
-                path: 'policy_type_id',
-                populate: [
-                    {
-                        path: 'policy_size_id',
-                        select: 'name'
-                    },
-                    {
-                        path: 'language',
-                        select: 'name'
+exports.getPolicyblank = asyncHandler(async (req, res, next) => {
+  res.status(200).json(res.advancedResults);
+});
 
-                    }
-                ]
-            })
-            .populate({
-                path: 'policy_id',
-                populate: [
-                    {
-                        path: 'agreementsId',
-                        select: 'agreementsnumber'
-                    },
-                    {
-                        path: 'branch_id',
-                        select: 'inn'
-                    },
-                    {
-                        path: 'typeofpoliceId',
-                        select: 'name'
-                    },
-                    {
-                        path: 'statusofpolicy',
-                        select: 'name'
-                    },
-                    {
-                        path: 'statusofpayment',
-                        select: 'name'
-                    }
+exports.getPolicyblankById = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
 
-                ]
-            })
-            .populate('status_blank','name')
+  const populate = [
+    {
+      path: "branch_id",
+      populate: [
+        {
+          path: "policy_type_id",
+          select: "name",
+        },
+        {
+          path: "statusofpolicy",
+          select: "name",
+        },
+      ],
+    },
+    {
+      path: "policy_type_id",
+      populate: [
+        {
+          path: "policy_size_id",
+          select: "name",
+        },
+        {
+          path: "language",
+          select: "name",
+        },
+      ],
+    },
+    {
+      path: "policy_id",
+      populate: [
+        {
+          path: "agreementsId",
+          select: "agreementsnumber",
+        },
+        {
+          path: "typeofpoliceId",
+          select: "name",
+        },
+        {
+          path: "statusofpolicy",
+          select: "name",
+        },
+        {
+          path: "statusofpayment",
+          select: "name",
+        },
+      ],
+    },
+  ];
 
-            .skip((page - 1) * counts).limit(counts)
-        res.status(200).json({
-            message: `Warehouse Insurance`,
-            data: data,
-            totalItems: totalItems
-        })
-    } catch (err) {
-        if (!err.statusCode) {
-            err.statusCode = 500
-        }
-        next(err)
-    }
-}
+  const result = await findModelById(Policyblank, AgesId, populate);
 
-exports.getPolicyblankById = async (req, res, next) => {
-    const AgesId = req.params.id
-    try {
-        const result = await Policyblank.findById(AgesId)
-            .populate({
-                path: 'branch_id',
-                populate: [
-                    {
-                        path: 'policy_type_id',
-                        select: 'name'
-                    },
-                    {
-                        path: 'statusofpolicy',
-                        select: 'name'
-                    }
-                ]
-            })
-            .populate({
-                path: 'policy_type_id',
-                populate: [
-                    {
-                        path: 'policy_size_id',
-                        select: 'name'
-                    },
-                    {
-                        path: 'language',
-                        select: 'name'
+  res.status(200).json({
+    message: `Warehouse Insurance`,
+    data: result,
+  });
+});
 
-                    }
-                ]
-            })
-            .populate({
-                path: 'policy_id',
-                populate: [
-                    {
-                        path: 'agreementsId',
-                        select: 'agreementsnumber'
-                    },
-                    {
-                        path: 'typeofpoliceId',
-                        select: 'name'
-                    },
-                    {
-                        path: 'statusofpolicy',
-                        select: 'name'
-                    },
-                    {
-                        path: 'statusofpayment',
-                        select: 'name'
-                    }
+exports.createPolicyblank = asyncHandler(async (req, res, next) => {
+  const { branch_id, policy_type_id, blank_number, Is_usedblank } = req.body;
 
-                ]
-            })
-        if (!result) {
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        res.status(200).json({
-            message: `Warehouse Insurance`,
-            data: result
-        })
-    } catch (err) {
-        if (!err.statusCode) {
-            err.statusCode = 500
-        }
-        next(err)
-    }
-}
+  const result = await Policyblank.create({
+    branch_id,
+    policy_type_id,
+    blank_number,
+    Is_usedblank,
+    creatorId: req.user._id,
+  });
 
-exports.createPolicyblank = async (req, res, next) => {
+  const results = await result.save();
 
-    const branch_id = req.body.branch_id
-    const policy_type_id = req.body.policy_type_id
-    const blank_number = req.body.blank_number
-    const Is_usedblank = req.body.Is_usedblank
+  res.status(201).json({
+    message: `Creat new policy blank`,
+    data: results,
+    creatorId: req.user._id,
+  });
+});
 
-    const result = new Policyblank({
-        branch_id: branch_id,
-        policy_type_id: policy_type_id,
-        blank_number: blank_number,
-        Is_usedblank: Is_usedblank,
-        creatorId: req.userId
-    })
-    const results = await result.save()
-    res.status(200).json({
-        message: `Creat new policy blank`,
-        data: results,
-        creatorId: req.userId,
-    })
-}
+exports.updatePolicyblank = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
 
-exports.updatePolicyblank = async (req, res, next) => {
-    const AgesId = req.params.id
-    const warehouse_id = req.body.warehouse_id
-    const policy_type_id = req.body.policy_type_id
-    const blank_number = req.body.blank_number
-    const Is_usedblank = req.body.Is_usedblank
-    try {
-        const result = await Policyblank.findById(AgesId)
-        if (!result) {
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        result.warehouse_id = warehouse_id
-        result.policy_type_id = policy_type_id
-        result.blank_number = blank_number
-        result.policy_count = policy_count
-        result.Is_usedblank = Is_usedblank
+  const { warehouse_id, policy_type_id, blank_number, Is_usedblank } = req.body;
 
-        const data = await result.save()
-        res.status(200).json({
-            message: `Update policy blank`,
-            data: data
-        })
-    } catch (err) {
-        if (!err.statusCode) {
-            const error = new Error('Intenall error11111')
-            error.statusCode = 500
-            throw error
-        }
-        next(err)
-    }
-}
+  const result = await findModelById(Policyblank, AgesId);
 
-exports.deletePolicyblank = async (req, res, next) => {
-    const AgesId = req.params.id
-    try {
-        const deleteddata = await Policyblank.findById(AgesId)
-        if (!deleteddata) {
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        if (deleteddata.creatorId.toString() !== req.userId) {
-            const error = new Error('bu userni ochirishga imkoni yoq')
-            error.statusCode = 403
-            throw error
-        }
-        const data = await Policyblank.findByIdAndRemove(AgesId)
-        res.status(200).json({
-            message: 'Policy blank is deleted',
-            data: data
-        })
-    } catch (err) {
-        if (!err.statusCode) {
-            err.statusCode = 500
-        }
-        next(err)
-    }
-}
+  Object.assign(result, {
+    warehouse_id,
+    policy_type_id,
+    blank_number,
+    Is_usedblank,
+  });
 
-exports.getPolicyblanknumberByTypeId = async (req, res, next) => {
-    const policy_type_id = req.params.id
-    try {
-        const result = await Policyblank.find({ policy_type_id: policy_type_id } && { Is_usedblank: false }).select("blank_number")
-        // .populate({
-        //     path:'warehouse_id',
-        //     populate:[
-        //         { 
-        //             path: 'policy_type_id',
-        //             select: 'name'
-        //         },
-        //         { 
-        //             path: 'statusofpolicy',
-        //             select: 'name'
-        //         }
-        //     ]
-        // })
-        //  .populate({
-        //     path: 'policy_type_id',
-        //     populate:[
-        //         { 
-        //         path: 'policy_size_id',
-        //         select: 'name'
-        //     },
-        //     { 
-        //         path: 'language',
-        //         select: 'name'
+  const data = await result.save();
 
-        //     }
-        //     ]
-        //  })           
+  res.status(200).json({
+    message: `Update policy blank`,
+    data: data,
+  });
+});
 
-        if (!result) {
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        res.status(200).json({
-            message: `Policy blank by type of bco`,
-            data: result
-        })
-    } catch (err) {
-        if (!err.statusCode) {
-            err.statusCode = 500
-        }
-        next(err)
-    }
+exports.deletePolicyblank = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
 
-}
+  const deleteddata = await findModelById(Policyblank, AgesId);
 
+  if (deleteddata.creatorId.toString() !== req.user._id) {
+    const error = new ErrorResponse("Bu userni ochirishga imkoni yoq", 403);
+    throw error;
+  }
+
+  const data = await Policyblank.findByIdAndRemove(AgesId);
+
+  res.status(200).json({
+    message: "Policy blank is deleted",
+    data: data,
+  });
+});
+
+exports.getPolicyblanknumberByTypeId = asyncHandler(async (req, res, next) => {
+  const policy_type_id = req.params.id;
+
+  const result = await Policyblank.find(
+    { policy_type_id } && { Is_usedblank: false }
+  ).select("blank_number");
+  // .populate({
+  //     path:'warehouse_id',
+  //     populate:[
+  //         {
+  //             path: 'policy_type_id',
+  //             select: 'name'
+  //         },
+  //         {
+  //             path: 'statusofpolicy',
+  //             select: 'name'
+  //         }
+  //     ]
+  // })
+  //  .populate({
+  //     path: 'policy_type_id',
+  //     populate:[
+  //         {
+  //         path: 'policy_size_id',
+  //         select: 'name'
+  //     },
+  //     {
+  //         path: 'language',
+  //         select: 'name'
+
+  //     }
+  //     ]
+  //  })
+
+  if (!result) {
+    const error = new ErrorResponse("Object  not found", 403);
+    throw error;
+  }
+
+  res.status(200).json({
+    message: `Policy blank by type of bco`,
+    data: result,
+  });
+});

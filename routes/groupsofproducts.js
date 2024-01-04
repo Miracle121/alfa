@@ -1,16 +1,27 @@
-const express = require('express')
-const {body} = require('express-validator')
-const groupsofproducts = require('../controllers/groupsofproducts')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
+const groupsofproducts = require("../controllers/groupsofproducts");
+const Groupsofproducts = require("../models/groupsofproducts");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,groupsofproducts.getGroupsofProducts)
-router.get('/:id',IsAuth,groupsofproducts.getGroupsofProductsById)
+router.use(IsAuth);
 
-router.post('/',IsAuth,[body('name').trim().isLength({min:3})],groupsofproducts.createGroupsofProducts)
-router.put('/:id',IsAuth,groupsofproducts.updateGroupsofProducts)
-router.delete('/:id',IsAuth,groupsofproducts.deleteGroupsofProducts)
+router.get(
+  "/",
+  advancedResults(Groupsofproducts),
+  groupsofproducts.getGroupsofProducts
+);
+router.get("/:id", groupsofproducts.getGroupsofProductsById);
 
+router.post(
+  "/",
+  [body("name").trim().isLength({ min: 3 })],
+  groupsofproducts.createGroupsofProducts
+);
+router.put("/:id", groupsofproducts.updateGroupsofProducts);
+router.delete("/:id", groupsofproducts.deleteGroupsofProducts);
 
-module.exports = router
+module.exports = router;

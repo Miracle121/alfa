@@ -1,14 +1,21 @@
-const express = require('express')
-const {body} = require('express-validator')
-const statusofpayment = require('../controllers/statusofpayment')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const statusofpayment = require("../controllers/statusofpayment");
+const Statusofpayment = require("../models/statusofpayment");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,statusofpayment.getStatusofpayment)
-router.get('/:id',IsAuth,statusofpayment.getStatusofpaymentById)
-router.post('/',IsAuth,statusofpayment.createStatusofpayment)
-router.put('/:id',IsAuth,statusofpayment.updateStatusofpayment)
-router.delete('/:id',IsAuth,statusofpayment.deleteStatusofpayment)
+router.use(IsAuth);
 
-module.exports = router
+router.get(
+  "/",
+  advancedResults(Statusofpayment),
+  statusofpayment.getStatusofpayment
+);
+router.get("/:id", statusofpayment.getStatusofpaymentById);
+router.post("/", statusofpayment.createStatusofpayment);
+router.put("/:id", statusofpayment.updateStatusofpayment);
+router.delete("/:id", statusofpayment.deleteStatusofpayment);
+
+module.exports = router;

@@ -1,20 +1,25 @@
-const express = require('express')
-const {body} = require('express-validator')
-const additionaldocuments = require('../controllers/additionaldocuments')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const additionaldocuments = require("../controllers/additionaldocuments");
+const Additionaldocuments = require("../models/additionaldocuments");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,additionaldocuments.getadditionaldocuments)
-router.get('/:id',IsAuth,additionaldocuments.getAdditionaldocumentsById)
+router.use(IsAuth);
 
-router.post('/',IsAuth,additionaldocuments.createAdditionaldocuments)
-router.put('/:id',IsAuth,additionaldocuments.updateAdditionaldocuments)
-router.delete('/:id',IsAuth,additionaldocuments.deleteAdditionaldocuments)
+router.get(
+  "/",
+  advancedResults(Additionaldocuments),
+  additionaldocuments.getadditionaldocuments
+);
+router.get("/:id", additionaldocuments.getAdditionaldocumentsById);
 
-// router.post('/',IsAuth,additionaldocuments.upload)
-router.get('/files/:name',IsAuth,additionaldocuments.download)
+router.post("/", additionaldocuments.createAdditionaldocuments);
+router.put("/:id", additionaldocuments.updateAdditionaldocuments);
+router.delete("/:id", additionaldocuments.deleteAdditionaldocuments);
 
+// router.post('/',additionaldocuments.upload)
+router.get("/files/:name", additionaldocuments.download);
 
-
-module.exports = router
+module.exports = router;

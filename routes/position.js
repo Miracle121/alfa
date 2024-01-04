@@ -1,15 +1,22 @@
-const express = require('express')
-const {body} = require('express-validator')
-const position = require('../controllers/position')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
+const position = require("../controllers/position");
+const Position = require("../models/position");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,position.getPosition)
-router.get('/:id',IsAuth,position.getPositionById)
-router.post('/',IsAuth,[body('name').trim().isLength({min:3})],position.createPosition)
-router.put('/:id',IsAuth,position.updatePosition)
-router.delete('/:id',IsAuth,position.deletePosition)
+router.use(IsAuth);
 
+router.get("/", advancedResults(Position), position.getPosition);
+router.get("/:id", position.getPositionById);
+router.post(
+  "/",
+  [body("name").trim().isLength({ min: 3 })],
+  position.createPosition
+);
+router.put("/:id", position.updatePosition);
+router.delete("/:id", position.deletePosition);
 
-module.exports = router
+module.exports = router;

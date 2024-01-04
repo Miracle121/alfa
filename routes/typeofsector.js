@@ -1,16 +1,23 @@
-const express = require('express')
-const {body} = require('express-validator')
-const typeofsector = require('../controllers/typeofsector')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
+const typeofsector = require("../controllers/typeofsector");
+const Typeofsector = require("../models/typeofsector");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,typeofsector.getTypeofsector)
-router.get('/:id',IsAuth,typeofsector.getTypeofsectorId)
+router.use(IsAuth);
 
-router.post('/',IsAuth,[body('name').trim().isLength({min:3})],typeofsector.createTypeofsector)
-router.put('/:id',IsAuth,typeofsector.updateTypeofsector)
-router.delete('/:id',IsAuth,typeofsector.deleteTypeofsector)
+router.get("/", advancedResults(Typeofsector), typeofsector.getTypeofsector);
+router.get("/:id", typeofsector.getTypeofsectorId);
 
+router.post(
+  "/",
+  [body("name").trim().isLength({ min: 3 })],
+  typeofsector.createTypeofsector
+);
+router.put("/:id", typeofsector.updateTypeofsector);
+router.delete("/:id", typeofsector.deleteTypeofsector);
 
-module.exports = router
+module.exports = router;

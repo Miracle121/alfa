@@ -1,16 +1,23 @@
-const express = require('express')
-const {body} = require('express-validator')
-const typeofendorsements = require('../controllers/typeofendorsements')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
+const typeofendorsements = require("../controllers/typeofendorsements");
+const Typeofendorsements = require("../models/typeofendorsements");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,typeofendorsements.getTypeofendorsements)
-router.get('/:id',IsAuth,typeofendorsements.getTypeofendorsementsById)
+router.use(IsAuth);
 
-router.post('/',IsAuth,typeofendorsements.createTypeOfendorsements)
-router.put('/:id',IsAuth,typeofendorsements.updateTypeofendorsements)
-router.delete('/:id',IsAuth,typeofendorsements.deleteTypeOfendorsements)
+router.get(
+  "/",
+  advancedResults(Typeofendorsements),
+  typeofendorsements.getTypeofendorsements
+);
+router.get("/:id", typeofendorsements.getTypeofendorsementsById);
 
+router.post("/", typeofendorsements.createTypeOfendorsements);
+router.put("/:id", typeofendorsements.updateTypeofendorsements);
+router.delete("/:id", typeofendorsements.deleteTypeOfendorsements);
 
-module.exports = router
+module.exports = router;

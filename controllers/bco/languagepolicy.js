@@ -1,115 +1,69 @@
-const Languagepolicy = require('../../models/bco/languagepolicy')
+const asyncHandler = require("express-async-handler");
+const Languagepolicy = require("../../models/bco/languagepolicy");
+const { ErrorResponse } = require("../../util/errorResponse");
+const { findModelById } = require("../../util/findModelById");
 
+exports.getLanguagepolicy = asyncHandler(async (req, res, next) => {
+  res.status(200).json(res.advencedResults);
+});
 
+exports.getLanguagepolicyById = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
 
-exports.getLanguagepolicy= async(req,res,next)=>{
-    const page = req.query.page ||1
-    const counts = 20 //req.query.count ||20
-    let totalItems
-    try {
-     totalItems = await Languagepolicy.find().countDocuments()
-     const data = await Languagepolicy.find().skip((page-1)*counts).limit(counts)
-     res.status(200).json({
-         message:`Language Policy  list`,
-         data:data,
-         totalItems:totalItems
-     })
-    } catch (err) {
-        if(!err.statusCode)
-        {
-            err.statusCode =500
-        }
-        next(err)
-    } 
-}
+  const result = await findModelById(Languagepolicy, AgesId);
 
-exports.getLanguagepolicyById = async(req,res,next)=>{
-    const AgesId= req.params.id
-    try {
-        const result= await Languagepolicy.findById(AgesId)
-        if(!result){
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        res.status(200).json({
-            message:`Language Policy  list`,
-            data:result
-        })
-    } catch (err) {
-        if(!err.statusCode)
-        {
-            err.statusCode =500
-        }
-        next(err)
-    }
-}
+  res.status(200).json({
+    message: `Language Policy  list`,
+    data: result,
+  });
+});
 
-exports.createLanguagepolicy = async(req,res,next)=>{
-    const name = req.body.name    
-    const result = new Languagepolicy({
-        name:name,
-        creatorId: req.userId
-    })
-    const results = await result.save()
-    res.status(200).json({
-        message:`Language Policy  added`,
-        data: results,
-        creatorId: req.userId,
-    })
-}
+exports.createLanguagepolicy = asyncHandler(async (req, res, next) => {
+  const name = req.body.name;
 
-exports.updateLanguagepolicy= async(req,res,next)=>{ 
-    const AgesId = req.params.id
-    const name = req.body.name
-    
-    try {
-    const result = await Languagepolicy.findById(AgesId)
-    if(!result){
-        const error = new Error('Object  not found')
-        error.statusCode = 404
-        throw error
-    }
-    result.name= name
- 
-    const data =await result.save()  
-    res.status(200).json({
-        message:`Language Policy changed`,
-        data: data
-    })
-    } catch (err) {
-        if(!err.statusCode){
-            const error = new Error('Intenall error11111')
-            error.statusCode = 500
-            throw error
-        }
-        next(err)
-    }
-}
+  const result = new Languagepolicy({
+    name: name,
+    creatorId: req.user._id,
+  });
 
-exports.deleteLanguagepolicy = async(req,res,next)=>{
-    const AgesId= req.params.id
-    try {
-        const deleteddata = await Languagepolicy.findById(AgesId)
-    if(!deleteddata){
-        const error = new Error('Object  not found')
-        error.statusCode = 404
-        throw error
-    }
-    if(deleteddata.creatorId.toString()!==req.userId){
-        const error = new Error('bu userni ochirishga imkoni yoq')
-        error.statusCode =403
-        throw error
-    }
-    const data=await Languagepolicy.findByIdAndRemove(AgesId)
-    res.status(200).json({
-        message:'Language Policy deleted',
-        data:data   
-    })
-    } catch (err) {
-        if(!err.statusCode){
-            err.statusCode =500
-        }
-        next(err)
-    }
-}
+  await result.save();
+
+  res.status(200).json({
+    message: `Language Policy added`,
+    data: result,
+    creatorId: req.user._id,
+  });
+});
+
+exports.updateLanguagepolicy = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
+  const name = req.body.name;
+
+  const result = await findModelById(Languagepolicy, AgesId);
+
+  result.name = name;
+
+  const data = await result.save();
+
+  res.status(200).json({
+    message: `Language Policy changed`,
+    data,
+  });
+});
+
+exports.deleteLanguagepolicy = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
+
+  const deleteddata = await findModelById(Languagepolicy, AgesId);
+
+  if (deleteddata.creatorId.toString() !== req.user._id) {
+    throw new ErrorResponse("Bu userni ochirishga imkoni yoq", 403);
+  }
+
+  const data = await Languagepolicy.findByIdAndRemove(AgesId);
+
+  res.status(200).json({
+    message: "Language Policy deleted",
+    data,
+  });
+});

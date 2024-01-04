@@ -1,38 +1,34 @@
-const ErrorResponse = require("../utils/errorResponse")
+require("colors");
+const { config } = require("../config/config");
+const { ErrorResponse } = require("../util/errorResponse");
 
-const errorHandler = (err,req,res,next)=>{
-  
-    let error ={...err}
-    error.message = err.message
-    
-    //Log to console for dev
-    // console.log(err.stack.red);
+const errorHandler = (err, req, res, next) => {
+  let error = { ...err }; // Create a shallow copy of the error object
 
-    // Mongoose bad ObjectId
-    if(err.name==='CastError'){
-       
-        const message =`Resource not found with id of ${err.value}`
-        error = new ErrorResponse(message,404)
+  if (config.env === "development") {
+    console.error(err.stack.red); // Log the modified error for debugging
+  }
+  error.message = err.message; // Preserve the original error message
 
+  // Customize error messages and status codes based on error types
+  if (err.name === "CastError") {
+    error = new ErrorResponse(`Resource not found`, 404);
+  } else if (err.code === 11000) {
+    error = new ErrorResponse("Duplicate field entered", 400);
+  } else if (err.name === "ValidationError") {
+    const messages = Object.values(err.errors)
+      .map((e) => e.message)
+      .join(", ");
+    error = new ErrorResponse(messages, 400);
+  } else if (err.name === "JsonWebTokenError") {
+    error = new ErrorResponse("Invalid token", 401);
+  }
 
-    }
-    // Mongoose duplicate key errors 
-    if(err.code ===11000){
-        const message ='Duplicate field value entered'
-        error = new ErrorResponse(message,400)
+  res.status(error.statusCode || 500).json({
+    success: false,
+    error: error.message || "Internal Server Error",
+  });
+};
 
-    }
-    // Mongoose validations error
-    if(err.name==='ValidationError'){
-        const message = Object.values(err.errors).map(val=> val.message)
-        error = new ErrorResponse(message,400)
-    }
+module.exports = { errorHandler };
 
-
-    res.status(error.statusCode||500).json({
-        success:false,
-        error: error.message || 'Server Error'
-    })
-}
-
-module.exports =errorHandler

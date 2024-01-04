@@ -1,54 +1,50 @@
-const { Schema, model } = require('mongoose')
-const policyblankSchema = new Schema({
+const { Schema, model } = require("mongoose");
+const policyblankSchema = new Schema(
+  {
     warehous_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'warehouse',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "warehouse",
+      required: true,
     },
     branch_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'Breanches',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "Branches",
+      required: true,
     },
     policy_type_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'Typeofbco'
+      type: Schema.Types.ObjectId,
+      ref: "Typeofbco",
     },
-
     blank_number: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
+      unique: true,
     },
-    policy_number: {
-        type: String
+    policy: {
+      type: Schema.Types.ObjectId,
+      ref: "Policy",
     },
-    policy_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'Policy'
-    },
-
     Is_usedblank: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
-    
     Is_given: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
-
     status_blank: {
-        type: Schema.Types.ObjectId,
-        ref: 'Statusbcopolicy',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "Statusbcopolicy",
+      required: true,
     },
     creatorId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Users',
-        required: true
-    }
-},
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
+    },
+  },
 
-    { timestamps: true })
+  { timestamps: true }
+);
 
-module.exports = model('Policyblank', policyblankSchema)
+module.exports = model("Policyblank", policyblankSchema);

@@ -1,128 +1,147 @@
-const { Schema, model } = require('mongoose')
-const policySchema = new Schema({
+const { Schema, model } = require("mongoose");
+
+const policySchema = new Schema(
+  {
     branch_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'Breanches',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "Branches",
+      required: true,
     },
-    agreementsId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Agreements',
-        required: true
+    invois: {
+      type: String,
+    },
+    agreementId: {
+      type: Schema.Types.ObjectId,
+      ref: "Agreements",
+      required: true,
     },
     policy_blanknumber: {
-        type: Schema.Types.ObjectId,
-        ref: 'Policyblank',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "Policyblank",
+      required: true,
     },
 
     typeofpoliceId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Typeofpolice',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "Typeofpolice",
+      required: true,
     },
 
     policy_number: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
 
     dateofissue: {
-        type: Date,
-        required: true
+      type: Date,
+      required: true,
     },
     dateofend: {
-        type: Date,
-        required: true
+      type: Date,
+      required: true,
     },
     dateofissueunix: {
-        type: Number,
-
+      type: Number,
     },
     dateofendunix: {
-        type: Number,
+      type: Number,
     },
     copyofdocuments: {
-        type: String,
-        // required: true
+      type: String,
+      // required: true
     },
-    riskId: [{
+    riskId: [
+      {
         riskgroup: {
-            type: Schema.Types.ObjectId,
-            ref: 'Typeofrisks',
-            required: true
+          type: Schema.Types.ObjectId,
+          ref: "Typeofrisks",
+          required: true,
         },
         risk: {
-            type: Schema.Types.ObjectId,
-            ref: 'Risks',
-            required: true
+          type: Schema.Types.ObjectId,
+          ref: "Risks",
+          required: true,
         },
         classeId: {
-            type: Schema.Types.ObjectId,
-            ref: 'Classesofproduct',
-            required: true
+          type: Schema.Types.ObjectId,
+          ref: "Classesofproduct",
+          required: true,
         },
         startdate: {
-            type: Date
+          type: Date,
         },
         enddate: {
-            type: Date
+          type: Date,
         },
         insurancepremium: {
-            type: Number
+          type: Number,
         },
         insurancerate: {
-            type: Number
+          type: Number,
         },
         suminsured: {
-            type: Number
-        }
-    }],
-    objectofinsurance: [{
+          type: Number,
+        },
+      },
+    ],
+    objectofinsurance: [
+      {
         typeofobjects: {
-            type: Schema.Types.ObjectId,
-            ref: 'Typeofobjects',
-            required: true
+          type: Schema.Types.ObjectId,
+          ref: "Typeofobjects",
+          required: true,
         },
         objects: {
-            type: Schema.Types.ObjectId,
-            ref: 'Objects',
-            required: true
+          type: Schema.Types.ObjectId,
+          ref: "Objects",
+          required: true,
         },
         quantity: {
-            type: Number,
-            required: true
+          type: Number,
+          required: true,
         },
-        regionId: {
-            type: Schema.Types.ObjectId,
-            ref: 'Region',
-            required: true
+        region: {
+          type: Schema.Types.ObjectId,
+          ref: "Region",
+          required: true,
         },
         districtsId: {
-            type: Schema.Types.ObjectId,
-            ref: 'Districts',
-            required: true
-        }
-    }],
+          type: Schema.Types.ObjectId,
+          ref: "District",
+          required: true,
+        },
+      },
+    ],
 
     statusofpolicy: {
-        type: Schema.Types.ObjectId,
-        ref: 'Statusofpolicy',
-        required: true
-
+      type: Schema.Types.ObjectId,
+      ref: "Statusofpolicy",
+      required: true,
     },
     statusofpayment: {
-        type: Schema.Types.ObjectId,
-        ref: 'Statusofpayment',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "Statusofpayment",
+      required: true,
+    },
+    typeofpayment: {
+      type: Schema.Types.ObjectId,
+      ref: "Typeofpayment",
+      required: true,
     },
     creatorId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Users',
-        required: true
-    }
-},
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
+    },
+  },
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
 
-    { timestamps: true })
+policySchema.virtual("agreement", {
+  ref: "Agreements",
+  localField: "agreementsId",
+  foreignField: "_id",
+  justOne: true,
+});
 
-module.exports = model('Policy', policySchema)
+module.exports = model("Policy", policySchema);

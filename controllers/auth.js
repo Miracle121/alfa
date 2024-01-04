@@ -1,98 +1,58 @@
-const User = require('../models/users')
-const {validationResult} = require('express-validator')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const asyncHandler = require("express-async-handler");
+const { validationResult } = require("express-validator");
+const User = require("../models/users");
+const { ErrorResponse } = require("../util/errorResponse");
 
-exports.signupUsers = (req,res,next)=>{   
+exports.signupUsers = asyncHandler(async (req, res, next) => {
+  // Validate request parameters
+  const errors = validationResult(req);
 
-    const errors = validationResult(req)
-    if(!errors.isEmpty()){
-        console.log(errors);
-        const error = new Error('Validation error==================')
-        error.statusCode = 422
-        error.data = errors.array()
-        throw error
-    }
+  if (!errors.isEmpty()) {
+    const error = new ErrorResponse("Validation error", 422);
+    error.data = errors.array();
+    throw error;
+  }
 
-    const name = req.body.name
-    const secondname = req.body.secondname
-    const middlename = req.body.middlename
-    const email = req.body.email  
-    const password= req.body.password
-  
+  // Extract user input
+  const { name, middlename, email, password } = req.body;
 
+  // Check email exsist
+  const checkEmail = await User.findOne({ email });
+  if (checkEmail) throw new ErrorResponse("Email already exsist", 400);
 
-    bcrypt.hash(password,12)
-    .then(hashpass=>{
-        const user = new User({
-            email:email,
-            password:hashpass,
-            name:name,
-            secondname:secondname,
-            middlename:middlename
-           
-        })
-        return user.save()
-    })
-    .then(result=>{
-        res.status(201).json({
-            message:'User bazaga kiritildi',
-            result
-        })
-    })
-    .catch(err=>{
-        if(!err.statusCode){
-            const error = new Error('Intenall error11111')
-            error.statusCode = 500
-            throw error
-        }
-        next(err)
-    })
-}
+  // Create a new user
+  const user = await User.create({
+    name,
+    middlename,
+    email,
+    password,
+  });
 
-exports.login = (req,res,next)=>{
-    const email = req.body.email
-    const password = req.body.password
-    let userLoad
-    User.findOne({email:email})
-    .then(user=>{
-        if(!user){
-            const error = new Error('email is not found')
-            error.statusCode = 401
-            throw error
-        }
-       
-        userLoad =user
-        return bcrypt.compare(password,user.password)
-    })
-    .then(isEqual=>{
-        if(!isEqual){
-            const error = new Error('email or password wrong')
-            error.statusCode = 401
-            throw error
-        }
-        const token = jwt.sign({
-           email:userLoad.email,
-           userId: userLoad._id.toString(),
-           regionId: userLoad.regionId,
-           userDestId: userLoad.districtsId
-        },
-        'testtest!@#123',
-        {expiresIn : '5d'})
-        res.status(200).json({
-            token:token,
-            userId: userLoad._id.toString(),
-            accountrole: userLoad.accountrole,
-            
-        })
-    })
-    .catch(err=>{
-        if(!err.statusCode){
-            const error = new Error('Intenall error11111')
-            error.statusCode = 500
-            throw error
-        }
-        next(err)
-    })
+  res.status(201).json({
+    message: "User successfully registered",
+    data: user,
+  });
+});
 
-}
+exports.login = asyncHandler(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password)
+    throw new ErrorResponse("Please provide an email and password", 400);
+
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user) throw new ErrorResponse("Invalid credebtials", 404);
+
+  const isMatch = await user.matchPassword(password);
+
+  if (!isMatch) throw new ErrorResponse("Invalid credebtials", 401);
+
+  const token = user.getSignedJwtToken();
+
+  res.status(200).json({
+    token,
+    userId: user._id.toString(),
+    accountrole: user.accountrole,
+  });
+});

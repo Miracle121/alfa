@@ -1,16 +1,18 @@
-const {Schema,model} = require('mongoose')
-const accountrolesSchema = new Schema({
-    name:{
-        type:String,
-        required:true
-        },    
-    creatorId:{
-        type: Schema.Types.ObjectId,
-        ref: 'Users',
-        required: true
-    }  
-},
+const { Schema, model } = require("mongoose");
+const accountrolesSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    creatorId: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
+    },
+  },
 
-{ timestamps:true })
+  { timestamps: true }
+);
 
-module.exports = model('Accountroles',accountrolesSchema)
+module.exports = model("Accountroles", accountrolesSchema);

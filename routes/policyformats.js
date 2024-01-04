@@ -1,16 +1,23 @@
-const express = require('express')
-const {body} = require('express-validator')
-const policyformats = require('../controllers/policyformats')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
+const policyformats = require("../controllers/policyformats");
+const Policyformats = require("../models/policyformats");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,policyformats.getPolicyformats)
-router.get('/:id',IsAuth,policyformats.getPolicyformatsId)
+router.use(IsAuth);
 
-router.post('/',IsAuth,[body('name').trim().isLength({min:3})],policyformats.createPolicyformats)
-router.put('/:id',IsAuth,policyformats.updatePolicyformats)
-router.delete('/:id',IsAuth,policyformats.deletePolicyformats)
+router.get("/", advancedResults(Policyformats), policyformats.getPolicyformats);
+router.get("/:id", policyformats.getPolicyformatsId);
 
+router.post(
+  "/",
+  [body("name").trim().isLength({ min: 3 })],
+  policyformats.createPolicyformats
+);
+router.put("/:id", policyformats.updatePolicyformats);
+router.delete("/:id", policyformats.deletePolicyformats);
 
-module.exports = router
+module.exports = router;

@@ -1,114 +1,67 @@
-const StatusActs = require('../../models/bco/status_acts')
+const asyncHandler = require("express-async-handler");
+const StatusActs = require("../../models/bco/status_acts");
+const { findModelById } = require("../../util/findModelById");
+const { ErrorResponse } = require("../../util/errorResponse");
 
+exports.getStatusActs = asyncHandler(async (req, res, next) => {
+  res.status(200).json(res.advancedResults);
+});
 
-exports.getStatusActs= async(req,res,next)=>{
-    const page = req.query.page ||1
-    const counts = 20 //req.query.count ||20
-    let totalItems
-    try {
-     totalItems = await StatusActs.find().countDocuments()
-     const data = await StatusActs.find().skip((page-1)*counts).limit(counts)
-     res.status(200).json({
-         message:`Status of  Acts`,
-         data:data,
-         totalItems:totalItems
-     })
-    } catch (err) {
-        if(!err.statusCode)
-        {
-            err.statusCode =500
-        }
-        next(err)
-    } 
-}
+exports.getStatusActsById = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
 
-exports.getStatusActsById = async(req,res,next)=>{
-    const AgesId= req.params.id
-    try {
-        const result= await StatusActs.findById(AgesId)
-        if(!result){
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        res.status(200).json({
-            message:`Status of  Acts`,
-            data:result
-        })
-    } catch (err) {
-        if(!err.statusCode)
-        {
-            err.statusCode =500
-        }
-        next(err)
-    }
-}
+  const result = await findModelById(StatusActs, AgesId);
 
-exports.createStatusActs = async(req,res,next)=>{
-    const name = req.body.name    
-    const result = new StatusActs({
-        name:name,
-        creatorId: req.userId
-    })
-    const results = await result.save()
-    res.status(200).json({
-        message:`Status of  Acts`,
-        data: results,
-        creatorId: req.userId,
-    })
-}
+  res.status(200).json({
+    message: `Status of  Acts`,
+    data: result,
+  });
+});
 
-exports.updateStatusActs= async(req,res,next)=>{ 
-    const AgesId = req.params.id
-    const name = req.body.name
-    
-    try {
-    const result = await StatusActs.findById(AgesId)
-    if(!result){
-        const error = new Error('Object  not found')
-        error.statusCode = 404
-        throw error
-    }
-    result.name= name
- 
-    const data =await result.save()  
-    res.status(200).json({
-        message:`Status of Acts`,
-        data: data
-    })
-    } catch (err) {
-        if(!err.statusCode){
-            const error = new Error('Intenall error11111')
-            error.statusCode = 500
-            throw error
-        }
-        next(err)
-    }
-}
+exports.createStatusActs = asyncHandler(async (req, res, next) => {
+  const name = req.body.name;
+  const result = new StatusActs({
+    name: name,
+    creatorId: req.user._id,
+  });
+  const results = await result.save();
+  res.status(200).json({
+    message: `Status of  Acts`,
+    data: results,
+    creatorId: req.user._id,
+  });
+});
 
-exports.deleteStatusActs = async(req,res,next)=>{
-    const AgesId= req.params.id
-    try {
-        const deleteddata = await StatusActs.findById(AgesId)
-    if(!deleteddata){
-        const error = new Error('Object  not found')
-        error.statusCode = 404
-        throw error
-    }
-    if(deleteddata.creatorId.toString()!==req.userId){
-        const error = new Error('bu userni ochirishga imkoni yoq')
-        error.statusCode =403
-        throw error
-    }
-    const data=await StatusActs.findByIdAndRemove(AgesId)
-    res.status(200).json({
-        message:'Status of  Acts',
-        data:data   
-    })
-    } catch (err) {
-        if(!err.statusCode){
-            err.statusCode =500
-        }
-        next(err)
-    }
-}
+exports.updateStatusActs = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
+  const name = req.body.name;
+
+  const result = await findModelById(StatusActs, AgesId);
+
+  result.name = name;
+
+  const data = await result.save();
+
+  res.status(200).json({
+    message: `Status of Acts`,
+    data: data,
+  });
+});
+
+exports.deleteStatusActs = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
+
+  const deleteddata = await findModelById(StatusActs, AgesId);
+
+  if (deleteddata.creatorId.toString() !== req.user._id) {
+    const error = new ErrorResponse("Bu userni ochirishga imkoni yoq", 403);
+    throw error;
+  }
+
+  const data = await StatusActs.findByIdAndRemove(AgesId);
+
+  res.status(200).json({
+    message: "Status of  Acts",
+    data: data,
+  });
+});

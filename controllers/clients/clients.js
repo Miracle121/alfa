@@ -1,340 +1,179 @@
-const Clients = require('../../models/clients/clients')
-const Agents = require('../../models/agents')
-// const User = require('../models/users')
-const moment = require('moment')
+const asyncHandler = require("express-async-handler");
+const Clients = require("../../models/clients/clients");
+const Agents = require("../../models/agents");
+const { findModelById } = require("../../util/findModelById");
+const { ErrorResponse } = require("../../util/errorResponse");
 
-exports.getClients = async (req, res, next) => {
-    const page = req.query.page || 1
-    const counts = 20 //req.query.count ||20
-    let totalItems
-    try {
-        totalItems = await Clients.find().countDocuments()
-        const data = await Clients.find()
-            .populate('branch', 'branchname')
-            .populate('typeofpersons', 'name')
-            .populate({
-                path: 'forindividualsdata',
-                populate: [
-                    {
-                        path: 'gender',
-                        select: 'name'
-                    },
-                    {
-                        path: 'citizenship',
-                        select: 'name'
-                    },
-                    {
-                        path: 'typeofdocument',
-                        select: 'name'
-                    },
-                    {
-                        path: 'regions',
-                        select: 'name'
-                    },
-                    {
-                        path: 'districts',
-                        select: 'name'
-                    },
+exports.getClients = asyncHandler(async (req, res, next) => {
+  res.status(200).json(res.advancedResults);
+});
 
+exports.getClientsById = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
 
-                ]
-            })
-            .populate({
-                path: 'corporateentitiesdata',
-                populate: [
-                    {
-                        path: 'regionId',
-                        select: 'name'
-                    },
-                    {
-                        path: 'districts',
-                        select: 'name'
-                    },
-                    {
-                        path: 'employees',
-                        populate: [
-                            {
-                                path: 'positions',
-                                select: 'name'
-                            },
-                            {
-                                path: 'typeofdocumentsformanager',
-                                select: 'name'
-                            },
-                        ]
-                    }
-                ]
-            })
-            .skip((page - 1) * counts).limit(counts)
-        res.status(200).json({
-            message: `Clients List`,
-            data: data,
-            totalItems: totalItems
-        })
-    } catch (err) {
+  // Populate options
+  const populateOptions = [
+    { path: "branch", select: "branchname" },
+    { path: "typeofpersons", select: "name" },
+    {
+      path: "forindividualsdata",
+      populate: [{ path: "gender", select: "name" }],
+    },
+    {
+      path: "corporateentitiesdata",
+      populate: [
+        { path: "region", select: "name" },
+        { path: "districts", select: "name" },
+        {
+          path: "employees",
+          populate: [
+            { path: "positions", select: "name" },
+            { path: "typeofdocumentsformanager", select: "name" },
+          ],
+        },
+      ],
+    },
+  ];
 
-        next(err)
-    }
-}
+  const result = await findModelById(Clients, AgesId, populateOptions);
 
-exports.getClientsById = async (req, res, next) => {
-    const AgesId = req.params.id
-    try {
-        const result = await Clients.findById(AgesId)
-            .populate('branch', 'branchname')
-            .populate('typeofpersons', 'name')
-            .populate({
-                path: 'forindividualsdata',
-                populate: [
-                    {
-                        path: 'gender',
-                        select: 'name'
-                    },
-                ]
-            })
-            .populate({
-                path: 'corporateentitiesdata',
-                populate: [
-                    {
-                        path: 'regionId',
-                        select: 'name'
-                    },
-                    {
-                        path: 'districts',
-                        select: 'name'
-                    },
-                    {
-                        path: 'employees',
-                        populate: [
-                            {
-                                path: 'positions',
-                                select: 'name'
-                            },
-                            {
-                                path: 'typeofdocumentsformanager',
-                                select: 'name'
-                            },
-                        ]
-                    }
-                ]
-            })
-        if (!result) {
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        res.status(200).json({
-            message: `Clients List`,
-            data: result
-        })
-    }
-    catch (err) {
+  res.status(200).json({
+    message: `Clients List`,
+    data: result,
+  });
+});
 
-        next(err)
-    }
-}
+exports.createClients = asyncHandler(async (req, res, next) => {
+  const {
+    inn,
+    branch,
+    typeofpersons,
+    forindividualsdata,
+    corporateentitiesdata,
+    isUsedourpanel,
+    isUserRestAPI,
+  } = req.body;
 
-exports.createClients = async (req, res, next) => {
-    const inn = req.body.inn
-    const branch = req.body.branch
-    const typeofpersons = req.body.typeofpersons
-    let forindividualsdata = req.body.forindividualsdata || null
-    let corporateentitiesdata = req.body.corporateentitiesdata || null
-    const isUsedourpanel = req.body.isUsedourpanel
-    const isUserRestAPI = req.body.isUserRestAPI
-    try {
-        const inn1 = await Clients.find({ "inn": inn })
-        if (inn1.length === 0) {
-            const result = new Clients({
-                inn: inn,
-                branch: branch,
-                typeofpersons: typeofpersons,
-                forindividualsdata: forindividualsdata,
-                corporateentitiesdata: corporateentitiesdata,
-                isUsedourpanel: isUsedourpanel,
-                isUserRestAPI: isUserRestAPI,
-                creatorId: req.userId
-            })
-            const results = await result.save()
-            res.status(200).json({
-                message: `Agents List`,
-                data: results,
-                creatorId: req.userId,
-            })
-        } else {
-            res.status(200).json({
-                message: `Agents List`,
-                data: inn1,
-                creatorId: req.userId,
-            })
-        }
-    } catch (err) {
-        next(err)
-    }
-}
+  const existingClient = await Clients.findOne({ inn });
 
-exports.updateClients = async (req, res, next) => {
-    const AgesId = req.params.id
-    const inn = req.body.inn
-    const branch = req.body.branch
-    const typeofpersons = req.body.typeofpersons
-    let forindividualsdata = req.body.forindividualsdata || null
-    let corporateentitiesdata = req.body.corporateentitiesdata || null
-    const isUsedourpanel = req.body.isUsedourpanel
-    const isUserRestAPI = req.body.isUserRestAPI
+  if (existingClient) {
+    return res.status(200).json({
+      message: "Client already exists",
+      data: existingClient,
+      creatorId: req.user._id,
+    });
+  }
 
-    try {
-        const result = await Clients.findById(AgesId)
-        if (!result) {
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        result.inn = inn
-        result.branch = branch
-        result.typeofpersons = typeofpersons
-        result.forindividualsdata = forindividualsdata
-        result.corporateentitiesdata = corporateentitiesdata
-        result.isUsedourpanel = isUsedourpanel
-        result.isUserRestAPI = isUserRestAPI
+  const newClient = await Clients.create({
+    inn,
+    branch,
+    typeofpersons,
+    forindividualsdata,
+    corporateentitiesdata,
+    isUsedourpanel,
+    isUserRestAPI,
+    creatorId: req.user._id,
+  });
 
-        const data = await result.save()
-        res.status(200).json({
-            message: `Clients List`,
-            data: data
-        })
-    }
-    catch (err) {
-        if (!err.statusCode) {
-            const error = new Error('Intenall error11111')
-            error.statusCode = 500
-            throw error
-        }
-        next(err)
-    }
-}
+  const savedClient = await newClient.save();
 
-exports.deleteClients = async (req, res, next) => {
-    const AgesId = req.params.id
-    try {
-        const deleteddata = await Clients.findById(AgesId)
-        const userdata = await User.find({ "agentId": AgesId })
-        if (!deleteddata) {
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-        if (deleteddata.creatorId.toString() !== req.userId) {
-            const error = new Error('bu userni ochirishga imkoni yoq')
-            error.statusCode = 403
-            throw error
-        }
-        const data = await Clients.findByIdAndRemove(AgesId)
-        const usersdata = await User.findByIdAndRemove(userdata)
-        res.status(200).json({
-            message: 'Clients is deletes',
-            data: data
-        })
-    } catch (err) {
-        if (!err.statusCode) {
-            err.statusCode = 500
-        }
-        next(err)
-    }
-}
+  res.status(201).json({
+    message: "Client created successfully",
+    data: savedClient,
+    creatorId: req.user._id,
+  });
+});
 
-exports.getClientsByInn = async (req, res, next) => {
-    const inn = req.get('inn')
-    try {
-        const clients = await Clients.find({ "inn": inn })
-            .populate('branch', 'branchname')
-            .populate('typeofpersons', 'name')
-            .populate({
-                path: 'forindividualsdata',
-                populate: [
-                    {
-                        path: 'gender',
-                        select: 'name'
-                    },
-                ]
-            })
-            .populate({
-                path: 'corporateentitiesdata',
-                populate: [
-                    {
-                        path: 'regionId',
-                        select: 'name'
-                    },
-                    {
-                        path: 'districts',
-                        select: 'name'
-                    },
-                    {
-                        path: 'employees',
-                        populate: [
-                            {
-                                path: 'positions',
-                                select: 'name'
-                            },
-                            {
-                                path: 'typeofdocumentsformanager',
-                                select: 'name'
-                            },
-                        ]
-                    }
-                ]
-            })
-        const agents = await Agents.find({ "inn": inn })
-            .populate('branch', 'branchname')
-            .populate('typeofpersons', 'name')
-            .populate({
-                path: 'forindividualsdata',
-                populate: [
-                    {
-                        path: 'gender',
-                        select: 'name'
-                    },
-                ]
-            })
-            .populate({
-                path: 'corporateentitiesdata',
-                populate: [
-                    {
-                        path: 'regionId',
-                        select: 'name'
-                    },
-                    {
-                        path: 'districts',
-                        select: 'name'
-                    },
-                    {
-                        path: 'employees',
-                        populate: [
-                            {
-                                path: 'positions',
-                                select: 'name'
-                            },
-                            {
-                                path: 'typeofdocumentsformanager',
-                                select: 'name'
-                            },
-                        ]
-                    }
-                ]
-            })
+exports.updateClients = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
+  const {
+    inn,
+    branch,
+    typeofpersons,
+    forindividualsdata,
+    corporateentitiesdata,
+    isUsedourpanel,
+    isUserRestAPI,
+  } = req.body;
 
-        if (!agents && !clients) {
-                const error = new Error('Object  not found')
-                error.statusCode = 404
-                throw error
-            }
-            res.status(200).json({
-                message: `Clients List`,
-                clients: clients,
-                agents:agents
-            })
+  const result = await findModelById(Clients, AgesId);
 
-    } catch (err) {
-        next(err)
-    }
-}
+  result.inn = inn;
+  result.branch = branch;
+  result.typeofpersons = typeofpersons;
+  result.forindividualsdata = forindividualsdata;
+  result.corporateentitiesdata = corporateentitiesdata;
+  result.isUsedourpanel = isUsedourpanel;
+  result.isUserRestAPI = isUserRestAPI;
+
+  const updatedClient = await result.save();
+
+  res.status(200).json({
+    message: "Client updated successfully",
+    data: updatedClient,
+  });
+});
+
+exports.deleteClients = asyncHandler(async (req, res, next) => {
+  const AgesId = req.params.id;
+
+  const deleteddata = await findModelById(Clients, AgesId);
+
+  if (deleteddata.creatorId.toString() !== req.user._id) {
+    const error = new Error("bu userni ochirishga imkoni yoq");
+    error.statusCode = 403;
+    throw error;
+  }
+
+  const data = await Clients.findByIdAndRemove(AgesId);
+
+  await User.deleteMany({ agent_Id: AgesId });
+
+  res.status(200).json({
+    message: "Clients is deletes",
+    data,
+  });
+});
+
+exports.getClientsByInn = asyncHandler(async (req, res, next) => {
+  const inn = req.get("inn");
+
+  // Populate options
+  const populateOptions = [
+    { path: "branch", select: "branchname" },
+    { path: "typeofpersons", select: "name" },
+    {
+      path: "forindividualsdata",
+      populate: [{ path: "gender", select: "name" }],
+    },
+    {
+      path: "corporateentitiesdata",
+      populate: [
+        { path: "region", select: "name" },
+        { path: "districts", select: "name" },
+        {
+          path: "employees",
+          populate: [
+            { path: "positions", select: "name" },
+            { path: "typeofdocumentsformanager", select: "name" },
+          ],
+        },
+      ],
+    },
+  ];
+
+  const clients = await Clients.find({ inn }).populate(populateOptions);
+
+  const agents = await Agents.find({ inn }).populate(populateOptions);
+
+  if (!agents && !clients) {
+    const error = new ErrorResponse("Object  not found", 404);
+    throw error;
+  }
+
+  res.status(200).json({
+    message: `Clients List`,
+    clients: clients,
+    agents: agents,
+  });
+});

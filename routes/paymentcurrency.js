@@ -1,16 +1,22 @@
-const express = require('express')
-const {body} = require('express-validator')
-const paymentcurrency = require('../controllers/paymentcurrency')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const paymentcurrency = require("../controllers/paymentcurrency");
+const Paymentcurrency = require("../models/paymentcurrency");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,paymentcurrency.getPaymentcurrency)
-router.get('/:id',IsAuth,paymentcurrency.getPaymentcurrencyId)
+router.use(IsAuth);
 
-router.post('/',IsAuth,paymentcurrency.createPaymentcurrency)
-router.put('/:id',IsAuth,paymentcurrency.updatePaymentcurrency)
-router.delete('/:id',IsAuth,paymentcurrency.deletePaymentcurrency)
+router.get(
+  "/",
+  advancedResults(Paymentcurrency),
+  paymentcurrency.getPaymentcurrency
+);
+router.get("/:id", paymentcurrency.getPaymentcurrencyId);
 
+router.post("/", paymentcurrency.createPaymentcurrency);
+router.put("/:id", paymentcurrency.updatePaymentcurrency);
+router.delete("/:id", paymentcurrency.deletePaymentcurrency);
 
-module.exports = router
+module.exports = router;

@@ -1,20 +1,23 @@
-const express = require('express')
-const {body} = require('express-validator')
-const transactionlog = require('../../controllers/billing/transactionlog')
-// const IsAuth = require('../../middleware/is-auth')
-const IsAuth = require('../../middleware/is-auth')
+const express = require("express");
+const transactionlog = require("../../controllers/billing/transactionlog");
+const Transactionlog = require("../../models/billing/transactionlog");
+const IsAuth = require("../../middleware/is-auth");
+const { advancedResults } = require("../../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,transactionlog.getTransactionlog)
-router.get('/:id',IsAuth,transactionlog.getTransactionlogById)
+router.use(IsAuth);
 
-router.post('/',IsAuth,transactionlog.createTransactionlog)
-router.put('/:id',IsAuth,transactionlog.updateTransactionlog)
-router.delete('/:id',IsAuth,transactionlog.deleteTransactionlog)
-router.post('/transaction_date/:id',IsAuth,transactionlog.transaction_date)
+router.get(
+  "/",
+  advancedResults(Transactionlog, "branch"),
+  transactionlog.getTransactionlog
+);
+router.get("/:id", transactionlog.getTransactionlogById);
 
+router.post("/", transactionlog.createTransactionlog);
+router.put("/:id", transactionlog.updateTransactionlog);
+router.delete("/:id", transactionlog.deleteTransactionlog);
+router.post("/transaction_date/:id", transactionlog.transaction_date);
 
-
-
-module.exports = router
+module.exports = router;

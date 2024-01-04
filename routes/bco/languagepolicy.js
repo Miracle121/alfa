@@ -1,16 +1,25 @@
-const express = require('express')
-const {body} = require('express-validator')
-const languagepolicy = require('../../controllers/bco/languagepolicy')
-const IsAuth = require('../../middleware/is-auth')
+const express = require("express");
+const { body } = require("express-validator");
 
-const router = express.Router()
+const Languagepolicy = require("../../models/bco/languagepolicy");
+const languagepolicy = require("../../controllers/bco/languagepolicy");
 
-router.get('/',IsAuth,languagepolicy.getLanguagepolicy)
-router.get('/:id',IsAuth,languagepolicy.getLanguagepolicyById)
+const IsAuth = require("../../middleware/is-auth");
+const { advancedResults } = require("../../middleware/advancedResults");
 
-router.post('/',IsAuth,languagepolicy.createLanguagepolicy)
-router.put('/:id',IsAuth,languagepolicy.updateLanguagepolicy)
-router.delete('/:id',IsAuth,languagepolicy.deleteLanguagepolicy)
+const router = express.Router();
 
+router.use(IsAuth);
 
-module.exports = router
+router.get(
+  "/",
+  advancedResults(Languagepolicy),
+  languagepolicy.getLanguagepolicy
+);
+router.get("/:id", languagepolicy.getLanguagepolicyById);
+
+router.post("/", languagepolicy.createLanguagepolicy);
+router.put("/:id", languagepolicy.updateLanguagepolicy);
+router.delete("/:id", languagepolicy.deleteLanguagepolicy);
+
+module.exports = router;

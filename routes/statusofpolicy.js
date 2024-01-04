@@ -1,14 +1,21 @@
-const express = require('express')
-const {body} = require('express-validator')
-const statusofpolicy = require('../controllers/statusofpolicy')
-const IsAuth = require('../middleware/is-auth')
+const express = require("express");
+const statusofpolicy = require("../controllers/statusofpolicy");
+const Statusofpolicy = require("../models/statusofpolicy");
+const IsAuth = require("../middleware/is-auth");
+const { advancedResults } = require("../middleware/advancedResults");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/',IsAuth,statusofpolicy.getStatusofpolicy)
-router.get('/:id',IsAuth,statusofpolicy.getStatusofpolicyById)
-router.post('/',IsAuth,statusofpolicy.createStatusofpolicy)
-router.put('/:id',IsAuth,statusofpolicy.updateStatusofpolicy)
-router.delete('/:id',IsAuth,statusofpolicy.deleteStatusofpolicy)
+router.use(IsAuth);
 
-module.exports = router
+router.get(
+  "/",
+  advancedResults(Statusofpolicy),
+  statusofpolicy.getStatusofpolicy
+);
+router.get("/:id", statusofpolicy.getStatusofpolicyById);
+router.post("/", statusofpolicy.createStatusofpolicy);
+router.put("/:id", statusofpolicy.updateStatusofpolicy);
+router.delete("/:id", statusofpolicy.deleteStatusofpolicy);
+
+module.exports = router;

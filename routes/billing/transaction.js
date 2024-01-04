@@ -1,17 +1,49 @@
-const express = require('express')
-const {body} = require('express-validator')
-const transaction = require('../../controllers/billing/transaction')
-// const IsAuth = require('../../middleware/is-auth')
-const IsAuth = require('../../middleware/is-auth')
-const upload = require('../../middleware/upload')
-const router = express.Router()
+const express = require("express");
+const transaction = require("../../controllers/billing/transaction");
+const Transaction = require("../../models/billing/transactions");
+const IsAuth = require("../../middleware/is-auth");
+const upload = require("../../middleware/upload");
+const { advancedResults } = require("../../middleware/advancedResults");
 
-router.get('/',IsAuth,transaction.getTransaction)
-router.get('/:id',IsAuth,transaction.getTransactionById)
+const router = express.Router();
 
-router.post('/',IsAuth,upload.single("files"),transaction.createTransaction)
-router.put('/:id',IsAuth,transaction.updateTransaction)
-router.delete('/:id',IsAuth,transaction.deleteTransaction)
+router.use(IsAuth);
 
+const populateOptions = [
+  {
+    path: "client",
+    select:
+      "forindividualsdata.middlename forindividualsdata.secondname forindividualsdata.name",
+  },
+  {
+    path: "branch",
+    select: "branchname",
+    populate: [
+      {
+        path: "policy",
+        select: "policy_number",
+        populate: { path: "agreement", select: "agreementsnumber" },
+      },
+      {
+        path: "blank",
+        select: "blank_number",
+      },
+    ],
+  },
+  { path: "region", select: "name" },
+  { path: "district", select: "name" },
+];
 
-module.exports = router
+router.get(
+  "/",
+  advancedResults(Transaction, populateOptions),
+  transaction.getTransaction
+);
+router.get("/division", transaction.divisionTranactions);
+router.get("/:id", transaction.getTransactionById);
+
+router.post("/", upload.single("files"), transaction.createTransaction);
+router.put("/:id", transaction.updateTransaction);
+router.delete("/:id", transaction.deleteTransaction);
+
+module.exports = router;

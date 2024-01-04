@@ -1,16 +1,23 @@
-const express = require('express')
+const express = require("express");
 
-const statusoftypebco = require('../../controllers/bco/statusoftypebco')
-const IsAuth = require('../../middleware/is-auth')
+const Statusoftypebco = require("../../models/bco/statusoftypebco");
+const statusoftypebco = require("../../controllers/bco/statusoftypebco");
 
-const router = express.Router()
+const IsAuth = require("../../middleware/is-auth");
+const { advancedResults } = require("../../middleware/advancedResults");
 
-router.get('/',IsAuth,statusoftypebco.getStatusoftypebco)
-router.get('/:id',IsAuth,statusoftypebco.getStatusoftypebcoById)
+const router = express.Router();
+router.use(IsAuth);
 
-router.post('/',IsAuth,statusoftypebco.createStatusoftypebco)
-router.put('/:id',IsAuth,statusoftypebco.updateStatusoftypebco)
-router.delete('/:id',IsAuth,statusoftypebco.deleteStatusoftypebco)
+router.get(
+  "/",
+  advancedResults(Statusoftypebco),
+  statusoftypebco.getStatusoftypebco
+);
+router.get("/:id", statusoftypebco.getStatusoftypebcoById);
 
+router.post("/", statusoftypebco.createStatusoftypebco);
+router.put("/:id", statusoftypebco.updateStatusoftypebco);
+router.delete("/:id", statusoftypebco.deleteStatusoftypebco);
 
-module.exports = router
+module.exports = router;
