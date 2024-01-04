@@ -11,6 +11,7 @@ router.use(IsAuth);
 
 router.get("/", advancedResults(Typeofobject), typeofobject.getTypeofobject);
 router.get("/:id", typeofobject.getTypeofobjectId);
+router.get("/inputs/:id", typeofobject.getInputs);
 
 router.post(
   "/",

@@ -75,3 +75,257 @@ exports.deleteTypeofobject = asyncHandler(async (req, res, next) => {
     data: data,
   });
 });
+
+exports.getInputs = asyncHandler(async (req, res, next) => {
+  const typeofobjectsId = req.params.id;
+
+  const selectedObjectType = await findModelById(Typeofobject, typeofobjectsId);
+
+  const objectTypes = [
+    {
+      label: "Транспортное средство",
+      fields: [
+        {
+          type: "checkbox",
+          name: "foreign_vehicle",
+          label: "Иностранное транспортное средство",
+          default: false,
+        },
+        {
+          type: "input",
+          name: "gov_number",
+          label: "GOV NUMBER",
+          rules: [],
+        },
+        {
+          type: "dropdown",
+          name: "registration_region",
+          label: "Регион регистрации",
+          options: [], // Populate with actual options
+        },
+        {
+          type: "input",
+          name: "model",
+          label: "Модель",
+          rules: [],
+        },
+        {
+          type: "dropdown",
+          name: "type",
+          label: "Вид",
+          options: [], // Populate with actual options
+        },
+        {
+          type: "input",
+          name: "manufacture_year",
+          label: "Год выпуска",
+          rules: [],
+        },
+        {
+          type: "input",
+          name: "body_number",
+          label: "Номер кузова",
+          rules: [],
+        },
+        {
+          type: "input",
+          name: "payload_capacity",
+          label: "Грузоподъемность",
+          rules: [],
+        },
+        {
+          type: "input",
+          name: "seating_capacity",
+          label: "Количество мест",
+          rules: [],
+        },
+        {
+          type: "input",
+          name: "engine_number",
+          label: "Номер двигателя",
+          rules: [],
+        },
+        {
+          type: "input",
+          name: "tech_passport_series",
+          label: "Серия тех.паспорта",
+          rules: [],
+        },
+        {
+          type: "input",
+          name: "tech_passport_number",
+          label: "Номер тех.паспорта",
+          rules: [],
+        },
+      ],
+    },
+    {
+      label: "Недвижимое имущество",
+      fields: [
+        {
+          type: "dropdown",
+          name: "region",
+          label: "Регион",
+          options: [], // Populate with actual options
+        },
+        {
+          type: "dropdown",
+          name: "land_rights",
+          label: "Вид права на земельный участок",
+          options: [], // Populate with actual options
+        },
+        {
+          type: "checkbox",
+          name: "foreign_owner",
+          label: "Правообладатель - иностранец",
+          default: false,
+        },
+        {
+          type: "input",
+          name: "cadastral_number",
+          label: "Кадастровый номер",
+          rules: [],
+        },
+        {
+          type: "datepicker",
+          name: "registration_date",
+          label: "Дата регистрации кадастрового документа",
+          rules: [],
+        },
+        {
+          type: "dropdown",
+          name: "building_classification",
+          label: "Классификация строения",
+          options: [], // Populate with actual options
+        },
+        {
+          type: "input",
+          name: "object_description",
+          label: "Описание объекта",
+          rules: [],
+        },
+        {
+          type: "input",
+          name: "address",
+          label: "Адрес",
+          rules: [],
+        },
+      ],
+    },
+    {
+      label: "Объект сельхозназначения",
+      fields: [
+        {
+          type: "dropdown",
+          name: "region",
+          label: "Регион",
+          options: [], // Populate with actual options
+        },
+        {
+          type: "checkbox",
+          name: "foreign_owner",
+          label: "Правообладатель - иностранец",
+          default: false,
+        },
+        {
+          type: "dropdown",
+          name: "agricultural_object_type",
+          label: "Объект сельхозназначения",
+          options: [], // Populate with actual options
+        },
+        {
+          type: "input",
+          name: "object_name",
+          label: "Наименование",
+          rules: [],
+        },
+        {
+          type: "input",
+          name: "object_description",
+          label: "Описание",
+          rules: [],
+        },
+        {
+          type: "dropdown",
+          name: "measurement_type",
+          label: "Тип измерения",
+          options: [], // Populate with actual options
+        },
+        {
+          type: "input",
+          name: "insurance_volume",
+          label: "Объем страхования",
+          rules: [],
+        },
+        {
+          type: "input",
+          name: "address",
+          label: "Адрес",
+          rules: [],
+        },
+      ],
+    },
+    {
+      label: "Другой",
+      fields: [
+        {
+          type: "dropdown",
+          name: "region",
+          label: "Регион",
+          options: [], // Populate with actual options
+        },
+        {
+          type: "checkbox",
+          name: "foreign_owner",
+          label: "Правообладатель - иностранец",
+          default: false,
+        },
+        {
+          type: "dropdown",
+          name: "object_type",
+          label: "Тип объекта",
+          options: [], // Populate with actual options
+        },
+        {
+          type: "input",
+          name: "object_name",
+          label: "Наименование",
+          rules: [],
+        },
+        {
+          type: "input",
+          name: "object_description",
+          label: "Описание",
+          rules: [],
+        },
+        {
+          type: "dropdown",
+          name: "measurement_type",
+          label: "Тип измерения",
+          options: [], // Populate with actual options
+        },
+        {
+          type: "input",
+          name: "insurance_volume",
+          label: "Объем страхования",
+          rules: [],
+        },
+        {
+          type: "input",
+          name: "address",
+          label: "Адрес",
+          rules: [],
+        },
+      ],
+    },
+  ];
+
+  const selectedObjectFields =
+    objectTypes.find((type) => type.label === selectedObjectType.name)
+      ?.fields || objectTypes.at(-1).fields;
+
+  res.status(200).json({
+    success: true,
+    data: selectedObjectFields,
+  });
+});
