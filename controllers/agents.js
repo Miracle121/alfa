@@ -73,7 +73,7 @@ exports.createAgents = asyncHandler(async (req, res, next) => {
   const isUsedourpanel = req.body.isUsedourpanel;
   const isUserRestAPI = req.body.isUserRestAPI;
 
-  const inn1 = await Agents.find({ inn: inn });
+  const inn1 = await Agents.find({ inn });
   if (inn1.length === 0) {
     const result = new Agents({
       inn: inn,
