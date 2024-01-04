@@ -27,7 +27,9 @@
   },
   "scripts": {
     "start": "NODE_ENV=production node app",
-    "dev": "nodemon app"
+    "dev": "nodemon app",
+    "setup": "node seeder -i",
+    "destroy": "node seeder -d"
   },
   "author": "",
   "license": "ISC",

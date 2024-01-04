@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "642420ab51a1f452f979ddb5",
+    "email": "testtest12sss1@gmail.ru",
+    "password": "testtest12sss1@gmail.ru",
+    "accountstatus": "62cc1847bb316e9c6b45a05b",
+    "accountrole": "62cc1af5bce19815d8b4a7d5"
+  },
+  {
+    "_id": "642420ab51a1f452f979ddb8",
+    "email": "tester@gmail.ru",
+    "password": "testerpassword",
+    "accountstatus": "64017ffbd2426b5179c5cfd3",
+    "accountrole": "63c94572af6bffd385b7ac54"
+  }
+]
