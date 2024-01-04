@@ -6,7 +6,7 @@ const objectsSchema = new Schema(
       type: String,
       required: true,
     },
-    typeObjectsId: {
+    typobjectsId: {
       type: Schema.Types.ObjectId,
       ref: "Typeofobjects",
       required: true,
