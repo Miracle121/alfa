@@ -52,7 +52,7 @@ exports.deleteAccountstatus = asyncHandler(async (req, res, next) => {
 
   const deleteddata = await findModelById(Accountstatus, AgesId);
 
-  if (deleteddata.creatorId.toString() !== req.userId) {
+  if (deleteddata.creatorId.toString() !== req.user._id) {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }

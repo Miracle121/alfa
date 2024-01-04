@@ -119,7 +119,7 @@ exports.deleteClients = asyncHandler(async (req, res, next) => {
 
   const deleteddata = await findModelById(Clients, AgesId);
 
-  if (deleteddata.creatorId.toString() !== req.userId) {
+  if (deleteddata.creatorId.toString() !== req.user._id) {
     const error = new Error("bu userni ochirishga imkoni yoq");
     error.statusCode = 403;
     throw error;

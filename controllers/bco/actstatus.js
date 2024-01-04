@@ -56,7 +56,7 @@ exports.deleteActstatus = asyncHandler(async (req, res, next) => {
 
   const deleteddata = await findModelById(Actstatus, AgesId);
 
-  if (deleteddata.creatorId.toString() !== req.userId) {
+  if (deleteddata.creatorId.toString() !== req.user._id) {
     throw new ErrorResponse("Bu userni ochirishga imkoni yoq");
   }
   const data = await Actstatus.findByIdAndRemove(AgesId);

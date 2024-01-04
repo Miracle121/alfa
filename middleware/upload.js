@@ -5,7 +5,7 @@ const AppUtil = require("../util/AppUtil");
 
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {
-    let dirname = `images/${moment().format("YYYY/MM/DD")}/${req.userId}`;
+    let dirname = `images/${moment().format("YYYY/MM/DD")}/${req.user._id}`;
     let dir = await AppUtil.checkPath(dirname);
     req.filePath = dirname;
     cb(null, dir);

@@ -64,7 +64,7 @@ exports.createActs = asyncHandler(async (req, res, next) => {
   const bcoDataFromFunc = await gettingNumberOfDigitsWithActs(
     bco_data,
     savedAct._id,
-    req.userId
+    req.user._id
   );
 
   const savedBco = await Bco.insertMany(bcoDataFromFunc);
@@ -116,7 +116,7 @@ exports.deleteActs = asyncHandler(async (req, res, next) => {
   const deletedData = await findModelById(Acts, ActsId);
 
   // Check if the user has permission to delete
-  if (deletedData.creatorId.toString() !== req.userId) {
+  if (deletedData.creatorId.toString() !== req.user._id) {
     throw new ErrorResponse(
       "You do not have permission to delete this object",
       403

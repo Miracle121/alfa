@@ -96,7 +96,7 @@ exports.deleteBco = asyncHandler(async (req, res, next) => {
 
   const deleteddata = await findModelById(Bco, AgesId);
 
-  if (deleteddata.creatorId.toString() !== req.userId) {
+  if (deleteddata.creatorId.toString() !== req.user._id) {
     throw new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
   }
 

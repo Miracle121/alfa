@@ -69,7 +69,7 @@ exports.deleteRegions = asyncHandler(async (req, res, next) => {
   const regionToDelete = await findModelById(Region, regId);
 
   // Check if the user has permission to delete
-  if (regionToDelete.creatorId.toString() !== req.userId) {
+  if (regionToDelete.creatorId.toString() !== req.user._id) {
     return res.status(403).json({
       message: "You don't have permission to delete this region",
       data: null,

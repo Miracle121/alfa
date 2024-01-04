@@ -211,7 +211,7 @@ exports.deleteAgreements = asyncHandler(async (req, res, next) => {
 
   const agreement = await findModelById(Agreements, agreementId);
 
-  if (agreement.creatorId.toString() !== req.userId) {
+  if (agreement.creatorId.toString() !== req.user._id) {
     const error = new ErrorResponse(
       "You don't have permission to delete this agreement",
       403

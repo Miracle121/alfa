@@ -75,7 +75,7 @@ exports.deleteDistricts = asyncHandler(async (req, res, next) => {
 
   const deletedData = await findModelById(District, destId);
 
-  if (deletedData.creatorId.toString() !== req.userId) {
+  if (deletedData.creatorId.toString() !== req.user._id) {
     const error = new Error(
       "Permission denied: You don't have the right to delete this district",
       403

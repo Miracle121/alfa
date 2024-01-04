@@ -148,7 +148,7 @@ exports.deleteAgents = asyncHandler(async (req, res, next) => {
 
   const deleteddata = await findModelById(Agents, AgesId);
 
-  if (deleteddata.creatorId.toString() !== req.userId) {
+  if (deleteddata.creatorId.toString() !== req.user._id) {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
@@ -211,7 +211,7 @@ async function deleteAgentAndRelatedData(agentId) {
   const agent = await findModelById(Agents, agentId);
 
   // Check if the current user has the permission to delete the agent
-  if (agent.creatorId.toString() !== req.userId) {
+  if (agent.creatorId.toString() !== req.user._id) {
     const error = new ErrorResponse(
       "You don't have permission to delete this agent",
       403
