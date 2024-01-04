@@ -8,7 +8,6 @@ const accountrolesSchema = new Schema(
     creatorId: {
       type: Schema.Types.ObjectId,
       ref: "Users",
-      required: true,
     },
   },
 
