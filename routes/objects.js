@@ -9,7 +9,11 @@ const router = express.Router();
 
 router.use(IsAuth);
 
-router.get("/", advancedResults(Objects), objects.getObject);
+router.get(
+  "/",
+  advancedResults(Objects, { path: "type", select: "name" }),
+  objects.getObject
+);
 router.get("/:id", objects.getObjectId);
 router.post(
   "/",

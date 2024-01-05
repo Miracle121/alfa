@@ -18,7 +18,18 @@ const objectsSchema = new Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
+
+objectsSchema.virtual("type", {
+  ref: "Typeofobjects",
+  localField: "typobjectsId",
+  foreignField: "_id",
+  justOne: true,
+});
 
 module.exports = model("Objects", objectsSchema);
