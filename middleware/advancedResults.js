@@ -1,11 +1,14 @@
 const asyncHandler = require("express-async-handler");
 
+/**
+ * @param {import("mongoose").Model} model
+ */
 const advancedResults = (model, populate) =>
   asyncHandler(async (req, res, next) => {
     const reqQuery = { ...req.query };
 
     // Extract fields to remove from query
-    const removeFields = ["select", "sort", "page", "limit"];
+    const removeFields = ["select", "sort", "page", "limit", "q"];
 
     // Remove fields from reqQuery
     removeFields.forEach((param) => delete reqQuery[param]);
@@ -21,6 +24,16 @@ const advancedResults = (model, populate) =>
 
     // Parse the modified query string back to an object
     let query = model.find(JSON.parse(queryStr));
+
+    if (req.query.q) {
+      query = query.find({
+        $or: [
+          {
+            name: { $regex: req.query.q, $options: "i" },
+          },
+        ],
+      });
+    }
 
     // Select specific fields if specified in query
     if (req.query.select) {

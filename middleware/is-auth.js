@@ -9,7 +9,9 @@ module.exports = asyncHandler(async (req, res, next) => {
   // Check for Authorization header
   if (req.headers.authorization) {
     // Set token from header
-    token = req.headers.authorization;
+    token = req.headers.authorization.split(" ")[1]
+      ? req.headers.authorization.split(" ")[1]
+      : req.headers.authorization;
   }
   // Set token from cookie
   // else if (req.cookies.token) {
@@ -19,7 +21,7 @@ module.exports = asyncHandler(async (req, res, next) => {
   if (!token) {
     throw new ErrorResponse("Not authorized to access this route", 401);
   }
-  console.log(token);
+
   // Verify token
   const decoded = jwt.verify(token, config.jwt.secret);
 
