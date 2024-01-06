@@ -1,7 +1,7 @@
 const express = require("express");
 const { body } = require("express-validator");
 const branches = require("../controllers/branches");
-const Branches = require("../models/branches");
+const Breanches = require("../models/branches");
 const IsAuth = require("../middleware/is-auth");
 const { advancedResults } = require("../middleware/advancedResults");
 
@@ -11,7 +11,7 @@ router.use(IsAuth);
 
 const populateOptions = [
   { path: "region", select: "name" },
-  { path: "branchstatus", select: "name" },
+  { path: "breanchstatus", select: "name" },
   {
     path: "employees",
     populate: [{ path: "positions", select: "name" }],
@@ -21,7 +21,7 @@ const populateOptions = [
 
 router.get(
   "/",
-  advancedResults(Branches, populateOptions),
+  advancedResults(Breanches, populateOptions),
   branches.getBranches
 );
 

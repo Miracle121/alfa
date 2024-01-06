@@ -13,7 +13,7 @@ const populateOptions = [
   { path: "accountstatus", select: "name" },
   { path: "accountrole", select: "name" },
   { path: "branch_Id", select: "branchname" },
-  { path: "agent_Id", select: "inn" },
+  { path: "agent_Id" },
 ];
 
 router.get("/", advancedResults(User, populateOptions), users.getUsers);

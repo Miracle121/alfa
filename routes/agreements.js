@@ -10,7 +10,7 @@ router.use(IsAuth);
 
 // populate options
 const populateOptions = [
-  { path: "branch", select: "inn" },
+  { path: "branch" },
   { path: "groupofproductsId", select: "name" },
   { path: "subgroupofproductsId", select: "name" },
   { path: "products", select: "productname" },
@@ -35,35 +35,6 @@ const populateOptions = [
     populate: [
       { path: "branch_id", select: "inn" },
       { path: "policy_blanknumber", select: "blank_number" },
-    ],
-  },
-];
-
-const populates = [
-  { path: "typeofpersons", select: "name" },
-  { path: "typeofagent", select: "name" },
-  {
-    path: "forindividualsdata",
-    populate: [
-      { path: "gender", select: "name" },
-      { path: "citizenship", select: "name" },
-      { path: "typeofdocument", select: "name" },
-      { path: "regions", select: "name" },
-      { path: "districts", select: "name" },
-    ],
-  },
-  {
-    path: "corporateentitiesdata",
-    populate: [
-      { path: "region", select: "name" },
-      { path: "districts", select: "name" },
-      {
-        path: "employees",
-        populate: [
-          { path: "positions", select: "name" },
-          { path: "typeofdocumentsformanager", select: "name" },
-        ],
-      },
     ],
   },
 ];

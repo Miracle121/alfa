@@ -1,7 +1,7 @@
 const express = require("express");
 const { body } = require("express-validator");
-const branchstatus = require("../controllers/branchstatus");
-const Branchstatus = require("../models/branchstatus");
+const breanchstatus = require("../controllers/branchstatus");
+const Breanchstatus = require("../models/branchstatus");
 const IsAuth = require("../middleware/is-auth");
 const { advancedResults } = require("../middleware/advancedResults");
 
@@ -9,15 +9,15 @@ const router = express.Router();
 
 router.use(IsAuth);
 
-router.get("/", advancedResults(Branchstatus), branchstatus.getBranchstatus);
-router.get("/:id", branchstatus.getBranchstatusById);
+router.get("/", advancedResults(Breanchstatus), breanchstatus.getbreanchstatus);
+router.get("/:id", breanchstatus.getbreanchstatusById);
 
 router.post(
   "/",
   [body("name").trim().isLength({ min: 3 })],
-  branchstatus.createBranchstatus
+  breanchstatus.createbreanchstatus
 );
-router.put("/:id", branchstatus.updateBranchstatus);
-router.delete("/:id", branchstatus.deleteBranchstatus);
+router.put("/:id", breanchstatus.updatebreanchstatus);
+router.delete("/:id", breanchstatus.deletebreanchstatus);
 
 module.exports = router;
