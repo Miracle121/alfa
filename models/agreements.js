@@ -1,8 +1,9 @@
 const { Schema, model } = require("mongoose");
-const agreementsSchema = new Schema({
+const agreementsSchema = new Schema(
+  {
     branch: {
       type: Schema.Types.ObjectId,
-      ref: "Branches",
+      ref: "Breanches",
       required: true,
     },
     agreementsnumber: {

@@ -27,7 +27,7 @@ const transactionlogSchema = new Schema(
     //ID объекта для субконто 2 счета по дебету filieal
     debt_account_obj2_ID: {
       type: Schema.Types.ObjectId,
-      ref: "Branches",
+      ref: "Breanches",
     },
     //ID объекта для субконто 3 счета по дебету Client
     debt_account_obj3_ID: {
@@ -57,7 +57,7 @@ const transactionlogSchema = new Schema(
     //ID объекта для субконто 2 счета по кредиту
     cred_account_obj2_ID: {
       type: Schema.Types.ObjectId,
-      ref: "Branches",
+      ref: "Breanches",
     },
     //ID объекта для субконто 3 счета по кредиту
     cred_account_obj3_ID: {
@@ -106,7 +106,7 @@ const transactionlogSchema = new Schema(
 );
 
 transactionlogSchema.virtual("branch", {
-  ref: "Branches",
+  ref: "Breanches",
   localField: "debt_account_obj2_ID",
   foreignField: "_id",
 });

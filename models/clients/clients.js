@@ -8,7 +8,7 @@ const clientSchema = new Schema(
     },
     branch: {
       type: Schema.Types.ObjectId,
-      ref: "Branches",
+      ref: "Breanches",
     },
     typeofpersons: {
       type: Schema.Types.ObjectId,

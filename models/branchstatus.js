@@ -15,4 +15,4 @@ const branchsstatusSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = model("Branchsstatus", branchsstatusSchema);
+module.exports = model("Breanchsstatuses", branchsstatusSchema);

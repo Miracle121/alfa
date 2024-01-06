@@ -3,7 +3,7 @@ const employeeSchema = new Schema(
   {
     branch: {
       type: Schema.Types.ObjectId,
-      ref: "Branches",
+      ref: "Breanches",
       required: true,
     },
     photo: {

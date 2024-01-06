@@ -2,12 +2,12 @@ const { Schema, model } = require("mongoose");
 
 const branchesSchema = new Schema(
   {
-    levelofbranches: {
+    levelofbreanches: {
       type: Schema.Types.ObjectId,
-      ref: "Levelofbranch",
+      ref: "Levelofbreanches",
       required: true,
     },
-    codeofbranches: {
+    codeofbreanches: {
       type: String,
       required: true,
     },
@@ -87,9 +87,9 @@ const branchesSchema = new Schema(
       type: String,
       required: true,
     },
-    branchstatus: {
+    breanchstatus: {
       type: Schema.Types.ObjectId,
-      ref: "Branchsstatus",
+      ref: "Breanchsstatuses",
       required: true,
     },
     fond_id: {
@@ -135,4 +135,4 @@ branchesSchema.virtual("blank", {
   },
 });
 
-module.exports = model("Branches", branchesSchema);
+module.exports = model("Breanches", branchesSchema);

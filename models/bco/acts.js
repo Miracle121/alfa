@@ -11,7 +11,7 @@ const actsSchema = new Schema(
     },
     sender_branch_id: {
       type: Schema.Types.ObjectId,
-      ref: "Branches",
+      ref: "Breanches",
       required: true,
     },
     sender_employee_id: {
@@ -21,7 +21,7 @@ const actsSchema = new Schema(
     },
     receiver_branch_id: {
       type: Schema.Types.ObjectId,
-      ref: "Branches",
+      ref: "Breanches",
       required: true,
     },
     receiver_employee_id: {

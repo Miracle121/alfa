@@ -8,7 +8,7 @@ const policyblankSchema = new Schema(
     },
     branch_id: {
       type: Schema.Types.ObjectId,
-      ref: "Branches",
+      ref: "Breanches",
       required: true,
     },
     policy_type_id: {

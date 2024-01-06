@@ -92,7 +92,7 @@ const transactionSchema = new Schema(
 
     branch: {
       type: Schema.Types.ObjectId,
-      ref: "Branches",
+      ref: "Breanches",
     },
 
     region: {
@@ -121,7 +121,7 @@ const transactionSchema = new Schema(
 
 const processDocument = async function (document) {
   try {
-    const branch = await this.model("Branches").findOne({
+    const branch = await this.model("Breanches").findOne({
       inn: document.recipient_bank_account,
     });
 
