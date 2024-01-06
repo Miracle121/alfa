@@ -13,7 +13,7 @@ exports.getBranchesById = asyncHandler(async (req, res, next) => {
 
   const populateOptions = [
     { path: "region", select: "name" },
-    { path: "branchstatus", select: "name" },
+    { path: "breanchstatus", select: "name" },
     {
       path: "employees",
       populate: [{ path: "positions", select: "name" }],
@@ -30,7 +30,7 @@ exports.getBranchesById = asyncHandler(async (req, res, next) => {
 
 exports.createBranches = asyncHandler(async (req, res, next) => {
   const {
-    levelofbranches,
+    levelofbreanches,
     codeofbranches,
     inn,
     district,
@@ -46,11 +46,11 @@ exports.createBranches = asyncHandler(async (req, res, next) => {
     checkingaccount,
     mfo,
     nameofbank,
-    branchstatus,
+    breanchstatus,
   } = req.body;
 
   const result = new Branches({
-    levelofbranches,
+    levelofbreanches,
     codeofbranches,
     inn,
     district,
@@ -66,7 +66,7 @@ exports.createBranches = asyncHandler(async (req, res, next) => {
     checkingaccount,
     mfo,
     nameofbank,
-    branchstatus,
+    breanchstatus,
     creatorId: req.user._id,
   });
 
@@ -82,7 +82,7 @@ exports.createBranches = asyncHandler(async (req, res, next) => {
 exports.updateBranches = asyncHandler(async (req, res, next) => {
   const AgesId = req.params.id;
   const {
-    levelofbranches,
+    levelofbreanches,
     codeofbranches,
     inn,
     region,
@@ -98,7 +98,7 @@ exports.updateBranches = asyncHandler(async (req, res, next) => {
     checkingaccount,
     mfo,
     nameofbank,
-    branchstatus,
+    breanchstatus,
   } = req.body;
 
   const result = await findModelById(Branches, AgesId);
@@ -108,7 +108,7 @@ exports.updateBranches = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  result.levelofbranches = levelofbranches;
+  result.levelofbreanches = levelofbreanches;
   result.codeofbranches = codeofbranches;
   result.inn = inn;
   result.region = region;
@@ -124,7 +124,7 @@ exports.updateBranches = asyncHandler(async (req, res, next) => {
   result.checkingaccount = checkingaccount;
   result.mfo = mfo;
   result.nameofbank = nameofbank;
-  result.branchstatus = branchstatus;
+  result.breanchstatus = breanchstatus;
 
   const data = await result.save();
   res.status(200).json({

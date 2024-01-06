@@ -1,55 +1,55 @@
-const Branchstatus = require("../models/branchstatus");
+const breanchstatus = require("../models/branchstatus");
 
-exports.getBranchstatus = async (req, res, next) => {
+exports.getbreanchstatus = async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 };
 
-exports.getBranchstatusById = async (req, res, next) => {
+exports.getbreanchstatusById = async (req, res, next) => {
   const AgesId = req.params.id;
 
-  const result = await findModelById(Branchstatus, AgesId);
+  const result = await findModelById(breanchstatus, AgesId);
 
   res.status(200).json({
-    message: `Branchstatus`,
+    message: `breanchstatus`,
     data: result,
   });
 };
 
-exports.createBranchstatus = async (req, res, next) => {
+exports.createbreanchstatus = async (req, res, next) => {
   const name = req.body.name;
 
-  const result = new Branchstatus({
+  const result = new breanchstatus({
     name: name,
     creatorId: req.user._id,
   });
   const results = await result.save();
   res.status(200).json({
-    message: `Branchstatus created`,
+    message: `breanchstatus created`,
     data: results,
     creatorId: req.user._id,
   });
 };
 
-exports.updateBranchstatus = async (req, res, next) => {
+exports.updatebreanchstatus = async (req, res, next) => {
   const AgesId = req.params.id;
   const name = req.body.name;
 
-  const result = await findModelById(Branchstatus, AgesId);
+  const result = await findModelById(breanchstatus, AgesId);
 
   result.name = name;
 
   const data = await result.save();
 
   res.status(200).json({
-    message: `Branchstatus List`,
+    message: `breanchstatus List`,
     data: data,
   });
 };
 
-exports.deleteBranchstatus = async (req, res, next) => {
+exports.deletebreanchstatus = async (req, res, next) => {
   const AgesId = req.params.id;
 
-  const deleteddata = await findModelById(Branchstatus, AgesId);
+  const deleteddata = await findModelById(breanchstatus, AgesId);
 
   if (deleteddata.creatorId.toString() !== req.user._id) {
     const error = new Error("bu userni ochirishga imkoni yoq");
@@ -57,10 +57,10 @@ exports.deleteBranchstatus = async (req, res, next) => {
     throw error;
   }
 
-  const data = await Branchstatus.findByIdAndRemove(AgesId);
+  const data = await breanchstatus.findByIdAndRemove(AgesId);
 
   res.status(200).json({
-    message: "Branchstatus is deletes",
+    message: "breanchstatus is deletes",
     data: data,
   });
 };
