@@ -14,6 +14,7 @@ exports.getBranchesById = asyncHandler(async (req, res, next) => {
   const populateOptions = [
     { path: "region", select: "name" },
     { path: "breanchstatus", select: "name" },
+    { path: "agents" },
     {
       path: "employees",
       populate: [{ path: "positions", select: "name" }],

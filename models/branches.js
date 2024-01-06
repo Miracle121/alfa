@@ -125,6 +125,13 @@ branchesSchema.virtual("policy", {
   justOne: true,
 });
 
+branchesSchema.virtual("agents", {
+  ref: "Agents",
+  localField: "_id",
+  foreignField: "branch",
+  justOne: false,
+});
+
 branchesSchema.virtual("blank", {
   ref: "Policyblank",
   localField: "_id",
