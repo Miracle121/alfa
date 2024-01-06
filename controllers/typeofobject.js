@@ -102,7 +102,6 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           name: "registration_region",
           url: "regions?limit=50",
           label: "Регион регистрации",
-          options: [], // Populate with actual options
         },
         {
           type: "input",
@@ -114,7 +113,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           type: "dropdown",
           name: "type",
           label: "Вид",
-          options: [], // Populate with actual options
+          url: "views?limit=50",
         },
         {
           type: "input",
@@ -168,20 +167,12 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           name: "region",
           url: "regions?limit=50",
           label: "Регион",
-          options: [], // Populate with actual options
         },
         {
           type: "dropdown",
           name: "land_rights",
           label: "Вид права на земельный участок",
-          options: [
-            "Собственность",
-            "Аренда (или пожизненное наследуемое владение)",
-            "Право пользования (сервитуты)",
-            "Земельные аренды",
-            "Проходные права",
-            "Земельные ипотеки",
-          ],
+          url: "typeofland?limit=50",
         },
         {
           type: "checkbox",
@@ -205,14 +196,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           type: "dropdown",
           name: "building_classification",
           label: "Классификация строения",
-          options: [
-            "Биологическая классификация (например, царства, отряды, семейства)",
-            "Информационная классификация (например, данные, файлы, базы данных)",
-            "Геологическая классификация (например, горные породы, слои земли)",
-            "Химическая классификация (например, элементы, соединения)",
-            "Таксономия (классификация живых организмов)",
-            "Технологическая классификация (например, машины, устройства)",
-          ], // Populate with actual options
+          url: "classification?limit=50",
         },
         {
           type: "input",
@@ -236,7 +220,6 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           name: "region",
           url: "regions?limit=50",
           label: "Регион",
-          options: [], // Populate with actual options
         },
         {
           type: "checkbox",
@@ -248,22 +231,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           type: "dropdown",
           name: "agricultural_object_type",
           label: "Объект сельхозназначения",
-          options: [
-            "Садовый участок",
-            "Огородные участки",
-            "Плодовые насаждения (фруктовые и ягодные деревья и кустарники)",
-            "Овощные грядки",
-            "Теплицы и оранжереи",
-            "Склады для хранения инвентаря и урожая",
-            "Колодцы и системы полива",
-            "Птицефермы (для содержания кур, уток и другой домашней птицы)",
-            "Пасеки (для разведения пчел и сбора меда)",
-            "Садовые постройки (беседки, навесы, альтанки)",
-            "Компостные кучи",
-            "Системы водоснабжения и водоотведения",
-            "Места для хранения инструментов и средств ухода за участком",
-            "Дорожные системы (пешеходные дорожки, проезды)",
-          ], // Populate with actual options
+          url: "agricultural?limit=50",
         },
         {
           type: "input",
@@ -281,7 +249,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           type: "dropdown",
           name: "measurement_type",
           label: "Тип измерения",
-          options: [], // Populate with actual options
+          url: "measurements?limit=50",
         },
         {
           type: "input",
@@ -305,7 +273,6 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           name: "region",
           label: "Регион",
           url: "regions?limit=50",
-          options: [], // Populate with actual options
         },
         {
           type: "checkbox",
@@ -329,7 +296,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           type: "dropdown",
           name: "measurement_type",
           label: "Тип измерения",
-          options: [], // Populate with actual options
+          url: "measurements?limit=50",
         },
         {
           type: "input",
