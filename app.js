@@ -58,7 +58,7 @@ const position = require("./routes/position");
 const typeofdocuments = require("./routes/typeofdocuments");
 const levelofbranch = require("./routes/levelofbranch");
 const branches = require("./routes/branches");
-const branchstatus = require("./routes/branchstatus");
+const breanchstatus = require("./routes/branchstatus");
 //============agreements=================
 const agreements = require("./routes/agreements");
 const reasons = require("./routes/reasons");
@@ -105,6 +105,9 @@ const clients = require("./routes/clients/clients");
 //===========================Employee=======================
 const employee = require("./routes/employee/employee");
 const positions = require("./routes/employee/positions");
+
+// Object created details
+const details = require("./routes/object");
 const app = express();
 
 // Connect to db
@@ -143,6 +146,7 @@ app.use(express.static(path.join(__dirname, "uploads")));
 app.use("/auth", auth);
 app.use("/regions", region);
 app.use("/districts", districts);
+app.use(details);
 app.use("/mfy", mfy);
 app.use("/groupsofproducts", groupsofproducts);
 app.use("/subgroupsofproducts", subgroupsofproducts);
@@ -186,7 +190,7 @@ app.use("/position", position);
 app.use("/typeofdocuments", typeofdocuments);
 app.use("/levelofbranch", levelofbranch);
 app.use("/branches", branches);
-app.use("/branchstatus", branchstatus);
+app.use("/breanchstatus", breanchstatus);
 //================agreements=====
 app.use("/agreements", agreements);
 app.use("/reasons", reasons);
