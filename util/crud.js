@@ -63,7 +63,7 @@ const crudUtil = (Model) => {
 
     await findModelById(Model, id);
 
-    await Model.findByIdAndRemove(id);
+    await Model.findByIdAndDelete(id);
 
     res.status(200).json({
       message: `${Model.modelName} deleted`,
