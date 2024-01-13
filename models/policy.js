@@ -10,7 +10,7 @@ const policySchema = new Schema(
     invois: {
       type: String,
     },
-    agreementId: {
+    agreementsId: {
       type: Schema.Types.ObjectId,
       ref: "Agreements",
       required: true,
