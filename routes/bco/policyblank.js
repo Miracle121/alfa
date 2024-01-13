@@ -28,7 +28,7 @@ const poplate = [
     ],
   },
   {
-    path: "policy_id",
+    path: "policy",
     populate: [
       { path: "agreementsId", select: "agreementsnumber" },
       { path: "branch_id", select: "inn" },
