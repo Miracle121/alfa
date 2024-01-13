@@ -8,7 +8,7 @@ const advancedResults = (model, populate) =>
     const reqQuery = { ...req.query };
 
     // Extract fields to remove from query
-    const removeFields = ["select", "sort", "page", "limit", "q"];
+    const removeFields = ["select", "sort", "page", "limit", "q", "all"];
 
     // Remove fields from reqQuery
     removeFields.forEach((param) => delete reqQuery[param]);
@@ -49,6 +49,19 @@ const advancedResults = (model, populate) =>
       query = query.sort("-createdAt");
     }
 
+    // Return all data
+    if (req.query.all === "true") {
+      const data = await query;
+
+      res.advancedResults = {
+        success: true,
+        message: `${model.modelName} list`,
+        total: data.length,
+        data,
+      };
+      return next();
+    }
+
     // Pagination
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
@@ -82,6 +95,7 @@ const advancedResults = (model, populate) =>
         limit,
       };
     }
+
     res.advancedResults = {
       success: true,
       message: `${model.modelName} list`,
