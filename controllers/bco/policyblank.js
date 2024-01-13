@@ -120,7 +120,7 @@ exports.deletePolicyblank = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Policyblank.findByIdAndRemove(AgesId);
+  const data = await Policyblank.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Policy blank is deleted",

@@ -69,7 +69,7 @@ exports.deleteRole = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Role.findByIdAndRemove(subgroupsId);
+  const data = await Role.findByIdAndDelete(subgroupsId);
 
   res.status(200).json({
     message: "Role deleted",

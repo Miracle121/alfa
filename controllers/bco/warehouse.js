@@ -120,7 +120,7 @@ exports.deleteWarehouse = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Warehouse.findByIdAndRemove(AgesId);
+  const data = await Warehouse.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Policy blank is deleted",

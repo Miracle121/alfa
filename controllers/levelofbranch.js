@@ -61,7 +61,7 @@ exports.deleteLevelofbranch = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Levelofbranch.findByIdAndRemove(positionId);
+  const data = await Levelofbranch.findByIdAndDelete(positionId);
 
   res.status(200).json({
     message: "Level of branch is deletes",

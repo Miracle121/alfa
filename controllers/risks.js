@@ -81,7 +81,7 @@ exports.deleteRisks = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Risks.findByIdAndRemove(typeofrisksId);
+  const data = await Risks.findByIdAndDelete(typeofrisksId);
 
   res.status(200).json({
     message: "Risks is deleted",

@@ -69,7 +69,7 @@ exports.deletePolicyformats = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Policyformats.findByIdAndRemove(subgroupsId);
+  const data = await Policyformats.findByIdAndDelete(subgroupsId);
 
   res.status(200).json({
     message: "Policy formats of products",

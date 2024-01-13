@@ -5,7 +5,7 @@ const { findModelById } = require("../util/findModelById");
 const { ErrorResponse } = require("../util/errorResponse");
 
 exports.getGroupsofProducts = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.advencedResults);
+  res.status(200).json(res.advancedResults);
 });
 
 exports.getGroupsofProductsById = asyncHandler(async (req, res, next) => {
@@ -67,7 +67,7 @@ exports.deleteGroupsofProducts = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Groupsofproducts.findByIdAndRemove(groupsId);
+  const data = await Groupsofproducts.findByIdAndDelete(groupsId);
 
   res.status(200).json({
     message: "Region is deletes",

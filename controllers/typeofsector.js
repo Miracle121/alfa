@@ -67,7 +67,7 @@ exports.deleteTypeofsector = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Typeofsector.findByIdAndRemove(subgroupsId);
+  const data = await Typeofsector.findByIdAndDelete(subgroupsId);
   res.status(200).json({
     message: "Type of sector",
     data: data,

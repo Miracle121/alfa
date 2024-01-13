@@ -60,7 +60,7 @@ exports.deleteTypeofclaimsettlement = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Typeofclaimsettlements.findByIdAndRemove(AgesId);
+  const data = await Typeofclaimsettlements.findByIdAndDelete(AgesId);
   res.status(200).json({
     message: "Region is deletes",
     data: data,

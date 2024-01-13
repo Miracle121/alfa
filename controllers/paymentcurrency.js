@@ -68,7 +68,7 @@ exports.deletePaymentcurrency = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Paymentcurrency.findByIdAndRemove(typeofpaymentId);
+  const data = await Paymentcurrency.findByIdAndDelete(typeofpaymentId);
 
   res.status(200).json({
     message: "Risks is deleted",

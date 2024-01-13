@@ -68,7 +68,7 @@ exports.deleteReasons = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Reasons.findByIdAndRemove(objectsId);
+  const data = await Reasons.findByIdAndDelete(objectsId);
 
   res.status(200).json({
     message: "Reasons is deleted",

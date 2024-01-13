@@ -69,7 +69,7 @@ exports.deleteStatusofendorsements = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Statusofendorsements.findByIdAndRemove(subgroupsId);
+  const data = await Statusofendorsements.findByIdAndDelete(subgroupsId);
 
   res.status(200).json({
     message: "Statusofendorsements is deletes",

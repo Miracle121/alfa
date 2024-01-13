@@ -60,7 +60,7 @@ exports.deleteLanguagepolicy = asyncHandler(async (req, res, next) => {
     throw new ErrorResponse("Bu userni ochirishga imkoni yoq", 403);
   }
 
-  const data = await Languagepolicy.findByIdAndRemove(AgesId);
+  const data = await Languagepolicy.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Language Policy deleted",

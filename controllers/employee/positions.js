@@ -66,7 +66,7 @@ exports.deletePositions = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Positions.findByIdAndRemove(AgesId);
+  const data = await Positions.findByIdAndDelete(AgesId);
   res.status(200).json({
     message: "Positions is deleted",
     data: data,

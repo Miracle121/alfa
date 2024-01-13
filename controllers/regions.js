@@ -77,7 +77,7 @@ exports.deleteRegions = asyncHandler(async (req, res, next) => {
   }
 
   // Remove the region
-  const deletedRegion = await Region.findByIdAndRemove(regId);
+  const deletedRegion = await Region.findByIdAndDelete(regId);
 
   // Find and delete associated districts
   const districtList = await District.find({ regiId: regId });

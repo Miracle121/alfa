@@ -138,7 +138,7 @@ exports.deleteBcoinpolicyblank = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Bcoinpolicyblank.findByIdAndRemove(AgesId);
+  const data = await Bcoinpolicyblank.findByIdAndDelete(AgesId);
   res.status(200).json({
     message: "Type of Acts is deleted",
     data: data,

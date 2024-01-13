@@ -125,7 +125,7 @@ exports.deleteClients = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Clients.findByIdAndRemove(AgesId);
+  const data = await Clients.findByIdAndDelete(AgesId);
 
   await User.deleteMany({ agent_Id: AgesId });
 

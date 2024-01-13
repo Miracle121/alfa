@@ -168,7 +168,7 @@ exports.deletePolicy = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Policy.findByIdAndRemove(AgesId);
+  const data = await Policy.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Region is deletes",

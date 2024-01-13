@@ -60,7 +60,7 @@ exports.deleteStatusofpayment = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Statusofpayment.findByIdAndRemove(AgesId);
+  const data = await Statusofpayment.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Accountroles is deleted",

@@ -65,7 +65,7 @@ exports.deleteTypeofpersons = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Typeofpersons.findByIdAndRemove(subgroupsId);
+  const data = await Typeofpersons.findByIdAndDelete(subgroupsId);
   res.status(200).json({
     message: "Typeofpersons of products",
     data: data,

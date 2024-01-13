@@ -68,7 +68,7 @@ exports.deleteTypeOfendorsements = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Typeofendorsements.findByIdAndRemove(subgroupsId);
+  const data = await Typeofendorsements.findByIdAndDelete(subgroupsId);
 
   res.status(200).json({
     message: "Region is deletes",

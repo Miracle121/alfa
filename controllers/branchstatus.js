@@ -57,7 +57,7 @@ exports.deletebreanchstatus = async (req, res, next) => {
     throw error;
   }
 
-  const data = await breanchstatus.findByIdAndRemove(AgesId);
+  const data = await breanchstatus.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "breanchstatus is deletes",

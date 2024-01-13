@@ -58,7 +58,7 @@ exports.deleteStatusoftypebco = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Statusoftypebco.findByIdAndRemove(AgesId);
+  const data = await Statusoftypebco.findByIdAndDelete(AgesId);
   res.status(200).json({
     message: "Status of type bco",
     data: data,

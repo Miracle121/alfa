@@ -79,7 +79,7 @@ exports.deleteObject = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Objects.findByIdAndRemove(objectsId);
+  const data = await Objects.findByIdAndDelete(objectsId);
 
   res.status(200).json({
     message: "Risks is deleted",

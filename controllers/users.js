@@ -102,7 +102,7 @@ exports.DeleteUsers = asyncHandler(async (req, res, next) => {
 
   await findModelById(User, usersId);
 
-  const data = await User.findByIdAndRemove(usersId);
+  const data = await User.findByIdAndDelete(usersId);
 
   res.status(200).json({
     message: "Region is deletes",

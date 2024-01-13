@@ -56,7 +56,7 @@ exports.deleteAccountstatus = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Accountstatus.findByIdAndRemove(AgesId);
+  const data = await Accountstatus.findByIdAndDelete(AgesId);
   res.status(200).json({
     message: "Accountstatus is deleted",
     data: data,

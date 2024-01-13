@@ -68,7 +68,7 @@ exports.deleteTypeofobject = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Typeofobject.findByIdAndRemove(typeofobjectsId);
+  const data = await Typeofobject.findByIdAndDelete(typeofobjectsId);
 
   res.status(200).json({
     message: "Risks is deleted",

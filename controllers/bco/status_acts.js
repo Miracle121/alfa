@@ -58,7 +58,7 @@ exports.deleteStatusActs = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await StatusActs.findByIdAndRemove(AgesId);
+  const data = await StatusActs.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Status of  Acts",

@@ -69,7 +69,7 @@ exports.deleteStatusOfProduct = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Statusofproducts.findByIdAndRemove(statusId);
+  const data = await Statusofproducts.findByIdAndDelete(statusId);
 
   res.status(200).json({
     message: "Region is deletes",

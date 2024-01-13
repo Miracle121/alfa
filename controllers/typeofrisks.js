@@ -68,7 +68,7 @@ exports.deleteTypeofrisks = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Typeofrisks.findByIdAndRemove(typeofrisksId);
+  const data = await Typeofrisks.findByIdAndDelete(typeofrisksId);
 
   res.status(200).json({
     message: "Type of risks list",

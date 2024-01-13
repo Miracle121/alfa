@@ -100,7 +100,7 @@ exports.deleteBco = asyncHandler(async (req, res, next) => {
     throw new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
   }
 
-  const data = await Bco.findByIdAndRemove(AgesId);
+  const data = await Bco.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Type of BCO is deleted",

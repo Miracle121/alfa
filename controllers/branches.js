@@ -144,7 +144,7 @@ exports.deleteBranches = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Branches.findByIdAndRemove(AgesId);
+  const data = await Branches.findByIdAndDelete(AgesId);
   res.status(200).json({
     message: "Region is deletes",
     data: data,

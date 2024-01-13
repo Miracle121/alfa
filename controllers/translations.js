@@ -94,7 +94,7 @@ exports.deleteTranslations = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Translations.findByIdAndRemove(subgroupsId);
+  const data = await Translations.findByIdAndDelete(subgroupsId);
 
   res.status(200).json({
     message: "Classe of products",

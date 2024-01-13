@@ -70,7 +70,7 @@ exports.deleteTypeofdistributes = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Typeofdistribute.findByIdAndRemove(AgesId);
+  const data = await Typeofdistribute.findByIdAndDelete(AgesId);
   res.status(200).json({
     message: "Accountroles is deleted",
     data: data,

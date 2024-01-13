@@ -323,7 +323,7 @@ exports.deleteProducts = async (req, res, next) => {
     throw error;
   }
 
-  const data = await Products.findByIdAndRemove(typeofrisksId);
+  const data = await Products.findByIdAndDelete(typeofrisksId);
 
   res.status(200).json({
     message: "Products is deleted",

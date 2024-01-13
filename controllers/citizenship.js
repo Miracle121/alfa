@@ -56,7 +56,7 @@ exports.deleteCitizenship = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Citizenship.findByIdAndRemove(AgesId);
+  const data = await Citizenship.findByIdAndDelete(AgesId);
   res.status(200).json({
     message: "Region is deletes",
     data: data,

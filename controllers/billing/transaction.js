@@ -108,7 +108,7 @@ exports.deleteTransaction = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Transaction.findByIdAndRemove(AgesId);
+  const data = await Transaction.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Transaction is deleted",

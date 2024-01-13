@@ -124,7 +124,7 @@ exports.deleteActs = asyncHandler(async (req, res, next) => {
   }
 
   // Remove the object
-  const data = await Acts.findByIdAndRemove(ActsId);
+  const data = await Acts.findByIdAndDelete(ActsId);
 
   res.status(200).json({
     message: "Type of Acts is deleted",

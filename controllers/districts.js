@@ -83,7 +83,7 @@ exports.deleteDistricts = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await District.findByIdAndRemove(destId);
+  const data = await District.findByIdAndDelete(destId);
 
   const region = data.region.toString();
 

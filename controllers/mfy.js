@@ -69,7 +69,7 @@ exports.deleteMfy = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Mfy.findByIdAndRemove(mfyId);
+  const data = await Mfy.findByIdAndDelete(mfyId);
 
   const district = data.district.toString();
 

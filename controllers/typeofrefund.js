@@ -60,7 +60,7 @@ exports.deleteTypeofrefund = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Typeofrefund.findByIdAndRemove(AgesId);
+  const data = await Typeofrefund.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Region is deletes",

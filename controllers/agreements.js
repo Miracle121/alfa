@@ -223,7 +223,7 @@ exports.deleteAgreements = asyncHandler(async (req, res, next) => {
   // await User.deleteMany({ agentId: agreementId });
 
   // Delete the agreement
-  const deletedAgreement = await Agreements.findByIdAndRemove(agreementId);
+  const deletedAgreement = await Agreements.findByIdAndDelete(agreementId);
 
   res.status(200).json({
     message: "Agreement is deleted",

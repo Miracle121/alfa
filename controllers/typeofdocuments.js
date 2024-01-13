@@ -60,7 +60,7 @@ exports.deleteTypeofdocuments = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Typeofdocuments.findByIdAndRemove(positionId);
+  const data = await Typeofdocuments.findByIdAndDelete(positionId);
 
   res.status(200).json({
     message: "Position is deletes",

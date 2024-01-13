@@ -153,7 +153,7 @@ exports.deleteAgents = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Agents.findByIdAndRemove(AgesId);
+  const data = await Agents.findByIdAndDelete(AgesId);
   await User.deleteMany({ agentId: AgesId });
 
   res.status(200).json({
@@ -220,7 +220,7 @@ async function deleteAgentAndRelatedData(agentId) {
   }
 
   // Find and delete the agent
-  const deletedAgent = await Agents.findByIdAndRemove(agentId);
+  const deletedAgent = await Agents.findByIdAndDelete(agentId);
 
   // Find and delete related user data
   const deletedUserData = await User.deleteMany({ agentId });

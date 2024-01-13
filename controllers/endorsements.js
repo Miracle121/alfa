@@ -89,7 +89,7 @@ exports.deleteEndorsements = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Endorsements.findByIdAndRemove(AgesId);
+  const data = await Endorsements.findByIdAndDelete(AgesId);
   res.status(200).json({
     message: "Accountroles is deleted",
     data: data,

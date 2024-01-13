@@ -60,7 +60,7 @@ exports.deleteStatusbcopolicy = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Statusbcopolicy.findByIdAndRemove(AgesId);
+  const data = await Statusbcopolicy.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Status bco policy",

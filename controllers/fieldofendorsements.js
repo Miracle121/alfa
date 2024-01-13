@@ -76,7 +76,7 @@ exports.deleteFieldofendorsements = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Fieldofendorsements.findByIdAndRemove(subgroupsId);
+  const data = await Fieldofendorsements.findByIdAndDelete(subgroupsId);
 
   res.status(200).json({
     message: `Field of endorsements`,

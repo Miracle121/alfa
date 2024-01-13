@@ -60,7 +60,7 @@ exports.deleteTypeofagent = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Typeofagent.findByIdAndRemove(AgesId);
+  const data = await Typeofagent.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Type of agents is deletes",

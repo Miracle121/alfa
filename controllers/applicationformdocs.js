@@ -72,7 +72,7 @@ exports.deleteApplicationformdocs = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Applicationformdocs.findByIdAndRemove(AgesId);
+  const data = await Applicationformdocs.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Region is deletes",

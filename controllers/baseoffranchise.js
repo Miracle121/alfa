@@ -59,7 +59,7 @@ exports.deleteBaseoffranchise = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Baseoffranchise.findByIdAndRemove(AgesId);
+  const data = await Baseoffranchise.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Region is deletes",

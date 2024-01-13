@@ -72,7 +72,7 @@ exports.deleteTypeOfInsurer = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("bu userni ochirishga imkoni yoq", 403);
     throw error;
   }
-  const data = await Typeofinsurer.findByIdAndRemove(subgroupsId);
+  const data = await Typeofinsurer.findByIdAndDelete(subgroupsId);
   res.status(200).json({
     message: "Region is deletes",
     data: data,

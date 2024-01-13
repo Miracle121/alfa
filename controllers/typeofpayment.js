@@ -66,7 +66,7 @@ exports.deleteTypeofpayment = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Typeofpayment.findByIdAndRemove(typeofpaymentId);
+  const data = await Typeofpayment.findByIdAndDelete(typeofpaymentId);
 
   res.status(200).json({
     message: "Risks is deleted",

@@ -60,7 +60,7 @@ exports.deletePosition = asyncHandler(async (req, res, next) => {
     throw error;
   }
 
-  const data = await Position.findByIdAndRemove(positionId);
+  const data = await Position.findByIdAndDelete(positionId);
 
   res.status(200).json({
     message: "Position is deletes",

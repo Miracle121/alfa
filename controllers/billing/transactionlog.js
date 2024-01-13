@@ -133,7 +133,7 @@ exports.deleteTransactionlog = asyncHandler(async (req, res, next) => {
 
     throw error;
   }
-  const data = await Transactionlog.findByIdAndRemove(AgesId);
+  const data = await Transactionlog.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Transaction is deleted",

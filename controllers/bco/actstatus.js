@@ -59,7 +59,7 @@ exports.deleteActstatus = asyncHandler(async (req, res, next) => {
   if (deleteddata.creatorId.toString() !== req.user._id) {
     throw new ErrorResponse("Bu userni ochirishga imkoni yoq");
   }
-  const data = await Actstatus.findByIdAndRemove(AgesId);
+  const data = await Actstatus.findByIdAndDelete(AgesId);
 
   res.status(200).json({
     message: "Status bco policy",
