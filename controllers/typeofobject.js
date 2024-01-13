@@ -98,7 +98,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           rules: [],
         },
         {
-          type: "dropdown",
+          type: "select",
           name: "registration_region",
           url: "regions?limit=50",
           label: "Регион регистрации",
@@ -110,7 +110,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           rules: [],
         },
         {
-          type: "dropdown",
+          type: "select",
           name: "type",
           label: "Вид",
           url: "views?limit=50",
@@ -163,13 +163,13 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
       label: "Недвижимое имущество",
       fields: [
         {
-          type: "dropdown",
+          type: "select",
           name: "region",
           url: "regions?limit=50",
           label: "Регион",
         },
         {
-          type: "dropdown",
+          type: "select",
           name: "land_rights",
           label: "Вид права на земельный участок",
           url: "typeofland?limit=50",
@@ -193,7 +193,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           rules: [],
         },
         {
-          type: "dropdown",
+          type: "select",
           name: "building_classification",
           label: "Классификация строения",
           url: "classification?limit=50",
@@ -216,7 +216,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
       label: "Объект сельхозназначения",
       fields: [
         {
-          type: "dropdown",
+          type: "select",
           name: "region",
           url: "regions?limit=50",
           label: "Регион",
@@ -228,7 +228,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           default: false,
         },
         {
-          type: "dropdown",
+          type: "select",
           name: "agricultural_object_type",
           label: "Объект сельхозназначения",
           url: "agricultural?limit=50",
@@ -246,7 +246,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           rules: [],
         },
         {
-          type: "dropdown",
+          type: "select",
           name: "measurement_type",
           label: "Тип измерения",
           url: "measurements?limit=50",
@@ -269,7 +269,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
       label: "Другой",
       fields: [
         {
-          type: "dropdown",
+          type: "select",
           name: "region",
           label: "Регион",
           url: "regions?limit=50",
@@ -293,7 +293,7 @@ exports.getInputs = asyncHandler(async (req, res, next) => {
           rules: [],
         },
         {
-          type: "dropdown",
+          type: "select",
           name: "measurement_type",
           label: "Тип измерения",
           url: "measurements?limit=50",
