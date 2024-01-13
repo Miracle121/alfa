@@ -26,24 +26,14 @@ exports.createTranslations = asyncHandler(async (req, res, next) => {
     const error = new ErrorResponse("Validation error", 422);
     throw error;
   }
-
-  const { key, uz, ru, eng } = req.body; // Destructuring for cleaner code
-
-  // Validate that at least one language translation is provided
-  if (!uz && !ru && !eng) {
-    const error = new ErrorResponse(
-      "At least one translation is required",
-      422
-    );
-    throw error;
-  }
+  const key = Object.keys(req.body);
 
   // Create a new Translations instance
   const translation = new Translations({
-    key,
-    uz,
-    ru,
-    eng,
+    key: key[0],
+    uz: key[0],
+    ru: key[0],
+    lang: key[0],
     creatorId: req.user._id,
   });
 
